@@ -3,7 +3,7 @@ import Sprite from "./sprite"
 export default class Panel extends Sprite {
   children: Array<Sprite>;
   constructor(x:number=0, y:number=0) {
-    super("", 0, 0, x, y);
+    super(0, 0, x, y);
     this.children = new Array();
   }
 

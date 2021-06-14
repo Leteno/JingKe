@@ -9,6 +9,7 @@
     "ts/**/*"
   ],
   "exclude": [
-    "js"
+    "js",
+    "ts/test",
   ]
 }

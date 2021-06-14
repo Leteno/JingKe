@@ -4,7 +4,7 @@ export default class TextView extends Sprite {
   text: string;
 
   constructor(text:string="Hello World", x:number=0, y:number=0) {
-    super("", 0, 0, x, y);
+    super(0, 0, x, y);
     this.text = text;
   }
 

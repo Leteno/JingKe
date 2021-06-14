@@ -1,15 +1,12 @@
 
 export default class Sprite {
-  img: CanvasImageSource;
   width: number;
   height: number;
   x: number;
   y: number;
   visible: boolean;
 
-  constructor(imgSrc:string='', width:number=0, height:number=0, x:number=0, y:number=0, visible:boolean=true) {
-    this.img = new Image();
-    this.img.src = imgSrc;
+  constructor(width:number=0, height:number=0, x:number=0, y:number=0, visible:boolean=true) {
     this.width = width;
     this.height = height;
     this.x = x;
@@ -31,13 +28,7 @@ export default class Sprite {
 
   // protected
   drawToCanvasInternal(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
-    ctx.drawImage(
-      this.img,
-      x,
-      y,
-      width,
-      height
-    );
+    // do nothing
   }
 
   isCollideWith(sp: Sprite) {

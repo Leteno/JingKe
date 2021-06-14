@@ -22,7 +22,7 @@ var TextView = /** @class */ (function (_super) {
         if (text === void 0) { text = "Hello World"; }
         if (x === void 0) { x = 0; }
         if (y === void 0) { y = 0; }
-        var _this = _super.call(this, "", 0, 0, x, y) || this;
+        var _this = _super.call(this, 0, 0, x, y) || this;
         _this.text = text;
         return _this;
     }

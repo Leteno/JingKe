@@ -1,15 +1,12 @@
 "use strict";
 exports.__esModule = true;
 var Sprite = /** @class */ (function () {
-    function Sprite(imgSrc, width, height, x, y, visible) {
-        if (imgSrc === void 0) { imgSrc = ''; }
+    function Sprite(width, height, x, y, visible) {
         if (width === void 0) { width = 0; }
         if (height === void 0) { height = 0; }
         if (x === void 0) { x = 0; }
         if (y === void 0) { y = 0; }
         if (visible === void 0) { visible = true; }
-        this.img = new Image();
-        this.img.src = imgSrc;
         this.width = width;
         this.height = height;
         this.x = x;
@@ -24,7 +21,7 @@ var Sprite = /** @class */ (function () {
     };
     // protected
     Sprite.prototype.drawToCanvasInternal = function (ctx, x, y, width, height) {
-        ctx.drawImage(this.img, x, y, width, height);
+        // do nothing
     };
     Sprite.prototype.isCollideWith = function (sp) {
         if (!this.visible || !sp.visible)

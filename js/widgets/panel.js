@@ -21,7 +21,7 @@ var Panel = /** @class */ (function (_super) {
     function Panel(x, y) {
         if (x === void 0) { x = 0; }
         if (y === void 0) { y = 0; }
-        var _this = _super.call(this, "", 0, 0, x, y) || this;
+        var _this = _super.call(this, 0, 0, x, y) || this;
         _this.children = new Array();
         return _this;
     }
