@@ -10,6 +10,6 @@
   ],
   "exclude": [
     "js",
-    "ts/test",
+    "ts/**/__test__",
   ]
 }

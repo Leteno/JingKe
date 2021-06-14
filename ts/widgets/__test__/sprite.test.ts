@@ -1,4 +1,4 @@
-import Sprite from "../widgets/sprite"
+import Sprite from "../sprite"
 
 test("isCollideWith", () => {
   let s1 = new Sprite();

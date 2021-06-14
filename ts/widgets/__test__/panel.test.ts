@@ -1,5 +1,5 @@
-import Panel from "../widgets/panel"
-import Sprite from "../widgets/sprite"
+import Panel from "../panel"
+import Sprite from "../sprite"
 
 test('helloworld', () => {
   expect(1+1).toBe(2);
