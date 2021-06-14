@@ -1,7 +1,9 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "outDir": "js"
+    "outDir": "js",
+    "checkJs": true,
+    "allowJs": true,
   },
   "include": [
     "ts/**/*"

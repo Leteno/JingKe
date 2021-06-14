@@ -1,13 +1,13 @@
 
 export default class Sprite {
-  img: Image;
+  img: CanvasImageSource;
   width: number;
   height: number;
   x: number;
   y: number;
   visible: boolean;
 
-  constructor(imgSrc:string ='', width:number =0, height:number =0, x:number =0, y:number =0, visible:boolean =true) {
+  constructor(imgSrc:string='', width:number=0, height:number=0, x:number=0, y:number=0, visible:boolean=true) {
     this.img = new Image();
     this.img.src = imgSrc;
     this.width = width;

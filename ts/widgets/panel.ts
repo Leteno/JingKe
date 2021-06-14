@@ -2,8 +2,8 @@ import Sprite from "./sprite"
 
 export default class Panel extends Sprite {
   children: Array<Sprite>;
-  constructor(x: number =0, y: number =0) {
-    super(x=x, y=y);
+  constructor(x:number=0, y:number=0) {
+    super("", 0, 0, x, y);
     this.children = new Array();
   }
 
@@ -12,7 +12,7 @@ export default class Panel extends Sprite {
   }
 
   removeView(view: Sprite) {
-    var index = this.children.findIndex((v => view === v));
+    let index = this.children.indexOf(view);
     if (index !== -1) {
       this.children.splice(index, 1);
     }
