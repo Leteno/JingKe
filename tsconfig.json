@@ -1,0 +1,12 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "outDir": "js"
+  },
+  "include": [
+    "ts/**/*"
+  ],
+  "exclude": [
+    "js"
+  ]
+}
