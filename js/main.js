@@ -8,6 +8,7 @@ export default class Main {
     // id of requestAnimationFrame
     this.aniId = 0;
     this.mainPanel = new Panel();
+    this.bindLoop = this.gameLoop.bind(this);
     this.restart();
   }
 
@@ -20,7 +21,7 @@ export default class Main {
 
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
-      this.gameLoop,
+      this.bindLoop,
       canvas
     );
   }
@@ -29,7 +30,7 @@ export default class Main {
     this.update();
     this.render();
     this.aniId = window.requestAnimationFrame(
-      this.gameLoop,
+      this.bindLoop,
       canvas
     );
   }

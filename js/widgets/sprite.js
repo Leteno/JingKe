@@ -2,7 +2,7 @@
 export default class Sprite {
   constructor(imgSrc='', width=0, height=0, x=0, y=0, visible=true) {
     this.img = new Image();
-    this.img.src = imagSrc;
+    this.img.src = imgSrc;
     this.width = width;
     this.height = height;
     this.x = x;
