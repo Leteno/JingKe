@@ -30,7 +30,6 @@ var ImageView = /** @class */ (function (_super) {
     }
     // override
     ImageView.prototype.drawToCanvasInternal = function (ctx, x, y, width, height) {
-        console.log("drawImage: {this.x} {this.y} {this.width} {this.height}");
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     };
     return ImageView;
