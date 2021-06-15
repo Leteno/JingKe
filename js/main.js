@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+var imageview_1 = require("./widgets/imageview");
 var panel_1 = require("./widgets/panel");
 var textview_1 = require("./widgets/textview");
 var Main = /** @class */ (function () {
@@ -18,6 +19,11 @@ var Main = /** @class */ (function () {
         this.mainPanel.addView(textView);
         textView.x = this.canvas.width / 2;
         textView.y = this.canvas.height / 2;
+        var imageView = new imageview_1["default"]("res/artichoke_PNG30.png");
+        this.mainPanel.addView(imageView);
+        imageView.x = this.canvas.width / 3;
+        imageView.y = this.canvas.width / 4;
+        imageView.width = imageView.height = 100;
         window.cancelAnimationFrame(this.aniId);
         this.aniId = window.requestAnimationFrame(this.bindLoop);
     };

@@ -1,6 +1,6 @@
+import ImageView from "./widgets/imageview"
 import Panel from "./widgets/panel";
 import TextView from "./widgets/textview"
-
 
 export default class Main {
   aniId: number;
@@ -21,10 +21,17 @@ export default class Main {
 
   restart() {
     this.mainPanel.removeAllViews();
+
     let textView = new TextView("Hello World");
     this.mainPanel.addView(textView);
     textView.x = this.canvas.width / 2;
     textView.y = this.canvas.height / 2;
+
+    let imageView = new ImageView("res/artichoke_PNG30.png");
+    this.mainPanel.addView(imageView);
+    imageView.x = this.canvas.width / 3;
+    imageView.y = this.canvas.width / 4;
+    imageView.width = imageView.height = 100;
 
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
