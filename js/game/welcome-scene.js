@@ -21,6 +21,12 @@ var WelcomeScene = /** @class */ (function () {
             imageView.y = animatorImageViewY.getVal();
         };
         this.animators.push(animatorImageViewY);
+        var text = textView.text;
+        var animatorTextViewString = new number_linear_animator_1["default"](0, textView.text.length, 2000);
+        animatorTextViewString.onValChange = function (val) {
+            textView.text = text.substring(0, Math.floor(val));
+        };
+        this.animators.push(animatorTextViewString);
     }
     WelcomeScene.prototype.update = function (dt) {
         this.animators.forEach((function (animator) {

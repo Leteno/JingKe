@@ -22,6 +22,7 @@ export default class WelcomeScene implements Scene {
     imageView.width = imageView.height = 100;
 
     this.animators = new Array<Animator<number>>();
+
     let animatorImageViewY = new NumberLinearAnimator(
       0, canvas.height * 2, 20000
     )
@@ -29,6 +30,15 @@ export default class WelcomeScene implements Scene {
       imageView.y = animatorImageViewY.getVal();
     }
     this.animators.push(animatorImageViewY)
+
+    let text:string = textView.text;
+    let animatorTextViewString = new NumberLinearAnimator(
+      0, textView.text.length, 2000
+    )
+    animatorTextViewString.onValChange = function(val: number) {
+      textView.text = text.substring(0, Math.floor(val))
+    }
+    this.animators.push(animatorTextViewString)
   }
 
   update(dt: number) {
