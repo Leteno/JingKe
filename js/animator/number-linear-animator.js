@@ -1,13 +1,16 @@
 "use strict";
 exports.__esModule = true;
 var NumberLinearAnimator = /** @class */ (function () {
-    function NumberLinearAnimator(start, end, feet) {
-        if (feet === undefined) {
-            feet = start > end ? -1 : 1;
-        }
+    function NumberLinearAnimator(start, end, totalTime) {
         this.start = start;
         this.end = end;
-        this.feet = feet;
+        this.totalTime = totalTime;
+        if (totalTime > 0) {
+            this.feet = (end - start) / totalTime;
+        }
+        else {
+            this.feet = end - start;
+        }
         this.stop = false;
     }
     NumberLinearAnimator.prototype.isStop = function () {
@@ -15,10 +18,10 @@ var NumberLinearAnimator = /** @class */ (function () {
     };
     NumberLinearAnimator.prototype.onStop = function () {
     };
-    NumberLinearAnimator.prototype.update = function () {
+    NumberLinearAnimator.prototype.update = function (dt) {
         if (this.stop)
             return;
-        this.start += this.feet;
+        this.start += this.feet * dt;
         if (this.feet > 0) {
             if (this.start > this.end) {
                 this.start = this.end;

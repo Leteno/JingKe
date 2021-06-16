@@ -16,10 +16,10 @@ var WelcomeScene = /** @class */ (function () {
         imageView.x = canvas.width / 3;
         imageView.width = imageView.height = 100;
         this.imageView = imageView;
-        this.animator = new number_linear_animator_1["default"](0, canvas.height * 2, 1);
+        this.animator = new number_linear_animator_1["default"](0, canvas.height * 2, 20000);
     }
-    WelcomeScene.prototype.update = function () {
-        this.animator.update();
+    WelcomeScene.prototype.update = function (dt) {
+        this.animator.update(dt);
         this.imageView.y = this.animator.getVal();
     };
     WelcomeScene.prototype.render = function (ctx) {

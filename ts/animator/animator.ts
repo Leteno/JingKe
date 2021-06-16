@@ -1,6 +1,6 @@
 
 export default interface Animator<T> {
-  update()
+  update(dt: number)
   getVal() : T
   isStop() : boolean
   onStop()

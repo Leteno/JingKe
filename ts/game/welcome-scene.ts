@@ -23,12 +23,12 @@ export default class WelcomeScene implements Scene {
     this.imageView = imageView;
 
     this.animator = new NumberLinearAnimator(
-      0, canvas.height * 2, 1
+      0, canvas.height * 2, 20000
     )
   }
 
-  update() {
-    this.animator.update();
+  update(dt: number) {
+    this.animator.update(dt);
     this.imageView.y = this.animator.getVal();
   }
 
