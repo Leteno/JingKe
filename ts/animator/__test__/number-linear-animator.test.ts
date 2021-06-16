@@ -3,12 +3,15 @@ import NumberLinearAnimator from "../number-linear-animator"
 test("test1To5", () => {
   let animator = new NumberLinearAnimator(0, 5, 1000)
   animator.onStop = jest.fn();
+  animator.onValChange = jest.fn();
   expect(animator.getVal()).toBe(0)
   expect(animator.isStop()).toBe(false)
   animator.update(800)
+  expect((animator.onValChange as jest.Mock).mock.calls[0][0]).toBe(4)
   expect(animator.getVal()).toBe(4);
   animator.update(200)
   expect(animator.isStop()).toBe(true)
+  expect((animator.onValChange as jest.Mock).mock.calls[1][0]).toBe(5)
   expect(animator.getVal()).toBe(5)
   expect(animator.onStop as jest.Mock).toBeCalled()
 })

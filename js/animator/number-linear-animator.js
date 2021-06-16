@@ -22,6 +22,7 @@ var NumberLinearAnimator = /** @class */ (function () {
         if (this.stop)
             return;
         this.start += this.feet * dt;
+        this.onValChange(this.start);
         if (this.feet > 0) {
             if (this.start > this.end) {
                 this.start = this.end;
@@ -40,6 +41,7 @@ var NumberLinearAnimator = /** @class */ (function () {
     NumberLinearAnimator.prototype.getVal = function () {
         return this.start;
     };
+    NumberLinearAnimator.prototype.onValChange = function (val) { };
     return NumberLinearAnimator;
 }());
 exports["default"] = NumberLinearAnimator;
