@@ -1,3 +1,4 @@
+import Animator from "../animator/animator"
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import Scene from "../scene/scene"
 import ImageView from "../widgets/imageview";
@@ -6,8 +7,7 @@ import TextView from "../widgets/textview";
 
 export default class WelcomeScene implements Scene {
   mainPanel: Panel;
-  imageView: ImageView;
-  animator: NumberLinearAnimator;
+  animators: Array<Animator<number>>;
   constructor(canvas: HTMLCanvasElement) {
     this.mainPanel = new Panel();
 
@@ -20,16 +20,21 @@ export default class WelcomeScene implements Scene {
     this.mainPanel.addView(imageView);
     imageView.x = canvas.width / 3;
     imageView.width = imageView.height = 100;
-    this.imageView = imageView;
 
-    this.animator = new NumberLinearAnimator(
+    this.animators = new Array<Animator<number>>();
+    let animatorImageViewY = new NumberLinearAnimator(
       0, canvas.height * 2, 20000
     )
+    animatorImageViewY.onValChange = function(val: number) {
+      imageView.y = animatorImageViewY.getVal();
+    }
+    this.animators.push(animatorImageViewY)
   }
 
   update(dt: number) {
-    this.animator.update(dt);
-    this.imageView.y = this.animator.getVal();
+    this.animators.forEach((animator => {
+      animator.update(dt)
+    }));
   }
 
   render(ctx: CanvasRenderingContext2D) {

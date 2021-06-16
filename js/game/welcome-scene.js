@@ -15,12 +15,17 @@ var WelcomeScene = /** @class */ (function () {
         this.mainPanel.addView(imageView);
         imageView.x = canvas.width / 3;
         imageView.width = imageView.height = 100;
-        this.imageView = imageView;
-        this.animator = new number_linear_animator_1["default"](0, canvas.height * 2, 20000);
+        this.animators = new Array();
+        var animatorImageViewY = new number_linear_animator_1["default"](0, canvas.height * 2, 20000);
+        animatorImageViewY.onValChange = function (val) {
+            imageView.y = animatorImageViewY.getVal();
+        };
+        this.animators.push(animatorImageViewY);
     }
     WelcomeScene.prototype.update = function (dt) {
-        this.animator.update(dt);
-        this.imageView.y = this.animator.getVal();
+        this.animators.forEach((function (animator) {
+            animator.update(dt);
+        }));
     };
     WelcomeScene.prototype.render = function (ctx) {
         ctx.save();
