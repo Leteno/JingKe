@@ -24,11 +24,21 @@ var TextView = /** @class */ (function (_super) {
         if (y === void 0) { y = 0; }
         var _this = _super.call(this, 0, 0, x, y) || this;
         _this.text = text;
+        _this.textColor = "black";
+        _this.textSize = undefined;
         return _this;
     }
     // override
     TextView.prototype.drawToCanvasInternal = function (ctx, x, y) {
+        ctx.save();
+        if (this.textColor) {
+            ctx.fillStyle = this.textColor;
+        }
+        if (this.textSize) {
+            ctx.font = this.textSize + "px bold";
+        }
         ctx.fillText(this.text, x, y);
+        ctx.restore();
     };
     return TextView;
 }(sprite_1["default"]));

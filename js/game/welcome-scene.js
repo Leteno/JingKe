@@ -7,10 +7,12 @@ var textview_1 = require("../widgets/textview");
 var WelcomeScene = /** @class */ (function () {
     function WelcomeScene(canvas) {
         this.mainPanel = new panel_1["default"]();
-        var textView = new textview_1["default"]("Hello World");
+        var textView = new textview_1["default"]("荆轲刺秦王");
         this.mainPanel.addView(textView);
-        textView.x = canvas.width / 2;
-        textView.y = canvas.height / 2;
+        textView.x = canvas.width / 4;
+        textView.y = canvas.height / 5;
+        textView.textColor = "black";
+        textView.textSize = 40;
         var imageView = new imageview_1["default"]("res/artichoke_PNG30.png");
         this.mainPanel.addView(imageView);
         imageView.x = canvas.width / 3;

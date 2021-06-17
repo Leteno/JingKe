@@ -11,10 +11,12 @@ export default class WelcomeScene implements Scene {
   constructor(canvas: HTMLCanvasElement) {
     this.mainPanel = new Panel();
 
-    let textView = new TextView("Hello World");
+    let textView = new TextView("荆轲刺秦王");
     this.mainPanel.addView(textView);
-    textView.x = canvas.width / 2;
-    textView.y = canvas.height / 2;
+    textView.x = canvas.width / 4;
+    textView.y = canvas.height / 5;
+    textView.textColor = "black";
+    textView.textSize = 40;
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     this.mainPanel.addView(imageView);
