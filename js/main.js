@@ -10,12 +10,10 @@ var Main = /** @class */ (function () {
         this.ctx = canvas.getContext('2d');
         this.last = time_1.timestamp();
         this.currentScene = new welcome_scene_1["default"](canvas);
-        this.restart();
-    }
-    Main.prototype.restart = function () {
+        this.currentScene.onStart(this.ctx);
         window.cancelAnimationFrame(this.aniId);
         this.aniId = window.requestAnimationFrame(this.bindLoop);
-    };
+    }
     Main.prototype.gameLoop = function () {
         var now = time_1.timestamp();
         var dt = now - this.last;

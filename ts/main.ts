@@ -17,10 +17,8 @@ export default class Main {
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     this.last = timestamp();
     this.currentScene = new WelcomeScene(canvas);
-    this.restart();
-  }
+    this.currentScene.onStart(this.ctx);
 
-  restart() {
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
       this.bindLoop

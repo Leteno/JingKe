@@ -1,6 +1,16 @@
 import Panel from "../panel"
 import Sprite from "../sprite"
 
+function indexOf(pairList: Array<{view: Sprite}>, view: Sprite): number {
+  let index = -1;
+  pairList.forEach((pair, i) => {
+    if (pair.view == view) {
+      index = i;
+    }
+  })
+  return index;
+}
+
 test('helloworld', () => {
   expect(1+1).toBe(2);
 })
@@ -11,10 +21,10 @@ test('addAndRemove', () => {
   let s2 = new Sprite();
 
   panel.addView(s1);
-  expect(panel.children.indexOf(s1)).toBeGreaterThanOrEqual(0);
-  expect(panel.children.indexOf(s2)).toBe(-1);
+  expect(indexOf(panel.children, s1)).toBeGreaterThanOrEqual(0);
+  expect(indexOf(panel.children, s2)).toBe(-1);
   panel.removeView(s1);
-  expect(panel.children.indexOf(s1)).toBe(-1);
+  expect(indexOf(panel.children, s1)).toBe(-1);
 })
 
 test('removeAll', () => {
@@ -24,11 +34,11 @@ test('removeAll', () => {
 
   panel.addView(s1);
   panel.addView(s2);
-  expect(panel.children.indexOf(s1)).toBeGreaterThanOrEqual(0);
-  expect(panel.children.indexOf(s2)).toBeGreaterThanOrEqual(0);
+  expect(indexOf(panel.children, s1)).toBeGreaterThanOrEqual(0);
+  expect(indexOf(panel.children, s2)).toBeGreaterThanOrEqual(0);
   panel.removeAllViews();
-  expect(panel.children.indexOf(s1)).toBe(-1);
-  expect(panel.children.indexOf(s2)).toBe(-1);
+  expect(indexOf(panel.children, s1)).toBe(-1);
+  expect(indexOf(panel.children, s2)).toBe(-1);
 })
 
 test('drawChildren', () => {

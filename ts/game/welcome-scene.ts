@@ -1,6 +1,7 @@
 import Animator from "../animator/animator"
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import Scene from "../scene/scene"
+import {Align} from "../misc/layout"
 import ImageView from "../widgets/imageview";
 import Panel from "../widgets/panel";
 import TextView from "../widgets/textview";
@@ -8,25 +9,27 @@ import TextView from "../widgets/textview";
 export default class WelcomeScene implements Scene {
   mainPanel: Panel;
   animators: Array<Animator<number>>;
+  canvasWidth: number;
+  canvasHeight: number;
   constructor(canvas: HTMLCanvasElement) {
-    this.mainPanel = new Panel();
-
+    this.mainPanel = new Panel(0, 0, canvas.width, canvas.height);
+    this.animators = new Array<Animator<number>>();
+    this.canvasWidth = canvas.width;
+    this.canvasHeight = canvas.height;
+  }
+  onStart(ctx: CanvasRenderingContext2D) {
     let textView = new TextView("荆轲刺秦王");
-    this.mainPanel.addView(textView);
-    textView.x = canvas.width / 4;
-    textView.y = canvas.height / 5;
+    this.mainPanel.addView(textView, Align.CENTER, Align.CENTER);
     textView.textColor = "black";
     textView.textSize = 40;
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     this.mainPanel.addView(imageView);
-    imageView.x = canvas.width / 3;
+    imageView.x = this.canvasWidth / 3;
     imageView.width = imageView.height = 100;
 
-    this.animators = new Array<Animator<number>>();
-
     let animatorImageViewY = new NumberLinearAnimator(
-      0, canvas.height * 2, 20000
+      0, this.canvasHeight * 2, 20000
     )
     animatorImageViewY.onValChange = function(val: number) {
       imageView.y = animatorImageViewY.getVal();
