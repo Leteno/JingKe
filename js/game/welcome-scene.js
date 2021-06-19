@@ -17,7 +17,21 @@ var WelcomeScene = /** @class */ (function () {
         this.mainPanel.addView(textView, layout_1.Align.CENTER, layout_1.Align.CENTER);
         textView.textColor = "black";
         textView.textSize = 40;
+        textView.y = -100;
         textView.measure(ctx);
+        var startBtn = new textview_1["default"]("开始游戏");
+        this.mainPanel.addView(startBtn, layout_1.Align.CENTER, layout_1.Align.CENTER);
+        startBtn.textColor = "black";
+        startBtn.textSize = 24;
+        startBtn.visible = false;
+        startBtn.measure(ctx);
+        var configBtn = new textview_1["default"]("配置");
+        this.mainPanel.addView(configBtn, layout_1.Align.CENTER, layout_1.Align.CENTER);
+        configBtn.textColor = "black";
+        configBtn.textSize = 24;
+        configBtn.y = 60;
+        configBtn.visible = false;
+        configBtn.measure(ctx);
         var imageView = new imageview_1["default"]("res/artichoke_PNG30.png");
         this.mainPanel.addView(imageView);
         imageView.x = this.canvasWidth / 3;
@@ -28,9 +42,15 @@ var WelcomeScene = /** @class */ (function () {
         };
         this.animators.push(animatorImageViewY);
         var text = textView.text;
-        var animatorTextViewString = new number_linear_animator_1["default"](0, textView.text.length, 2000);
+        var animatorTextViewString = new number_linear_animator_1["default"](0, textView.text.length, 1500);
         animatorTextViewString.onValChange = function (val) {
             textView.text = text.substring(0, Math.floor(val));
+        };
+        animatorTextViewString.onStop = function () {
+            setTimeout(function () {
+                startBtn.visible = true;
+                configBtn.visible = true;
+            }, 200);
         };
         this.animators.push(animatorTextViewString);
     };

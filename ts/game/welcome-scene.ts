@@ -5,6 +5,7 @@ import {Align} from "../misc/layout"
 import ImageView from "../widgets/imageview";
 import Panel from "../widgets/panel";
 import TextView from "../widgets/textview";
+import { config } from "yargs";
 
 export default class WelcomeScene implements Scene {
   mainPanel: Panel;
@@ -22,7 +23,23 @@ export default class WelcomeScene implements Scene {
     this.mainPanel.addView(textView, Align.CENTER, Align.CENTER);
     textView.textColor = "black";
     textView.textSize = 40;
+    textView.y = -100;
     textView.measure(ctx);
+
+    let startBtn = new TextView("开始游戏");
+    this.mainPanel.addView(startBtn, Align.CENTER, Align.CENTER);
+    startBtn.textColor = "black";
+    startBtn.textSize = 24;
+    startBtn.visible = false;
+    startBtn.measure(ctx);
+
+    let configBtn = new TextView("配置");
+    this.mainPanel.addView(configBtn, Align.CENTER, Align.CENTER);
+    configBtn.textColor = "black";
+    configBtn.textSize = 24;
+    configBtn.y = 60;
+    configBtn.visible = false;
+    configBtn.measure(ctx);
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     this.mainPanel.addView(imageView);
@@ -39,10 +56,16 @@ export default class WelcomeScene implements Scene {
 
     let text:string = textView.text;
     let animatorTextViewString = new NumberLinearAnimator(
-      0, textView.text.length, 2000
+      0, textView.text.length, 1500
     )
     animatorTextViewString.onValChange = function(val: number) {
       textView.text = text.substring(0, Math.floor(val))
+    }
+    animatorTextViewString.onStop = function() {
+      setTimeout(() => {
+        startBtn.visible = true;
+        configBtn.visible = true;
+      }, 200);
     }
     this.animators.push(animatorTextViewString)
   }

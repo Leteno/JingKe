@@ -32,6 +32,7 @@ export default class TextView extends Sprite {
 
   // override
   drawToCanvasInternal(ctx: CanvasRenderingContext2D, x:number, y:number) {
+    if (!this.visible) return;
     ctx.save();
     this.applyStyle(ctx);
     ctx.fillText(this.text, x, y);

@@ -46,6 +46,8 @@ var TextView = /** @class */ (function (_super) {
     };
     // override
     TextView.prototype.drawToCanvasInternal = function (ctx, x, y) {
+        if (!this.visible)
+            return;
         ctx.save();
         this.applyStyle(ctx);
         ctx.fillText(this.text, x, y);
