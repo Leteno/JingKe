@@ -22,6 +22,7 @@ export default class WelcomeScene implements Scene {
     this.mainPanel.addView(textView, Align.CENTER, Align.CENTER);
     textView.textColor = "black";
     textView.textSize = 40;
+    textView.measure(ctx);
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     this.mainPanel.addView(imageView);

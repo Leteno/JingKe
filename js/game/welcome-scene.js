@@ -17,6 +17,7 @@ var WelcomeScene = /** @class */ (function () {
         this.mainPanel.addView(textView, layout_1.Align.CENTER, layout_1.Align.CENTER);
         textView.textColor = "black";
         textView.textSize = 40;
+        textView.measure(ctx);
         var imageView = new imageview_1["default"]("res/artichoke_PNG30.png");
         this.mainPanel.addView(imageView);
         imageView.x = this.canvasWidth / 3;

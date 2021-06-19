@@ -28,15 +28,26 @@ var TextView = /** @class */ (function (_super) {
         _this.textSize = undefined;
         return _this;
     }
-    // override
-    TextView.prototype.drawToCanvasInternal = function (ctx, x, y) {
-        ctx.save();
+    TextView.prototype.applyStyle = function (ctx) {
         if (this.textColor) {
             ctx.fillStyle = this.textColor;
         }
         if (this.textSize) {
             ctx.font = this.textSize + "px bold";
         }
+    };
+    TextView.prototype.measure = function (ctx) {
+        ctx.save();
+        this.applyStyle(ctx);
+        var metric = ctx.measureText(this.text);
+        this.width = metric.width;
+        console.log("measure width: " + this.width);
+        ctx.restore();
+    };
+    // override
+    TextView.prototype.drawToCanvasInternal = function (ctx, x, y) {
+        ctx.save();
+        this.applyStyle(ctx);
         ctx.fillText(this.text, x, y);
         ctx.restore();
     };
