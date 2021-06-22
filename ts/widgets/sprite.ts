@@ -1,3 +1,6 @@
+import { boolean } from "yargs";
+import EasyMath from "../misc/easy-math";
+import { ClickEvent } from "../misc/event";
 
 export default class Sprite {
   width: number;
@@ -40,5 +43,16 @@ export default class Sprite {
               && spX <= this.x + this.width
               && spY >= this.y
               && spY <= this.y + this.height);
+  }
+
+  onclick(event: ClickEvent): boolean {
+    let inside = EasyMath.between(this.x, this.x + this.width, event.x)
+      && EasyMath.between(this.y, this.y + this.height, event.y);
+    if (!inside) return false;
+    return this.onclickInternal(event);
+  }
+
+  onclickInternal(event: ClickEvent): boolean {
+    return true;
   }
 }

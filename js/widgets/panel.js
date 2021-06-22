@@ -15,8 +15,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+var easy_math_1 = require("../misc/easy-math");
 var sprite_1 = require("./sprite");
 var layout_1 = require("../misc/layout");
+var event_1 = require("../misc/event");
 var Pair = /** @class */ (function () {
     function Pair() {
     }
@@ -71,6 +73,21 @@ var Panel = /** @class */ (function (_super) {
                     /* Align.Center */ y + Math.max(_this.height - view.height, 0) / 2 + view.y;
             view.drawToCanvasInternal(ctx, finalX, finalY, view.width, view.height);
         }));
+    };
+    Panel.prototype.onclick = function (event) {
+        var inside = easy_math_1["default"].between(this.x, this.x + this.width, event.x)
+            && easy_math_1["default"].between(this.y, this.y + this.height, event.y);
+        if (!inside)
+            return false;
+        // event cut out
+        var childEvent = event_1.ClickEvent.alignChildren(event, this.x, this.y);
+        for (var i = 0; i < this.children.length; i++) {
+            var view = this.children[i].view;
+            if (view.onclick(childEvent)) {
+                return true;
+            }
+        }
+        return this.onclickInternal(event);
     };
     return Panel;
 }(sprite_1["default"]));

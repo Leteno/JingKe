@@ -5,7 +5,7 @@ import {Align} from "../misc/layout"
 import ImageView from "../widgets/imageview";
 import Panel from "../widgets/panel";
 import TextView from "../widgets/textview";
-import { config } from "yargs";
+import { ClickEvent } from "../misc/event";
 
 export default class WelcomeScene implements Scene {
   mainPanel: Panel;
@@ -25,6 +25,10 @@ export default class WelcomeScene implements Scene {
     textView.textSize = 40;
     textView.y = -100;
     textView.measure(ctx);
+    textView.onclickInternal = (event: ClickEvent) : boolean => {
+      console.log("text is clicked");
+      return true;
+    }
 
     let startBtn = new TextView("开始游戏");
     this.mainPanel.addView(startBtn, Align.CENTER, Align.CENTER);
@@ -32,6 +36,10 @@ export default class WelcomeScene implements Scene {
     startBtn.textSize = 24;
     startBtn.visible = false;
     startBtn.measure(ctx);
+    startBtn.onclickInternal = (event: ClickEvent) : boolean => {
+      console.log("startBtn is clicked");
+      return true;
+    }
 
     let configBtn = new TextView("配置");
     this.mainPanel.addView(configBtn, Align.CENTER, Align.CENTER);
@@ -40,6 +48,10 @@ export default class WelcomeScene implements Scene {
     configBtn.y = 60;
     configBtn.visible = false;
     configBtn.measure(ctx);
+    configBtn.onclickInternal = (event: ClickEvent) : boolean => {
+      console.log("configBtn is clicked");
+      return true;
+    }
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     this.mainPanel.addView(imageView);
@@ -82,5 +94,9 @@ export default class WelcomeScene implements Scene {
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     ctx.restore();
     this.mainPanel.drawToCanvas(ctx);
+  }
+
+  onclick(event: ClickEvent) {
+    this.mainPanel.onclick(event);
   }
 }

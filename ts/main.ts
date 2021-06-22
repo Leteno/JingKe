@@ -1,6 +1,7 @@
 import WelcomeScene from "./game/welcome-scene";
 import Scene from "./scene/scene";
 import {timestamp} from "./misc/time"
+import { ClickEvent } from "./misc/event";
 
 export default class Main {
   aniId: number;
@@ -23,6 +24,7 @@ export default class Main {
     this.aniId = window.requestAnimationFrame(
       this.bindLoop
     );
+    canvas.onclick = this.onclick.bind(this);
   }
 
   gameLoop() {
@@ -42,5 +44,9 @@ export default class Main {
 
   render() {
     this.currentScene.render(this.ctx);
+  }
+
+  onclick(event: PointerEvent) {
+    this.currentScene.onclick(ClickEvent.from(event))
   }
 }

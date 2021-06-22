@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+var easy_math_1 = require("../misc/easy-math");
 var Sprite = /** @class */ (function () {
     function Sprite(width, height, x, y, visible) {
         if (width === void 0) { width = 0; }
@@ -32,6 +33,16 @@ var Sprite = /** @class */ (function () {
             && spX <= this.x + this.width
             && spY >= this.y
             && spY <= this.y + this.height);
+    };
+    Sprite.prototype.onclick = function (event) {
+        var inside = easy_math_1["default"].between(this.x, this.x + this.width, event.x)
+            && easy_math_1["default"].between(this.y, this.y + this.height, event.y);
+        if (!inside)
+            return false;
+        return this.onclickInternal(event);
+    };
+    Sprite.prototype.onclickInternal = function (event) {
+        return true;
     };
     return Sprite;
 }());

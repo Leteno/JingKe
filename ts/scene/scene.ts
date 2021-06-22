@@ -1,3 +1,4 @@
+import { ClickEvent } from "../misc/event";
 import Panel from "../widgets/panel";
 
 export default interface Scene {
@@ -5,4 +6,5 @@ export default interface Scene {
   onStart(ctx: CanvasRenderingContext2D)
   update(dt: number)
   render(ctx: CanvasRenderingContext2D)
+  onclick(event:ClickEvent)
 }

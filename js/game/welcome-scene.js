@@ -19,12 +19,20 @@ var WelcomeScene = /** @class */ (function () {
         textView.textSize = 40;
         textView.y = -100;
         textView.measure(ctx);
+        textView.onclickInternal = function (event) {
+            console.log("text is clicked");
+            return true;
+        };
         var startBtn = new textview_1["default"]("开始游戏");
         this.mainPanel.addView(startBtn, layout_1.Align.CENTER, layout_1.Align.CENTER);
         startBtn.textColor = "black";
         startBtn.textSize = 24;
         startBtn.visible = false;
         startBtn.measure(ctx);
+        startBtn.onclickInternal = function (event) {
+            console.log("startBtn is clicked");
+            return true;
+        };
         var configBtn = new textview_1["default"]("配置");
         this.mainPanel.addView(configBtn, layout_1.Align.CENTER, layout_1.Align.CENTER);
         configBtn.textColor = "black";
@@ -32,6 +40,10 @@ var WelcomeScene = /** @class */ (function () {
         configBtn.y = 60;
         configBtn.visible = false;
         configBtn.measure(ctx);
+        configBtn.onclickInternal = function (event) {
+            console.log("configBtn is clicked");
+            return true;
+        };
         var imageView = new imageview_1["default"]("res/artichoke_PNG30.png");
         this.mainPanel.addView(imageView);
         imageView.x = this.canvasWidth / 3;
@@ -65,6 +77,9 @@ var WelcomeScene = /** @class */ (function () {
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.restore();
         this.mainPanel.drawToCanvas(ctx);
+    };
+    WelcomeScene.prototype.onclick = function (event) {
+        this.mainPanel.onclick(event);
     };
     return WelcomeScene;
 }());

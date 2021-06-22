@@ -1,5 +1,7 @@
+import EasyMath from "../misc/easy-math"
 import Sprite from "./sprite"
 import {Align} from "../misc/layout"
+import { ClickEvent } from "../misc/event"
 
 class Pair {
   view: Sprite
@@ -58,5 +60,20 @@ export default class Panel extends Sprite {
         view.height
       );
     }));
+  }
+
+  onclick(event: ClickEvent) : boolean {
+    let inside = EasyMath.between(this.x, this.x + this.width, event.x)
+      && EasyMath.between(this.y, this.y + this.height, event.y);
+    if (!inside) return false;
+    // event cut out
+    let childEvent = ClickEvent.alignChildren(event, this.x, this.y);
+    for (let i = 0; i < this.children.length; i++) {
+      let view:Sprite = this.children[i].view;
+      if (view.onclick(childEvent)) {
+        return true;
+      }
+    }
+    return this.onclickInternal(event);
   }
 }
