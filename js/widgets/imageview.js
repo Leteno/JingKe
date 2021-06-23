@@ -18,16 +18,25 @@ exports.__esModule = true;
 var sprite_1 = require("./sprite");
 var ImageView = /** @class */ (function (_super) {
     __extends(ImageView, _super);
-    function ImageView(imgSrc, width, height, x, y) {
-        if (width === void 0) { width = 0; }
-        if (height === void 0) { height = 0; }
-        if (x === void 0) { x = 0; }
-        if (y === void 0) { y = 0; }
-        var _this = _super.call(this, width, height, x, y, true) || this;
+    function ImageView(imgSrc, left, top) {
+        if (left === void 0) { left = 0; }
+        if (top === void 0) { top = 0; }
+        var _this = _super.call(this, left, top) || this;
         _this.img = new Image();
         _this.img.src = imgSrc;
         return _this;
     }
+    ImageView.prototype.onMeasure = function (ctx) {
+        this.width = this.img.naturalWidth;
+        this.height = this.img.naturalHeight;
+        return {
+            widthAtMost: this.width + this.left,
+            heightAtMost: this.height + this.top
+        };
+    };
+    ImageView.prototype.onLayout = function (left, top, right, bottom) {
+        throw new Error("Method not implemented.");
+    };
     // override
     ImageView.prototype.drawToCanvasInternal = function (ctx, x, y, width, height) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);

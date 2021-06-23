@@ -1,11 +1,24 @@
-import Sprite from "./sprite"
+import Sprite, { MeasureResult } from "./sprite"
 
 export default class ImageView extends Sprite {
   img: HTMLImageElement;
-  constructor(imgSrc: string, width:number=0, height:number=0, x:number=0, y:number=0) {
-    super(width, height, x, y, true);
+  constructor(imgSrc: string, left:number=0, top:number=0) {
+    super(left, top);
     this.img = new Image();
     this.img.src = imgSrc;
+  }
+
+  protected onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
+    this.width = this.img.naturalWidth;
+    this.height = this.img.naturalHeight;
+    return {
+      widthAtMost: this.width + this.left,
+      heightAtMost: this.height + this.top
+    }
+  }
+
+  protected onLayout(left: number, top: number, right: number, bottom: number): void {
+    throw new Error("Method not implemented.");
   }
 
   // override

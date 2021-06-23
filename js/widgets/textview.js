@@ -18,11 +18,11 @@ exports.__esModule = true;
 var sprite_1 = require("./sprite");
 var TextView = /** @class */ (function (_super) {
     __extends(TextView, _super);
-    function TextView(text, x, y) {
+    function TextView(text, left, top) {
         if (text === void 0) { text = "Hello World"; }
-        if (x === void 0) { x = 0; }
-        if (y === void 0) { y = 0; }
-        var _this = _super.call(this, 0, 0, x, y) || this;
+        if (left === void 0) { left = 0; }
+        if (top === void 0) { top = 0; }
+        var _this = _super.call(this, left, top) || this;
         _this.text = text;
         _this.textColor = "black";
         _this.textSize = undefined;
@@ -36,13 +36,20 @@ var TextView = /** @class */ (function (_super) {
             ctx.font = this.textSize + "px bold";
         }
     };
-    TextView.prototype.measure = function (ctx) {
+    TextView.prototype.onMeasure = function (ctx) {
         ctx.save();
         this.applyStyle(ctx);
         var metric = ctx.measureText(this.text);
         this.width = metric.width;
-        console.log("measure width: " + this.width);
+        this.height = this.textSize;
         ctx.restore();
+        return {
+            widthAtMost: this.width + this.left,
+            heightAtMost: this.height + this.top
+        };
+    };
+    TextView.prototype.onLayout = function (left, top, right, bottom) {
+        throw new Error("Method not implemented.");
     };
     // override
     TextView.prototype.drawToCanvasInternal = function (ctx, x, y) {

@@ -7,7 +7,9 @@ var panel_1 = require("../widgets/panel");
 var textview_1 = require("../widgets/textview");
 var WelcomeScene = /** @class */ (function () {
     function WelcomeScene(canvas) {
-        this.mainPanel = new panel_1["default"](0, 0, canvas.width, canvas.height);
+        this.mainPanel = new panel_1["default"](0, 0);
+        this.mainPanel.forceWidth = canvas.width;
+        this.mainPanel.forceHeight = canvas.height;
         this.animators = new Array();
         this.canvasWidth = canvas.width;
         this.canvasHeight = canvas.height;
@@ -28,7 +30,6 @@ var WelcomeScene = /** @class */ (function () {
         startBtn.textColor = "black";
         startBtn.textSize = 24;
         startBtn.visible = false;
-        startBtn.measure(ctx);
         startBtn.onclickInternal = function (event) {
             console.log("startBtn is clicked");
             return true;
@@ -48,6 +49,7 @@ var WelcomeScene = /** @class */ (function () {
         this.mainPanel.addView(imageView);
         imageView.x = this.canvasWidth / 3;
         imageView.width = imageView.height = 100;
+        this.mainPanel.measure(ctx);
         var animatorImageViewY = new number_linear_animator_1["default"](0, this.canvasHeight * 2, 20000);
         animatorImageViewY.onValChange = function (val) {
             imageView.y = animatorImageViewY.getVal();

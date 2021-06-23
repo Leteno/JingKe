@@ -1,10 +1,9 @@
-import Sprite from "../sprite"
+import TestSprite from "./test_sprite.test"
 
 test("isCollideWith", () => {
-  let s1 = new Sprite();
-  let s2 = new Sprite();
+  let s1 = new TestSprite(100, 100);
+  let s2 = new TestSprite(100, 100);
 
-  s1.width = s1.height = s2.width = s2.height = 100;
   s1.x = s1.y = 300;
 
   // No touch

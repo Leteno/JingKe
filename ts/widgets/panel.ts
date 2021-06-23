@@ -1,5 +1,5 @@
 import EasyMath from "../misc/easy-math"
-import Sprite from "./sprite"
+import Sprite, { MeasureResult } from "./sprite"
 import {Align} from "../misc/layout"
 import { ClickEvent } from "../misc/event"
 
@@ -11,9 +11,29 @@ class Pair {
 
 export default class Panel extends Sprite {
   children: Array<Pair>;
-  constructor(x:number=0, y:number=0, width:number=0, height:number=0) {
-    super(width, height, x, y);
+  constructor(left:number=0, top:number=0) {
+    super(left, top);
     this.children = new Array();
+  }
+
+  protected onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
+    let widthAtMost = 0;
+    let heightAtMost = 0;
+    this.children.forEach((pair) => {
+      let size = pair.view.measure(ctx)
+      widthAtMost = Math.max(size.widthAtMost, widthAtMost)
+      heightAtMost = Math.max(size.heightAtMost, heightAtMost)
+    });
+    this.width = widthAtMost;
+    this.height = heightAtMost;
+    return {
+      widthAtMost: widthAtMost + this.left,
+      heightAtMost: heightAtMost + this.top
+    }
+  }
+
+  protected onLayout(left: number, top: number, right: number, bottom: number): void {
+    throw new Error("Method not implemented.")
   }
 
   addView(view: Sprite, alignX: Align=Align.START, alignY: Align=Align.START) {

@@ -1,5 +1,6 @@
 import Panel from "../panel"
 import Sprite from "../sprite"
+import TestSprite from "./test_sprite.test"
 
 function indexOf(pairList: Array<{view: Sprite}>, view: Sprite): number {
   let index = -1;
@@ -17,8 +18,8 @@ test('helloworld', () => {
 
 test('addAndRemove', () => {
   let panel = new Panel();
-  let s1 = new Sprite();
-  let s2 = new Sprite();
+  let s1 = new TestSprite(100, 100);
+  let s2 = new TestSprite(100, 100);
 
   panel.addView(s1);
   expect(indexOf(panel.children, s1)).toBeGreaterThanOrEqual(0);
@@ -29,8 +30,8 @@ test('addAndRemove', () => {
 
 test('removeAll', () => {
   let panel = new Panel();
-  let s1 = new Sprite();
-  let s2 = new Sprite();
+  let s1 = new TestSprite(100, 100);
+  let s2 = new TestSprite(100, 100);
 
   panel.addView(s1);
   panel.addView(s2);
@@ -46,8 +47,8 @@ test('drawChildren', () => {
   panel.x = 120; panel.y = 150;
   let mockDrawFunc1 = jest.fn();
   let mockDrawFunc2 = jest.fn();
-  let s1 = new Sprite();
-  let s2 = new Sprite();
+  let s1 = new TestSprite(100, 100);
+  let s2 = new TestSprite(100, 100);
   s1.drawToCanvasInternal = mockDrawFunc1;
   s2.drawToCanvasInternal = mockDrawFunc2;
   s1.x = 1; s1.y = 10;

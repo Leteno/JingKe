@@ -13,7 +13,9 @@ export default class WelcomeScene implements Scene {
   canvasWidth: number;
   canvasHeight: number;
   constructor(canvas: HTMLCanvasElement) {
-    this.mainPanel = new Panel(0, 0, canvas.width, canvas.height);
+    this.mainPanel = new Panel(0, 0);
+    this.mainPanel.forceWidth = canvas.width;
+    this.mainPanel.forceHeight = canvas.height;
     this.animators = new Array<Animator<number>>();
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
@@ -35,7 +37,6 @@ export default class WelcomeScene implements Scene {
     startBtn.textColor = "black";
     startBtn.textSize = 24;
     startBtn.visible = false;
-    startBtn.measure(ctx);
     startBtn.onclickInternal = (event: ClickEvent) : boolean => {
       console.log("startBtn is clicked");
       return true;
@@ -57,6 +58,8 @@ export default class WelcomeScene implements Scene {
     this.mainPanel.addView(imageView);
     imageView.x = this.canvasWidth / 3;
     imageView.width = imageView.height = 100;
+
+    this.mainPanel.measure(ctx);
 
     let animatorImageViewY = new NumberLinearAnimator(
       0, this.canvasHeight * 2, 20000

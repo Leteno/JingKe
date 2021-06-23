@@ -1,12 +1,10 @@
 
 import { ClickEvent } from "../../misc/event";
 import Panel from "../panel"
-import Sprite from "../sprite"
+import TestSprite from "./test_sprite.test"
 
 test("testSimpleView", () => {
-  let view = new Sprite();
-  view.width = 100;
-  view.height = 100;
+  let view = new TestSprite(100, 100);
   view.x = 50;
   view.y = 50;
 
@@ -27,9 +25,8 @@ test("testPanel", () => {
   });
   panel.onclickInternal = panelClick;
 
-  let viewA = new Sprite();
+  let viewA = new TestSprite(100, 100);
   viewA.x = viewA.y = 100;
-  viewA.width = viewA.height = 100;
   panel.addView(viewA);
   let viewAClick = jest.fn<boolean, any>((all: any[]) :boolean => {
     return true;

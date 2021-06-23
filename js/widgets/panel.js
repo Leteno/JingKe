@@ -26,15 +26,31 @@ var Pair = /** @class */ (function () {
 }());
 var Panel = /** @class */ (function (_super) {
     __extends(Panel, _super);
-    function Panel(x, y, width, height) {
-        if (x === void 0) { x = 0; }
-        if (y === void 0) { y = 0; }
-        if (width === void 0) { width = 0; }
-        if (height === void 0) { height = 0; }
-        var _this = _super.call(this, width, height, x, y) || this;
+    function Panel(left, top) {
+        if (left === void 0) { left = 0; }
+        if (top === void 0) { top = 0; }
+        var _this = _super.call(this, left, top) || this;
         _this.children = new Array();
         return _this;
     }
+    Panel.prototype.onMeasure = function (ctx) {
+        var widthAtMost = 0;
+        var heightAtMost = 0;
+        this.children.forEach(function (pair) {
+            var size = pair.view.measure(ctx);
+            widthAtMost = Math.max(size.widthAtMost, widthAtMost);
+            heightAtMost = Math.max(size.heightAtMost, heightAtMost);
+        });
+        this.width = widthAtMost;
+        this.height = heightAtMost;
+        return {
+            widthAtMost: widthAtMost + this.left,
+            heightAtMost: heightAtMost + this.top
+        };
+    };
+    Panel.prototype.onLayout = function (left, top, right, bottom) {
+        throw new Error("Method not implemented.");
+    };
     Panel.prototype.addView = function (view, alignX, alignY) {
         if (alignX === void 0) { alignX = layout_1.Align.START; }
         if (alignY === void 0) { alignY = layout_1.Align.START; }

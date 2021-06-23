@@ -1,12 +1,12 @@
-import Sprite from "./sprite";
+import Sprite, { MeasureResult } from "./sprite";
 
 export default class TextView extends Sprite {
   text: string;
   textColor: string;
   textSize: number;
 
-  constructor(text:string="Hello World", x:number=0, y:number=0) {
-    super(0, 0, x, y);
+  constructor(text:string="Hello World", left:number=0, top:number=0) {
+    super(left, top);
     this.text = text;
     this.textColor = "black";
     this.textSize = undefined;
@@ -21,13 +21,21 @@ export default class TextView extends Sprite {
     }
   }
   
-  measure(ctx: CanvasRenderingContext2D) {
+  protected onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
     ctx.save();
     this.applyStyle(ctx);
     let metric = ctx.measureText(this.text);
     this.width = metric.width;
-    console.log(`measure width: ${this.width}`)
+    this.height = this.textSize;
     ctx.restore();
+    return {
+      widthAtMost: this.width + this.left,
+      heightAtMost: this.height + this.top
+    }
+  }
+
+  protected onLayout(left: number, top: number, right: number, bottom: number): void {
+    throw new Error("Method not implemented.");
   }
 
   // override
