@@ -1,5 +1,4 @@
 
-import { assert } from "console";
 import Scene from "./scene"
 
 export default class SceneManager {
@@ -33,8 +32,10 @@ export default class SceneManager {
    * Will raise exception if there is no scene related to key.
    */
   switchScene(key: string) {
-    assert(this.sceneMap.has(key), 
-      `switchScene to key ${key} which has no scene related`);
+    if (!this.sceneMap.has(key)) {
+      console.warn(`switchScene to key ${key} which has no scene related`);
+      return;
+    }
     this.currentScene = this.sceneMap.get(key) as Scene;
     this.currentScene.onStart(this.ctx);
   }

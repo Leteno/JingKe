@@ -1,6 +1,5 @@
 "use strict";
 exports.__esModule = true;
-var console_1 = require("console");
 var SceneManager = /** @class */ (function () {
     function SceneManager(ctx) {
         this.ctx = ctx;
@@ -25,7 +24,10 @@ var SceneManager = /** @class */ (function () {
      * Will raise exception if there is no scene related to key.
      */
     SceneManager.prototype.switchScene = function (key) {
-        console_1.assert(this.sceneMap.has(key), "switchScene to key " + key + " which has no scene related");
+        if (!this.sceneMap.has(key)) {
+            console.warn("switchScene to key " + key + " which has no scene related");
+            return;
+        }
         this.currentScene = this.sceneMap.get(key);
         this.currentScene.onStart(this.ctx);
     };

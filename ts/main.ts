@@ -1,5 +1,6 @@
 import WelcomeScene from "./game/welcome-scene";
 import Scene from "./scene/scene";
+import SceneManager from "./scene/scene_manager"
 import {timestamp} from "./misc/time"
 import { ClickEvent } from "./misc/event";
 
@@ -9,7 +10,7 @@ export default class Main {
   ctx: CanvasRenderingContext2D;
 
   last: number;
-  currentScene: Scene
+  sceneManager: SceneManager;
 
   constructor(canvas: HTMLCanvasElement) {
     // id of requestAnimationFrame
@@ -17,8 +18,11 @@ export default class Main {
     this.bindLoop = this.gameLoop.bind(this);
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     this.last = timestamp();
-    this.currentScene = new WelcomeScene(canvas);
-    this.currentScene.onStart(this.ctx);
+
+    this.sceneManager = new SceneManager(this.ctx);
+    let welcomeScene = new WelcomeScene(canvas);
+    this.sceneManager.push("welcome", welcomeScene);
+    this.sceneManager.switchScene("welcome");
 
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
@@ -39,14 +43,14 @@ export default class Main {
   }
 
   update(dt: number) {
-    this.currentScene.update(dt);
+    this.sceneManager.currentScene.update(dt);
   }
 
   render() {
-    this.currentScene.render(this.ctx);
+    this.sceneManager.currentScene.render(this.ctx);
   }
 
   onclick(event: PointerEvent) {
-    this.currentScene.onclick(ClickEvent.from(event))
+    this.sceneManager.currentScene.onclick(ClickEvent.from(event))
   }
 }

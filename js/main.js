@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var welcome_scene_1 = require("./game/welcome-scene");
+var scene_manager_1 = require("./scene/scene_manager");
 var time_1 = require("./misc/time");
 var event_1 = require("./misc/event");
 var Main = /** @class */ (function () {
@@ -10,8 +11,10 @@ var Main = /** @class */ (function () {
         this.bindLoop = this.gameLoop.bind(this);
         this.ctx = canvas.getContext('2d');
         this.last = time_1.timestamp();
-        this.currentScene = new welcome_scene_1["default"](canvas);
-        this.currentScene.onStart(this.ctx);
+        this.sceneManager = new scene_manager_1["default"](this.ctx);
+        var welcomeScene = new welcome_scene_1["default"](canvas);
+        this.sceneManager.push("welcome", welcomeScene);
+        this.sceneManager.switchScene("welcome");
         window.cancelAnimationFrame(this.aniId);
         this.aniId = window.requestAnimationFrame(this.bindLoop);
         canvas.onclick = this.onclick.bind(this);
@@ -25,13 +28,13 @@ var Main = /** @class */ (function () {
         this.aniId = window.requestAnimationFrame(this.bindLoop);
     };
     Main.prototype.update = function (dt) {
-        this.currentScene.update(dt);
+        this.sceneManager.currentScene.update(dt);
     };
     Main.prototype.render = function () {
-        this.currentScene.render(this.ctx);
+        this.sceneManager.currentScene.render(this.ctx);
     };
     Main.prototype.onclick = function (event) {
-        this.currentScene.onclick(event_1.ClickEvent.from(event));
+        this.sceneManager.currentScene.onclick(event_1.ClickEvent.from(event));
     };
     return Main;
 }());
