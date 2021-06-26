@@ -21,6 +21,7 @@ export default class Main {
     this.aniId = 0;
     this.bindLoop = this.gameLoop.bind(this);
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    this.ctx.textBaseline = "top";
     this.last = timestamp();
 
     this.sceneManager = new SceneManager(this.ctx);

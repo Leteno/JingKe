@@ -12,6 +12,7 @@ var Main = /** @class */ (function () {
         this.aniId = 0;
         this.bindLoop = this.gameLoop.bind(this);
         this.ctx = canvas.getContext('2d');
+        this.ctx.textBaseline = "top";
         this.last = time_1.timestamp();
         this.sceneManager = new scene_manager_1["default"](this.ctx);
         var welcomeScene = new welcome_scene_1["default"](this.sceneManager, canvas);
