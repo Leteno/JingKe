@@ -14,7 +14,7 @@ export default class WelcomeScene implements Scene {
   canvasWidth: number;
   canvasHeight: number;
   constructor(canvas: HTMLCanvasElement) {
-    this.mainPanel = new Panel(0, 0);
+    this.mainPanel = new Panel();
     this.mainPanel.forceWidth = canvas.width;
     this.mainPanel.forceHeight = canvas.height;
     this.animators = new Array<Animator<number>>();

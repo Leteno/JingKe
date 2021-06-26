@@ -18,10 +18,8 @@ exports.__esModule = true;
 var sprite_1 = require("./sprite");
 var ImageView = /** @class */ (function (_super) {
     __extends(ImageView, _super);
-    function ImageView(imgSrc, left, top) {
-        if (left === void 0) { left = 0; }
-        if (top === void 0) { top = 0; }
-        var _this = _super.call(this, left, top) || this;
+    function ImageView(imgSrc) {
+        var _this = _super.call(this) || this;
         _this.img = new Image();
         _this.img.src = imgSrc;
         return _this;

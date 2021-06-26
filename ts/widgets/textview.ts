@@ -5,8 +5,8 @@ export default class TextView extends Sprite {
   textColor: string;
   textSize: number;
 
-  constructor(text:string="Hello World", left:number=0, top:number=0) {
-    super(left, top);
+  constructor(text:string="Hello World") {
+    super();
     this.text = text;
     this.textColor = "black";
     this.textSize = undefined;

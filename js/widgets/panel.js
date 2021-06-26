@@ -20,10 +20,8 @@ var sprite_1 = require("./sprite");
 var event_1 = require("../misc/event");
 var Panel = /** @class */ (function (_super) {
     __extends(Panel, _super);
-    function Panel(left, top) {
-        if (left === void 0) { left = 0; }
-        if (top === void 0) { top = 0; }
-        var _this = _super.call(this, left, top) || this;
+    function Panel() {
+        var _this = _super.call(this) || this;
         _this.children = new Array();
         return _this;
     }

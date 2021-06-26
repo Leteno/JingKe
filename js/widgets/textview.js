@@ -18,11 +18,9 @@ exports.__esModule = true;
 var sprite_1 = require("./sprite");
 var TextView = /** @class */ (function (_super) {
     __extends(TextView, _super);
-    function TextView(text, left, top) {
+    function TextView(text) {
         if (text === void 0) { text = "Hello World"; }
-        if (left === void 0) { left = 0; }
-        if (top === void 0) { top = 0; }
-        var _this = _super.call(this, left, top) || this;
+        var _this = _super.call(this) || this;
         _this.text = text;
         _this.textColor = "black";
         _this.textSize = undefined;

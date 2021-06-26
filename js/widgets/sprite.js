@@ -10,19 +10,16 @@ var MeasureResult = /** @class */ (function () {
 }());
 exports.MeasureResult = MeasureResult;
 var Sprite = /** @class */ (function () {
-    function Sprite(left, top, layoutParam, visible) {
-        if (left === void 0) { left = 0; }
-        if (top === void 0) { top = 0; }
+    function Sprite(layoutParam, visible) {
         if (layoutParam === void 0) { layoutParam = layout_1.LayoutParams.normal(); }
         if (visible === void 0) { visible = true; }
-        this.left = left;
-        this.top = top;
         this.layoutParam = layoutParam;
         this.visible = visible;
         this.forceWidth = -1;
         this.forceHeight = -1;
         this.width = this.height = 0;
         this.x = this.y = 0;
+        this.left = this.top = 0;
         this.right = this.bottom = 0;
     }
     Sprite.prototype.measure = function (ctx) {

@@ -5,8 +5,8 @@ import { ClickEvent } from "../misc/event"
 
 export default class Panel extends Sprite {
   children: Array<Sprite>;
-  constructor(left:number=0, top:number=0) {
-    super(left, top);
+  constructor() {
+    super();
     this.children = new Array();
   }
 

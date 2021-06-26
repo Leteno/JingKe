@@ -2,8 +2,8 @@ import Sprite, { MeasureResult } from "./sprite"
 
 export default class ImageView extends Sprite {
   img: HTMLImageElement;
-  constructor(imgSrc: string, left:number=0, top:number=0) {
-    super(left, top);
+  constructor(imgSrc: string) {
+    super();
     this.img = new Image();
     this.img.src = imgSrc;
   }

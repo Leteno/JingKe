@@ -26,9 +26,7 @@ export default abstract class Sprite {
   x: number;
   y: number;
 
-  constructor(left:number=0, top:number=0, layoutParam: LayoutParams=LayoutParams.normal(), visible:boolean=true) {
-    this.left = left;
-    this.top = top;
+  constructor(layoutParam: LayoutParams=LayoutParams.normal(), visible:boolean=true) {
     this.layoutParam = layoutParam;
     this.visible = visible;
 
@@ -36,6 +34,7 @@ export default abstract class Sprite {
     this.forceHeight = -1;
     this.width = this.height = 0;
     this.x = this.y = 0;
+    this.left = this.top = 0;
     this.right = this.bottom = 0;
   }
 

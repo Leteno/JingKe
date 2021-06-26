@@ -7,7 +7,7 @@ var panel_1 = require("../widgets/panel");
 var textview_1 = require("../widgets/textview");
 var WelcomeScene = /** @class */ (function () {
     function WelcomeScene(canvas) {
-        this.mainPanel = new panel_1["default"](0, 0);
+        this.mainPanel = new panel_1["default"]();
         this.mainPanel.forceWidth = canvas.width;
         this.mainPanel.forceHeight = canvas.height;
         this.animators = new Array();
