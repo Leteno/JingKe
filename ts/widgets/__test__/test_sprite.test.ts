@@ -2,14 +2,17 @@
 import Sprite, { MeasureResult } from "../sprite"
 
 export default class TestSprite extends Sprite {
-  constructor(width: number, height: number) {
+  constructor(width: number = -1, height: number=-1) {
     super();
     this.width = this.forceWidth = width;
     this.height = this.forceHeight = height;
   }
 
-  protected onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
-    throw new Error("Shouldn't call.");
+  public onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
+    return {
+      widthAtMost: this.width,
+      heightAtMost: this.height
+    }
   }
   drawToCanvasInternal(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number): void {
     // do nothing

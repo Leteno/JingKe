@@ -27,7 +27,7 @@ export default class WelcomeScene implements Scene {
     this.mainPanel.addView(textView);
     textView.textColor = "black";
     textView.textSize = 40;
-    textView.y = -100;
+    textView.top = -100;
     textView.onclickInternal = (event: ClickEvent) : boolean => {
       console.log("text is clicked");
       return true;
@@ -49,7 +49,7 @@ export default class WelcomeScene implements Scene {
     this.mainPanel.addView(configBtn);
     configBtn.textColor = "black";
     configBtn.textSize = 24;
-    configBtn.y = 60;
+    configBtn.top = 60;
     configBtn.visible = false;
     configBtn.onclickInternal = (event: ClickEvent) : boolean => {
       console.log("configBtn is clicked");

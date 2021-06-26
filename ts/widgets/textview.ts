@@ -27,6 +27,7 @@ export default class TextView extends Sprite {
     let metric = ctx.measureText(this.text);
     this.width = metric.width;
     this.height = this.textSize;
+    console.log(`textview width: ${this.width} height: ${this.height}`)
     ctx.restore();
     return {
       widthAtMost: this.width + this.getAdditionalX(),

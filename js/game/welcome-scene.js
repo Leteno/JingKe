@@ -20,7 +20,7 @@ var WelcomeScene = /** @class */ (function () {
         this.mainPanel.addView(textView);
         textView.textColor = "black";
         textView.textSize = 40;
-        textView.y = -100;
+        textView.top = -100;
         textView.onclickInternal = function (event) {
             console.log("text is clicked");
             return true;
@@ -40,7 +40,7 @@ var WelcomeScene = /** @class */ (function () {
         this.mainPanel.addView(configBtn);
         configBtn.textColor = "black";
         configBtn.textSize = 24;
-        configBtn.y = 60;
+        configBtn.top = 60;
         configBtn.visible = false;
         configBtn.onclickInternal = function (event) {
             console.log("configBtn is clicked");

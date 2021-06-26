@@ -1,6 +1,6 @@
 import { Align, LayoutParams } from "../../misc/layout";
 import Panel from "../panel"
-import Sprite from "../sprite"
+import Sprite, { MeasureResult } from "../sprite"
 import TestSprite from "./test_sprite.test"
 
 function indexOf(pairList: Array<Sprite>, view: Sprite): number {
@@ -70,6 +70,28 @@ test('drawChildren', () => {
   // expect(mockDrawFunc1.mock.calls[0][2]).toBe(10);
   // expect(mockDrawFunc2.mock.calls[0][1]).toBe(2);
   // expect(mockDrawFunc2.mock.calls[0][2]).toBe(20);
+})
+
+test("onMeasure", () => {
+  let ctx = {} as CanvasRenderingContext2D;
+  let panel = new Panel();
+  panel.forceWidth = panel.forceHeight = 100;
+  let s1 = new TestSprite();
+  let onMeasureFn = jest.fn<MeasureResult, any>(((all: any[]):MeasureResult=>{
+    return {
+      widthAtMost: 10,
+      heightAtMost: 10
+    };
+  }));
+  let onLayoutFn = jest.fn();
+  s1.onMeasure = onMeasureFn;
+  s1.onLayout = onLayoutFn;
+  panel.addView(s1);
+
+  panel.measure(ctx);
+  expect(onMeasureFn.mock.calls.length).toBe(1)
+  panel.layout();
+  expect(onLayoutFn.mock.calls.length).toBe(1)
 })
 
 test("measureAndLayout", ()=> {

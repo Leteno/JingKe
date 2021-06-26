@@ -10,6 +10,10 @@ export default class Panel extends Sprite {
     this.children = new Array();
   }
 
+  public measure(ctx: CanvasRenderingContext2D): MeasureResult {
+    return this.onMeasure(ctx);
+  }
+
   protected onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
     let widthAtMost = 0;
     let heightAtMost = 0;
@@ -18,6 +22,14 @@ export default class Panel extends Sprite {
       widthAtMost = Math.max(size.widthAtMost, widthAtMost)
       heightAtMost = Math.max(size.heightAtMost, heightAtMost)
     });
+    if (this.forceWidth > 0 && this.forceHeight > 0) {
+      this.width = this.forceWidth;
+      this.height = this.forceHeight;
+      return {
+        widthAtMost: this.forceWidth,
+        heightAtMost: this.forceHeight,
+      }
+    }
     this.width = widthAtMost;
     this.height = heightAtMost;
     return {

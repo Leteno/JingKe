@@ -25,6 +25,9 @@ var Panel = /** @class */ (function (_super) {
         _this.children = new Array();
         return _this;
     }
+    Panel.prototype.measure = function (ctx) {
+        return this.onMeasure(ctx);
+    };
     Panel.prototype.onMeasure = function (ctx) {
         var widthAtMost = 0;
         var heightAtMost = 0;
@@ -33,6 +36,14 @@ var Panel = /** @class */ (function (_super) {
             widthAtMost = Math.max(size.widthAtMost, widthAtMost);
             heightAtMost = Math.max(size.heightAtMost, heightAtMost);
         });
+        if (this.forceWidth > 0 && this.forceHeight > 0) {
+            this.width = this.forceWidth;
+            this.height = this.forceHeight;
+            return {
+                widthAtMost: this.forceWidth,
+                heightAtMost: this.forceHeight
+            };
+        }
         this.width = widthAtMost;
         this.height = heightAtMost;
         return {
