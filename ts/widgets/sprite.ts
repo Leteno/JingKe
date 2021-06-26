@@ -1,6 +1,7 @@
 import { boolean } from "yargs";
 import EasyMath from "../misc/easy-math";
 import { ClickEvent } from "../misc/event";
+import { Align, LayoutParams } from "../misc/layout";
 
 export class MeasureResult {
   widthAtMost: number;
@@ -10,7 +11,10 @@ export class MeasureResult {
 export default abstract class Sprite {
   left: number;
   top: number;
+  right: number;
+  bottom: number;
   visible: boolean;
+  layoutParam: LayoutParams;
 
   // We could force the value here. Need to call measure to update it though.
   forceWidth: number;
@@ -22,15 +26,17 @@ export default abstract class Sprite {
   x: number;
   y: number;
 
-  constructor(left:number=0, top:number=0, visible:boolean=true) {
+  constructor(left:number=0, top:number=0, layoutParam: LayoutParams=LayoutParams.normal(), visible:boolean=true) {
     this.left = left;
     this.top = top;
+    this.layoutParam = layoutParam;
     this.visible = visible;
 
     this.forceWidth = -1;
     this.forceHeight = -1;
     this.width = this.height = 0;
     this.x = this.y = 0;
+    this.right = this.bottom = 0;
   }
 
   measure(ctx: CanvasRenderingContext2D): MeasureResult {
@@ -38,23 +44,57 @@ export default abstract class Sprite {
       this.width = this.forceWidth;
       this.height = this.forceHeight;
       return {
-        widthAtMost: this.forceWidth + this.left,
-        heightAtMost: this.forceHeight + this.top
+        widthAtMost: this.forceWidth + this.getAdditionalX(),
+        heightAtMost: this.forceHeight + this.getAdditionalY()
       }
     }
     return this.onMeasure(ctx);
   }
 
+  getAdditionalX() : number {
+    let ret = this.left;
+    if (Align.CENTER == this.layoutParam.xcfg) {
+      ret = this.left * 2;
+    }
+    return ret;
+  }
+  getAdditionalY() : number {
+    let ret = this.top;
+    if (Align.CENTER == this.layoutParam.xcfg) {
+      ret = this.top * 2;
+    }
+    return ret;
+  }
+
   // measure for width and height
   protected abstract onMeasure(ctx: CanvasRenderingContext2D): MeasureResult;
 
-  layout(left: number, top: number, right: number, bottom: number): void {
-    return this.onLayout(left, top, right, bottom);
+  // (left, top) - width, height, those are parent's attribute.
+  // And under such situation, we need to calculate the x,y for the layout
+  onLayout(width: number, height: number) {
+    switch(this.layoutParam.xcfg) {
+      case Align.CENTER:
+        this.x = (width - this.width) / 2 + this.left;
+        break;
+      case Align.END:
+        this.x = width - this.width - this.right;
+        break;
+      default:
+        this.x = this.left;
+        break;
+    }
+    switch(this.layoutParam.ycfg) {
+      case Align.CENTER:
+        this.y = (height - this.height) / 2 + this.top;
+        break;
+      case Align.END:
+        this.y = height - this.height - this.bottom;
+        break;
+      default:
+        this.y = this.top;
+        break;
+    }
   }
-
-  // layout for x and y
-  // (left, top) - (right, bottom), those are parent's size.
-  protected abstract onLayout(left: number, top: number, right: number, bottom: number): void;
 
   // public final
   drawToCanvas(ctx: CanvasRenderingContext2D) {

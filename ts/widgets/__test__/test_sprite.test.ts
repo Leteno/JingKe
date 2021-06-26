@@ -11,9 +11,6 @@ export default class TestSprite extends Sprite {
   protected onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
     throw new Error("Shouldn't call.");
   }
-  protected onLayout(left: number, top: number, right: number, bottom: number): void {
-    // do nothing
-  }
   drawToCanvasInternal(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number): void {
     // do nothing
   }

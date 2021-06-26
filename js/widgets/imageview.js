@@ -30,12 +30,9 @@ var ImageView = /** @class */ (function (_super) {
         this.width = this.img.naturalWidth;
         this.height = this.img.naturalHeight;
         return {
-            widthAtMost: this.width + this.left,
-            heightAtMost: this.height + this.top
+            widthAtMost: this.width + this.getAdditionalX(),
+            heightAtMost: this.height + this.getAdditionalY()
         };
-    };
-    ImageView.prototype.onLayout = function (left, top, right, bottom) {
-        throw new Error("Method not implemented.");
     };
     // override
     ImageView.prototype.drawToCanvasInternal = function (ctx, x, y, width, height) {

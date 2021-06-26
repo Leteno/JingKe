@@ -17,13 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var easy_math_1 = require("../misc/easy-math");
 var sprite_1 = require("./sprite");
-var layout_1 = require("../misc/layout");
 var event_1 = require("../misc/event");
-var Pair = /** @class */ (function () {
-    function Pair() {
-    }
-    return Pair;
-}());
 var Panel = /** @class */ (function (_super) {
     __extends(Panel, _super);
     function Panel(left, top) {
@@ -36,37 +30,33 @@ var Panel = /** @class */ (function (_super) {
     Panel.prototype.onMeasure = function (ctx) {
         var widthAtMost = 0;
         var heightAtMost = 0;
-        this.children.forEach(function (pair) {
-            var size = pair.view.measure(ctx);
+        this.children.forEach(function (view) {
+            var size = view.measure(ctx);
             widthAtMost = Math.max(size.widthAtMost, widthAtMost);
             heightAtMost = Math.max(size.heightAtMost, heightAtMost);
         });
         this.width = widthAtMost;
         this.height = heightAtMost;
         return {
-            widthAtMost: widthAtMost + this.left,
-            heightAtMost: heightAtMost + this.top
+            widthAtMost: widthAtMost + this.getAdditionalX(),
+            heightAtMost: heightAtMost + this.getAdditionalY()
         };
     };
-    Panel.prototype.onLayout = function (left, top, right, bottom) {
-        throw new Error("Method not implemented.");
+    Panel.prototype.layout = function () {
+        this.onLayout(this.width, this.height);
     };
-    Panel.prototype.addView = function (view, alignX, alignY) {
-        if (alignX === void 0) { alignX = layout_1.Align.START; }
-        if (alignY === void 0) { alignY = layout_1.Align.START; }
-        this.children.push({
-            "view": view,
-            "alignX": alignX,
-            "alignY": alignY
+    Panel.prototype.onLayout = function (width, height) {
+        var _this = this;
+        _super.prototype.onLayout.call(this, width, height);
+        this.children.forEach(function (view) {
+            view.onLayout(_this.width, _this.height);
         });
+    };
+    Panel.prototype.addView = function (view) {
+        this.children.push(view);
     };
     Panel.prototype.removeView = function (view) {
-        var index = -1;
-        this.children.forEach(function (pair, ind) {
-            if (pair.view == view) {
-                index = ind;
-            }
-        });
+        var index = this.children.findIndex(function (v) { return v == view; });
         if (index !== -1) {
             this.children.splice(index, 1);
         }
@@ -76,19 +66,12 @@ var Panel = /** @class */ (function (_super) {
     };
     // override
     Panel.prototype.drawToCanvasInternal = function (ctx, x, y) {
-        var _this = this;
-        this.children.forEach((function (pair) {
-            var view = pair.view;
-            var alignX = pair.alignX;
-            var finalX = alignX == layout_1.Align.START ? x + view.x :
-                alignX == layout_1.Align.END ? x + _this.width - view.x :
-                    /* Align.CENTER */ x + Math.max(_this.width - view.width, 0) / 2 + view.x;
-            var alignY = pair.alignY;
-            var finalY = alignY == layout_1.Align.START ? y + view.y :
-                alignY == layout_1.Align.END ? y + _this.height - view.y :
-                    /* Align.Center */ y + Math.max(_this.height - view.height, 0) / 2 + view.y;
-            view.drawToCanvasInternal(ctx, finalX, finalY, view.width, view.height);
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        this.children.forEach((function (view) {
+            view.drawToCanvasInternal(ctx, view.x, view.y, view.width, view.height);
         }));
+        ctx.restore();
     };
     Panel.prototype.onclick = function (event) {
         var inside = easy_math_1["default"].between(this.x, this.x + this.width, event.x)
@@ -98,7 +81,7 @@ var Panel = /** @class */ (function (_super) {
         // event cut out
         var childEvent = event_1.ClickEvent.alignChildren(event, this.x, this.y);
         for (var i = 0; i < this.children.length; i++) {
-            var view = this.children[i].view;
+            var view = this.children[i];
             if (view.onclick(childEvent)) {
                 return true;
             }

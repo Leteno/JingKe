@@ -44,12 +44,9 @@ var TextView = /** @class */ (function (_super) {
         this.height = this.textSize;
         ctx.restore();
         return {
-            widthAtMost: this.width + this.left,
-            heightAtMost: this.height + this.top
+            widthAtMost: this.width + this.getAdditionalX(),
+            heightAtMost: this.height + this.getAdditionalY()
         };
-    };
-    TextView.prototype.onLayout = function (left, top, right, bottom) {
-        throw new Error("Method not implemented.");
     };
     // override
     TextView.prototype.drawToCanvasInternal = function (ctx, x, y) {

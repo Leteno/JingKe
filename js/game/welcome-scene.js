@@ -16,17 +16,18 @@ var WelcomeScene = /** @class */ (function () {
     }
     WelcomeScene.prototype.onStart = function (ctx) {
         var textView = new textview_1["default"]("荆轲刺秦王");
-        this.mainPanel.addView(textView, layout_1.Align.CENTER, layout_1.Align.CENTER);
+        textView.layoutParam = new layout_1.LayoutParams(layout_1.Align.CENTER, layout_1.Align.CENTER);
+        this.mainPanel.addView(textView);
         textView.textColor = "black";
         textView.textSize = 40;
         textView.y = -100;
-        textView.measure(ctx);
         textView.onclickInternal = function (event) {
             console.log("text is clicked");
             return true;
         };
         var startBtn = new textview_1["default"]("开始游戏");
-        this.mainPanel.addView(startBtn, layout_1.Align.CENTER, layout_1.Align.CENTER);
+        startBtn.layoutParam = new layout_1.LayoutParams(layout_1.Align.CENTER, layout_1.Align.CENTER);
+        this.mainPanel.addView(startBtn);
         startBtn.textColor = "black";
         startBtn.textSize = 24;
         startBtn.visible = false;
@@ -35,12 +36,12 @@ var WelcomeScene = /** @class */ (function () {
             return true;
         };
         var configBtn = new textview_1["default"]("配置");
-        this.mainPanel.addView(configBtn, layout_1.Align.CENTER, layout_1.Align.CENTER);
+        configBtn.layoutParam = new layout_1.LayoutParams(layout_1.Align.CENTER, layout_1.Align.CENTER);
+        this.mainPanel.addView(configBtn);
         configBtn.textColor = "black";
         configBtn.textSize = 24;
         configBtn.y = 60;
         configBtn.visible = false;
-        configBtn.measure(ctx);
         configBtn.onclickInternal = function (event) {
             console.log("configBtn is clicked");
             return true;
@@ -50,6 +51,7 @@ var WelcomeScene = /** @class */ (function () {
         imageView.x = this.canvasWidth / 3;
         imageView.width = imageView.height = 100;
         this.mainPanel.measure(ctx);
+        this.mainPanel.layout();
         var animatorImageViewY = new number_linear_animator_1["default"](0, this.canvasHeight * 2, 20000);
         animatorImageViewY.onValChange = function (val) {
             imageView.y = animatorImageViewY.getVal();

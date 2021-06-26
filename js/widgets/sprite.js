@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.MeasureResult = void 0;
 var easy_math_1 = require("../misc/easy-math");
+var layout_1 = require("../misc/layout");
 var MeasureResult = /** @class */ (function () {
     function MeasureResult() {
     }
@@ -9,31 +10,71 @@ var MeasureResult = /** @class */ (function () {
 }());
 exports.MeasureResult = MeasureResult;
 var Sprite = /** @class */ (function () {
-    function Sprite(left, top, visible) {
+    function Sprite(left, top, layoutParam, visible) {
         if (left === void 0) { left = 0; }
         if (top === void 0) { top = 0; }
+        if (layoutParam === void 0) { layoutParam = layout_1.LayoutParams.normal(); }
         if (visible === void 0) { visible = true; }
         this.left = left;
         this.top = top;
+        this.layoutParam = layoutParam;
         this.visible = visible;
         this.forceWidth = -1;
         this.forceHeight = -1;
         this.width = this.height = 0;
         this.x = this.y = 0;
+        this.right = this.bottom = 0;
     }
     Sprite.prototype.measure = function (ctx) {
         if (this.forceWidth > 0 && this.forceHeight > 0) {
             this.width = this.forceWidth;
             this.height = this.forceHeight;
             return {
-                widthAtMost: this.forceWidth + this.left,
-                heightAtMost: this.forceHeight + this.top
+                widthAtMost: this.forceWidth + this.getAdditionalX(),
+                heightAtMost: this.forceHeight + this.getAdditionalY()
             };
         }
         return this.onMeasure(ctx);
     };
-    Sprite.prototype.layout = function (left, top, right, bottom) {
-        return this.onLayout(left, top, right, bottom);
+    Sprite.prototype.getAdditionalX = function () {
+        var ret = this.left;
+        if (layout_1.Align.CENTER == this.layoutParam.xcfg) {
+            ret = this.left * 2;
+        }
+        return ret;
+    };
+    Sprite.prototype.getAdditionalY = function () {
+        var ret = this.top;
+        if (layout_1.Align.CENTER == this.layoutParam.xcfg) {
+            ret = this.top * 2;
+        }
+        return ret;
+    };
+    // (left, top) - width, height, those are parent's attribute.
+    // And under such situation, we need to calculate the x,y for the layout
+    Sprite.prototype.onLayout = function (width, height) {
+        switch (this.layoutParam.xcfg) {
+            case layout_1.Align.CENTER:
+                this.x = (width - this.width) / 2 + this.left;
+                break;
+            case layout_1.Align.END:
+                this.x = width - this.width - this.right;
+                break;
+            default:
+                this.x = this.left;
+                break;
+        }
+        switch (this.layoutParam.ycfg) {
+            case layout_1.Align.CENTER:
+                this.y = (height - this.height) / 2 + this.top;
+                break;
+            case layout_1.Align.END:
+                this.y = height - this.height - this.bottom;
+                break;
+            default:
+                this.y = this.top;
+                break;
+        }
     };
     // public final
     Sprite.prototype.drawToCanvas = function (ctx) {

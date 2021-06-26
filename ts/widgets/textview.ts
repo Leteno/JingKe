@@ -29,13 +29,9 @@ export default class TextView extends Sprite {
     this.height = this.textSize;
     ctx.restore();
     return {
-      widthAtMost: this.width + this.left,
-      heightAtMost: this.height + this.top
+      widthAtMost: this.width + this.getAdditionalX(),
+      heightAtMost: this.height + this.getAdditionalY()
     }
-  }
-
-  protected onLayout(left: number, top: number, right: number, bottom: number): void {
-    throw new Error("Method not implemented.");
   }
 
   // override
