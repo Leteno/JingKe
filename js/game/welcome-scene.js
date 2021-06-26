@@ -48,8 +48,8 @@ var WelcomeScene = /** @class */ (function () {
         };
         var imageView = new imageview_1["default"]("res/artichoke_PNG30.png");
         this.mainPanel.addView(imageView);
-        imageView.x = this.canvasWidth / 3;
-        imageView.width = imageView.height = 100;
+        imageView.left = this.canvasWidth / 3;
+        imageView.forceWidth = imageView.forceHeight = 100;
         this.mainPanel.measure(ctx);
         this.mainPanel.layout();
         var animatorImageViewY = new number_linear_animator_1["default"](0, this.canvasHeight * 2, 20000);

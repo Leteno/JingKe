@@ -58,8 +58,8 @@ export default class WelcomeScene implements Scene {
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     this.mainPanel.addView(imageView);
-    imageView.x = this.canvasWidth / 3;
-    imageView.width = imageView.height = 100;
+    imageView.left = this.canvasWidth / 3;
+    imageView.forceWidth = imageView.forceHeight = 100;
 
     this.mainPanel.measure(ctx);
     this.mainPanel.layout();
