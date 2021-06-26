@@ -11,5 +11,6 @@ export default class TestScene implements Scene {
   }
   onclick(event: ClickEvent) {
   }
-
 }
+
+test("ignore", ()=>{})
