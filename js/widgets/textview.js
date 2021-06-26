@@ -24,6 +24,7 @@ var TextView = /** @class */ (function (_super) {
         _this.text = text;
         _this.textColor = "black";
         _this.textSize = 24;
+        _this.debug = false;
         return _this;
     }
     TextView.prototype.applyStyle = function (ctx) {
@@ -50,6 +51,12 @@ var TextView = /** @class */ (function (_super) {
     TextView.prototype.drawToCanvasInternal = function (ctx, x, y) {
         if (!this.visible)
             return;
+        if (this.debug) {
+            ctx.save();
+            ctx.fillStyle = "pink";
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.restore();
+        }
         ctx.save();
         this.applyStyle(ctx);
         ctx.fillText(this.text, x, y);
