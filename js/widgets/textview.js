@@ -23,7 +23,7 @@ var TextView = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.text = text;
         _this.textColor = "black";
-        _this.textSize = undefined;
+        _this.textSize = 24;
         return _this;
     }
     TextView.prototype.applyStyle = function (ctx) {

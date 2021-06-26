@@ -6,7 +6,8 @@ var imageview_1 = require("../widgets/imageview");
 var panel_1 = require("../widgets/panel");
 var textview_1 = require("../widgets/textview");
 var WelcomeScene = /** @class */ (function () {
-    function WelcomeScene(canvas) {
+    function WelcomeScene(sceneManager, canvas) {
+        this.sceneManager = sceneManager;
         this.mainPanel = new panel_1["default"]();
         this.mainPanel.forceWidth = canvas.width;
         this.mainPanel.forceHeight = canvas.height;
@@ -15,6 +16,7 @@ var WelcomeScene = /** @class */ (function () {
         this.canvasHeight = canvas.height;
     }
     WelcomeScene.prototype.onStart = function (ctx) {
+        var _this = this;
         var textView = new textview_1["default"]("荆轲刺秦王");
         textView.layoutParam = new layout_1.LayoutParams(layout_1.Align.CENTER, layout_1.Align.CENTER);
         this.mainPanel.addView(textView);
@@ -32,7 +34,7 @@ var WelcomeScene = /** @class */ (function () {
         startBtn.textSize = 24;
         startBtn.visible = false;
         startBtn.onclickInternal = function (event) {
-            console.log("startBtn is clicked");
+            _this.sceneManager.switchScene("helloWorld");
             return true;
         };
         var configBtn = new textview_1["default"]("配置");
@@ -76,10 +78,6 @@ var WelcomeScene = /** @class */ (function () {
         }));
     };
     WelcomeScene.prototype.render = function (ctx) {
-        ctx.save();
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.restore();
         this.mainPanel.drawToCanvas(ctx);
     };
     WelcomeScene.prototype.onclick = function (event) {

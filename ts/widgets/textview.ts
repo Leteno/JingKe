@@ -9,7 +9,7 @@ export default class TextView extends Sprite {
     super();
     this.text = text;
     this.textColor = "black";
-    this.textSize = undefined;
+    this.textSize = 24;
   }
 
   applyStyle(ctx: CanvasRenderingContext2D) {

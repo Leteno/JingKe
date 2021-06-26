@@ -6,14 +6,18 @@ import ImageView from "../widgets/imageview";
 import Panel from "../widgets/panel";
 import TextView from "../widgets/textview";
 import { ClickEvent } from "../misc/event";
-import { config } from "yargs";
+import SceneManager from "../scene/scene_manager";
 
 export default class WelcomeScene implements Scene {
   mainPanel: Panel;
   animators: Array<Animator<number>>;
   canvasWidth: number;
   canvasHeight: number;
-  constructor(canvas: HTMLCanvasElement) {
+  sceneManager: SceneManager;
+
+  constructor(sceneManager: SceneManager, canvas: HTMLCanvasElement) {
+    this.sceneManager = sceneManager;
+
     this.mainPanel = new Panel();
     this.mainPanel.forceWidth = canvas.width;
     this.mainPanel.forceHeight = canvas.height;
@@ -40,7 +44,7 @@ export default class WelcomeScene implements Scene {
     startBtn.textSize = 24;
     startBtn.visible = false;
     startBtn.onclickInternal = (event: ClickEvent) : boolean => {
-      console.log("startBtn is clicked");
+      this.sceneManager.switchScene("helloWorld");
       return true;
     }
 
@@ -95,10 +99,6 @@ export default class WelcomeScene implements Scene {
   }
 
   render(ctx: CanvasRenderingContext2D) {
-    ctx.save();
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    ctx.restore();
     this.mainPanel.drawToCanvas(ctx);
   }
 
