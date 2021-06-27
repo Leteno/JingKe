@@ -29,6 +29,7 @@ var HelloWorldScene = /** @class */ (function () {
         longText.top = 100;
         longText.left = 20;
         longText.right = 40;
+        longText.debug = true;
         this.mainPanel.addView(longText);
     }
     HelloWorldScene.prototype.onStart = function (ctx) {

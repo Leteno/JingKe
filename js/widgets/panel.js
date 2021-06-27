@@ -53,8 +53,8 @@ var Panel = /** @class */ (function (_super) {
         this.width = widthAtMost;
         this.height = heightAtMost;
         return {
-            widthAtMost: widthAtMost + this.getAdditionalX(),
-            heightAtMost: heightAtMost + this.getAdditionalY()
+            widthAtMost: widthAtMost + this.getLandscapeMargin(),
+            heightAtMost: heightAtMost + this.getPortraitMargin()
         };
     };
     Panel.prototype.layout = function () {

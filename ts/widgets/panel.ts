@@ -43,8 +43,8 @@ export default class Panel extends Sprite {
     this.width = widthAtMost;
     this.height = heightAtMost;
     return {
-      widthAtMost: widthAtMost + this.getAdditionalX(),
-      heightAtMost: heightAtMost + this.getAdditionalY()
+      widthAtMost: widthAtMost + this.getLandscapeMargin(),
+      heightAtMost: heightAtMost + this.getPortraitMargin()
     }
   }
 

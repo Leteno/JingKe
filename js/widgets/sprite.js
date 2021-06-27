@@ -27,23 +27,23 @@ var Sprite = /** @class */ (function () {
             this.width = this.forceWidth;
             this.height = this.forceHeight;
             return {
-                widthAtMost: this.forceWidth + this.getAdditionalX(),
-                heightAtMost: this.forceHeight + this.getAdditionalY()
+                widthAtMost: this.forceWidth + this.getLandscapeMargin(),
+                heightAtMost: this.forceHeight + this.getPortraitMargin()
             };
         }
         return this.onMeasure(ctx, maxWidth, maxHeight);
     };
-    Sprite.prototype.getAdditionalX = function () {
-        var ret = this.left;
+    Sprite.prototype.getLandscapeMargin = function () {
+        var ret = this.left + this.right;
         if (layout_1.Align.CENTER == this.layoutParam.xcfg) {
-            ret = this.left * 2;
+            ret = Math.max(this.left, this.right) * 2;
         }
         return ret;
     };
-    Sprite.prototype.getAdditionalY = function () {
-        var ret = this.top;
+    Sprite.prototype.getPortraitMargin = function () {
+        var ret = this.top + this.bottom;
         if (layout_1.Align.CENTER == this.layoutParam.xcfg) {
-            ret = this.top * 2;
+            ret = Math.max(this.top, this.bottom) * 2;
         }
         return ret;
     };

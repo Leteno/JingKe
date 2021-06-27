@@ -41,7 +41,7 @@ var TextView = /** @class */ (function (_super) {
         ctx.save();
         this.applyStyle(ctx);
         var charNumEachLine = 1000;
-        var maxTextWidth = maxWidth - this.getAdditionalX();
+        var maxTextWidth = maxWidth - this.getLandscapeMargin();
         if (maxWidth > 0 && // is valid, not -1;
             maxTextWidth > 0) {
             charNumEachLine =
@@ -63,8 +63,8 @@ var TextView = /** @class */ (function (_super) {
         }
         ctx.restore();
         return {
-            widthAtMost: this.width + this.getAdditionalX(),
-            heightAtMost: this.height + this.getAdditionalY()
+            widthAtMost: this.width + this.getLandscapeMargin(),
+            heightAtMost: this.height + this.getPortraitMargin()
         };
     };
     // override

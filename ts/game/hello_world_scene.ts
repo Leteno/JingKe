@@ -40,6 +40,8 @@ export default class HelloWorldScene implements Scene {
     longText.layoutParam = new LayoutParams(Align.START, Align.CENTER)
     longText.top = 100;
     longText.left = 20;
+    longText.right = 40;
+    longText.debug = true;
     this.mainPanel.addView(longText);
   }
 

@@ -28,8 +28,8 @@ var ImageView = /** @class */ (function (_super) {
         this.width = this.img.naturalWidth;
         this.height = this.img.naturalHeight;
         return {
-            widthAtMost: this.width + this.getAdditionalX(),
-            heightAtMost: this.height + this.getAdditionalY()
+            widthAtMost: this.width + this.getLandscapeMargin(),
+            heightAtMost: this.height + this.getPortraitMargin()
         };
     };
     // override

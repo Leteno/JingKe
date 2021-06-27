@@ -36,7 +36,7 @@ export default class TextView extends Sprite {
     this.applyStyle(ctx);
 
     let charNumEachLine = 1000;
-    let maxTextWidth = maxWidth - this.getAdditionalX();
+    let maxTextWidth = maxWidth - this.getLandscapeMargin();
     if (maxWidth > 0 &&  // is valid, not -1;
         maxTextWidth > 0) {
       charNumEachLine = 
@@ -61,8 +61,8 @@ export default class TextView extends Sprite {
 
     ctx.restore();
     return {
-      widthAtMost: this.width + this.getAdditionalX(),
-      heightAtMost: this.height + this.getAdditionalY()
+      widthAtMost: this.width + this.getLandscapeMargin(),
+      heightAtMost: this.height + this.getPortraitMargin()
     }
   }
 
