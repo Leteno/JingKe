@@ -51,7 +51,6 @@ export default class HelloWorldScene implements Scene {
   }
 
   update(dt: number) {
-    console.log("helloworld dt: " + dt);
     this.animators.forEach(animator => {
       animator.update(dt);
     });

@@ -17,9 +17,9 @@ var Main = /** @class */ (function () {
         this.sceneManager = new scene_manager_1["default"](this.ctx);
         var welcomeScene = new welcome_scene_1["default"](this.sceneManager, canvas);
         this.sceneManager.push("welcome", welcomeScene);
-        this.sceneManager.switchScene("welcome");
         var helloWorldScene = new hello_world_scene_1["default"](canvas);
         this.sceneManager.push("helloWorld", helloWorldScene);
+        this.sceneManager.switchScene("helloWorld");
         window.cancelAnimationFrame(this.aniId);
         this.aniId = window.requestAnimationFrame(this.bindLoop);
         canvas.onclick = this.onclick.bind(this);

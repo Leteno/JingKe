@@ -37,7 +37,6 @@ var HelloWorldScene = /** @class */ (function () {
         this.mainPanel.layout();
     };
     HelloWorldScene.prototype.update = function (dt) {
-        console.log("helloworld dt: " + dt);
         this.animators.forEach(function (animator) {
             animator.update(dt);
         });
