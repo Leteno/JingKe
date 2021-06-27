@@ -6,10 +6,13 @@ import Scene from "../scene/scene";
 import ImageView from "../widgets/imageview";
 import Panel from "../widgets/panel";
 import TextView from "../widgets/textview";
+import DialogueView from "../widgets/dialogue_view";
+import Dialogue from "../data/dialogue";
 
 export default class HelloWorldScene implements Scene {
   mainPanel: Panel;
-  animators: Array<Animator<number>>
+  animators: Array<Animator<number>>;
+  dialogueView: DialogueView;
 
   constructor(canvas: HTMLCanvasElement) {
     this.mainPanel = new Panel();
@@ -43,6 +46,16 @@ export default class HelloWorldScene implements Scene {
     longText.right = 40;
     longText.debug = true;
     this.mainPanel.addView(longText);
+
+    this.dialogueView = new DialogueView();
+    this.dialogueView.forceWidth = canvas.width;
+    this.dialogueView.forceHeight = canvas.height / 4;
+    this.mainPanel.addView(this.dialogueView);
+    this.dialogueView.updateData(new Dialogue(
+      "郑虾米",
+      "这是一段很长的话，但是如果你想看完，我也没有任何意见，只是觉得你或许可以做一点更有意义的事情"
+      )
+    );
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
@@ -54,6 +67,7 @@ export default class HelloWorldScene implements Scene {
     this.animators.forEach(animator => {
       animator.update(dt);
     });
+    this.dialogueView.updateTime(dt);
   }
 
   render(ctx: CanvasRenderingContext2D) {

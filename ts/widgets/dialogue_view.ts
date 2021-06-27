@@ -1,0 +1,104 @@
+import NumberLinearAnimator from "../animator/number-linear-animator";
+import Dialogue from "../data/dialogue";
+import { Align, LayoutParams } from "../misc/layout";
+import Panel from "./panel";
+import TextView from "./textview";
+
+export default class DialogueView extends Panel {
+  nameViewLeft: TextView;
+  nameViewRight: TextView;
+  contentView: TextView;
+  animators: Array<NumberLinearAnimator>;
+
+  // Hack to update contentView's text
+  expectedContentText: string;
+
+  constructor() {
+    super();
+
+    this.layoutParam = new LayoutParams(
+      Align.START, Align.END
+    );
+    this.left = 20;
+    this.right = 20;
+    this.bottom = 20;
+
+    // Add all views:
+    this.nameViewLeft = new TextView("郑大侠");
+    this.nameViewRight = new TextView("嘉女士");
+    this.contentView = new TextView("你好，冒险者");
+    this.addView(this.nameViewLeft);
+    this.addView(this.nameViewRight);
+    this.addView(this.contentView);
+
+    // Configure View position
+    this.nameViewLeft.left = 20;
+    this.nameViewLeft.top = 10;
+    this.nameViewRight.right = 60;
+    this.nameViewRight.top = 10;
+    this.nameViewRight.layoutParam = new LayoutParams(
+      Align.END, Align.START
+    );
+    this.nameViewRight.visible = false;
+    this.contentView.left = 20;
+    this.contentView.right = 50;
+    this.contentView.top = 40;
+    this.contentView.bottom = 20;
+    this.contentView.textSize = 16;
+
+    // Animator
+    this.animators = new Array<NumberLinearAnimator>();
+
+    // Others
+    this.expectedContentText = "你好，冒险者";
+  }
+
+  drawToCanvasInternal(
+    ctx: CanvasRenderingContext2D, x: number, y: number) : void {
+    ctx.save();
+    ctx.strokeStyle = "black";
+    ctx.strokeRect(
+      this.x, this.y,
+      this.width - this.getLandscapeMargin(),
+      this.height - this.getPortraitMargin());
+    ctx.restore();
+
+    if (this.expectedContentText != this.contentView.text) {
+      this.contentView.text = this.expectedContentText;
+      this.measure(
+        ctx,
+        this.width - this.getLandscapeMargin(),
+        this.height - this.getPortraitMargin());
+    }
+    super.drawToCanvasInternal(ctx, x, y);
+  }
+
+  updateData(data: Dialogue) {
+    let view = data.showAtLeft ? this.nameViewLeft
+                : this.nameViewRight;
+    view.text = data.username;
+
+    this.animators.splice(0);
+    let supposedTime = data.content.length * 1000 / data.speed;
+    let contentAnimator = new NumberLinearAnimator(
+      0, data.content.length, supposedTime
+    );
+    contentAnimator.onValChange = (val => {
+      this.expectedContentText =
+        data.content.substr(0, val);
+    }).bind(this);
+    contentAnimator.onStop =
+      this.onContentLoadCompleted.bind(this);
+    this.animators.push(contentAnimator);
+  }
+
+  updateTime(dt:number) {
+    this.animators.forEach(animator => {
+      animator.update(dt);
+    })
+  }
+
+  onContentLoadCompleted() {
+    console.log("onContentLoadComplete");
+  }
+}

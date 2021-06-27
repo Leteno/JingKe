@@ -5,6 +5,8 @@ var number_linear_animator_1 = require("../animator/number-linear-animator");
 var imageview_1 = require("../widgets/imageview");
 var panel_1 = require("../widgets/panel");
 var textview_1 = require("../widgets/textview");
+var dialogue_view_1 = require("../widgets/dialogue_view");
+var dialogue_1 = require("../data/dialogue");
 var HelloWorldScene = /** @class */ (function () {
     function HelloWorldScene(canvas) {
         this.mainPanel = new panel_1["default"]();
@@ -31,6 +33,11 @@ var HelloWorldScene = /** @class */ (function () {
         longText.right = 40;
         longText.debug = true;
         this.mainPanel.addView(longText);
+        this.dialogueView = new dialogue_view_1["default"]();
+        this.dialogueView.forceWidth = canvas.width;
+        this.dialogueView.forceHeight = canvas.height / 4;
+        this.mainPanel.addView(this.dialogueView);
+        this.dialogueView.updateData(new dialogue_1["default"]("郑虾米", "这是一段很长的话，但是如果你想看完，我也没有任何意见，只是觉得你或许可以做一点更有意义的事情"));
     }
     HelloWorldScene.prototype.onStart = function (ctx) {
         this.mainPanel.measure(ctx);
@@ -40,6 +47,7 @@ var HelloWorldScene = /** @class */ (function () {
         this.animators.forEach(function (animator) {
             animator.update(dt);
         });
+        this.dialogueView.updateTime(dt);
     };
     HelloWorldScene.prototype.render = function (ctx) {
         this.mainPanel.drawToCanvas(ctx);
