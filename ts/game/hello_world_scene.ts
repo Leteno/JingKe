@@ -51,9 +51,14 @@ export default class HelloWorldScene implements Scene {
     this.dialogueView.forceWidth = canvas.width;
     this.dialogueView.forceHeight = canvas.height / 4;
     this.mainPanel.addView(this.dialogueView);
-    this.dialogueView.updateData(new Dialogue(
+    this.dialogueView.addDialogue(new Dialogue(
       "郑虾米",
       "这是一段很长的话，但是如果你想看完，我也没有任何意见，只是觉得你或许可以做一点更有意义的事情"
+      )
+    );
+    this.dialogueView.addDialogue(new Dialogue(
+      "郑虾米",
+      "不要讲干话"
       )
     );
   }

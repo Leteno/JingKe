@@ -50,6 +50,7 @@ var DialogueView = /** @class */ (function (_super) {
         _this.animators = new Array();
         // Others
         _this.expectedContentText = "你好，冒险者";
+        _this.queue = new Array();
         return _this;
     }
     DialogueView.prototype.drawToCanvasInternal = function (ctx, x, y) {
@@ -63,7 +64,17 @@ var DialogueView = /** @class */ (function (_super) {
         }
         _super.prototype.drawToCanvasInternal.call(this, ctx, x, y);
     };
-    DialogueView.prototype.updateData = function (data) {
+    DialogueView.prototype.addDialogue = function (data) {
+        this.queue.push(data);
+        if (this.animators.length == 0 ||
+            this.animators.findIndex((function (animator) {
+                return animator.isStop();
+            }))) {
+            var top_1 = this.queue.slice(0, 1)[0];
+            this.updateView(top_1);
+        }
+    };
+    DialogueView.prototype.updateView = function (data) {
         var _this = this;
         var view = data.showAtLeft ? this.nameViewLeft
             : this.nameViewRight;
@@ -86,6 +97,25 @@ var DialogueView = /** @class */ (function (_super) {
     };
     DialogueView.prototype.onContentLoadCompleted = function () {
         console.log("onContentLoadComplete");
+    };
+    DialogueView.prototype.onclickInternal = function (event) {
+        if (this.animators.length > 0 &&
+            this.animators.findIndex(function (animator) {
+                return !animator.isStop();
+            })) {
+            // click to skip the animation.
+            this.animators.forEach(function (animator) {
+                animator.update(animator.totalTime);
+            });
+        }
+        else {
+            // click to update data:
+            if (this.queue.length > 0) {
+                var front = this.queue.slice(0, 1)[0];
+                this.updateView(front);
+            }
+        }
+        return true;
     };
     return DialogueView;
 }(panel_1["default"]));
