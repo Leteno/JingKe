@@ -97,7 +97,7 @@ var Sprite = /** @class */ (function () {
         return this.onclickInternal(event);
     };
     Sprite.prototype.onclickInternal = function (event) {
-        return true;
+        return false;
     };
     return Sprite;
 }());

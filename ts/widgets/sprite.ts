@@ -134,6 +134,6 @@ export default abstract class Sprite {
   }
 
   onclickInternal(event: ClickEvent): boolean {
-    return true;
+    return false;
   }
 }

@@ -7,6 +7,9 @@ import TestSprite from "./test_sprite.test"
 
 test("testSimpleView", () => {
   let view = new TestSprite(100, 100);
+  view.onclickInternal = () => {
+    return true;
+  }
   view.x = 50;
   view.y = 50;
 
