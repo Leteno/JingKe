@@ -93,8 +93,8 @@ export default class DialogueView extends Panel {
     if (this.animators.length == 0 ||
         this.animators.findIndex((animator=> {
           return animator.isStop();
-        }))) {
-      let top = this.queue.slice(0, 1)[0];
+        })) != -1) {
+      let top = this.queue.shift();
       this.updateView(top);
     }
   }
@@ -132,7 +132,7 @@ export default class DialogueView extends Panel {
     if (this.animators.length > 0 &&
         this.animators.findIndex((animator) => {
           return !animator.isStop();
-        })) {
+        }) != -1) {
       // click to skip the animation.
       this.animators.forEach((animator) => {
         animator.update(animator.totalTime);
@@ -140,7 +140,7 @@ export default class DialogueView extends Panel {
     } else {
       // click to update data:
       if (this.queue.length > 0) {
-        let front = this.queue.slice(0,1)[0];
+        let front = this.queue.shift();
         this.updateView(front);
       }
     }

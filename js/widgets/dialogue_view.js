@@ -76,8 +76,8 @@ var DialogueView = /** @class */ (function (_super) {
         if (this.animators.length == 0 ||
             this.animators.findIndex((function (animator) {
                 return animator.isStop();
-            }))) {
-            var top_1 = this.queue.slice(0, 1)[0];
+            })) != -1) {
+            var top_1 = this.queue.shift();
             this.updateView(top_1);
         }
     };
@@ -109,7 +109,7 @@ var DialogueView = /** @class */ (function (_super) {
         if (this.animators.length > 0 &&
             this.animators.findIndex(function (animator) {
                 return !animator.isStop();
-            })) {
+            }) != -1) {
             // click to skip the animation.
             this.animators.forEach(function (animator) {
                 animator.update(animator.totalTime);
@@ -118,7 +118,7 @@ var DialogueView = /** @class */ (function (_super) {
         else {
             // click to update data:
             if (this.queue.length > 0) {
-                var front = this.queue.slice(0, 1)[0];
+                var front = this.queue.shift();
                 this.updateView(front);
             }
         }
