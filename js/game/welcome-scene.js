@@ -2,7 +2,6 @@
 exports.__esModule = true;
 var number_linear_animator_1 = require("../animator/number-linear-animator");
 var layout_1 = require("../misc/layout");
-var imageview_1 = require("../widgets/imageview");
 var panel_1 = require("../widgets/panel");
 var textview_1 = require("../widgets/textview");
 var WelcomeScene = /** @class */ (function () {
@@ -48,17 +47,8 @@ var WelcomeScene = /** @class */ (function () {
             console.log("configBtn is clicked");
             return true;
         };
-        var imageView = new imageview_1["default"]("res/artichoke_PNG30.png");
-        this.mainPanel.addView(imageView);
-        imageView.left = this.canvasWidth / 3;
-        imageView.forceWidth = imageView.forceHeight = 100;
         this.mainPanel.measure(ctx);
         this.mainPanel.layout();
-        var animatorImageViewY = new number_linear_animator_1["default"](0, this.canvasHeight * 2, 20000);
-        animatorImageViewY.onValChange = function (val) {
-            imageView.y = animatorImageViewY.getVal();
-        };
-        this.animators.push(animatorImageViewY);
         var text = textView.text;
         var animatorTextViewString = new number_linear_animator_1["default"](0, textView.text.length, 1500);
         animatorTextViewString.onValChange = function (val) {

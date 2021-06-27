@@ -2,7 +2,6 @@ import Animator from "../animator/animator"
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import Scene from "../scene/scene"
 import {Align, LayoutParams} from "../misc/layout"
-import ImageView from "../widgets/imageview";
 import Panel from "../widgets/panel";
 import TextView from "../widgets/textview";
 import { ClickEvent } from "../misc/event";
@@ -60,21 +59,9 @@ export default class WelcomeScene implements Scene {
       return true;
     }
 
-    let imageView = new ImageView("res/artichoke_PNG30.png");
-    this.mainPanel.addView(imageView);
-    imageView.left = this.canvasWidth / 3;
-    imageView.forceWidth = imageView.forceHeight = 100;
-
     this.mainPanel.measure(ctx);
     this.mainPanel.layout();
 
-    let animatorImageViewY = new NumberLinearAnimator(
-      0, this.canvasHeight * 2, 20000
-    )
-    animatorImageViewY.onValChange = function(val: number) {
-      imageView.y = animatorImageViewY.getVal();
-    }
-    this.animators.push(animatorImageViewY)
 
     let text:string = textView.text;
     let animatorTextViewString = new NumberLinearAnimator(
