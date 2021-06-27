@@ -51,9 +51,16 @@ var DialogueView = /** @class */ (function (_super) {
         // Others
         _this.expectedContentText = "你好，冒险者";
         _this.queue = new Array();
+        _this.debug = false;
         return _this;
     }
     DialogueView.prototype.drawToCanvasInternal = function (ctx, x, y) {
+        if (this.debug) {
+            ctx.save();
+            ctx.fillStyle = "green";
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.restore();
+        }
         ctx.save();
         ctx.strokeStyle = "black";
         ctx.strokeRect(this.x, this.y, this.width - this.getLandscapeMargin(), this.height - this.getPortraitMargin());

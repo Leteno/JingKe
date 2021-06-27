@@ -13,6 +13,8 @@ export default class DialogueView extends Panel {
 
   queue: Array<Dialogue>;
 
+  debug: boolean;
+
   // Hack to update contentView's text
   expectedContentText: string;
 
@@ -55,10 +57,19 @@ export default class DialogueView extends Panel {
     // Others
     this.expectedContentText = "你好，冒险者";
     this.queue = new Array<Dialogue>();
+    this.debug = false;
   }
 
   drawToCanvasInternal(
     ctx: CanvasRenderingContext2D, x: number, y: number) : void {
+
+    if (this.debug) {
+      ctx.save();
+      ctx.fillStyle = "green";
+      ctx.fillRect(this.x, this.y, this.width, this.height);
+      ctx.restore();
+    }
+
     ctx.save();
     ctx.strokeStyle = "black";
     ctx.strokeRect(
