@@ -80,5 +80,6 @@ export default class HelloWorldScene implements Scene {
   }
 
   onclick(event: ClickEvent) {
+    this.mainPanel.onclick(event);
   }
 }

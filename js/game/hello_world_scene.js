@@ -54,6 +54,7 @@ var HelloWorldScene = /** @class */ (function () {
         this.mainPanel.drawToCanvas(ctx);
     };
     HelloWorldScene.prototype.onclick = function (event) {
+        this.mainPanel.onclick(event);
     };
     return HelloWorldScene;
 }());
