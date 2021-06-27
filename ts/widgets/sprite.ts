@@ -38,7 +38,9 @@ export default abstract class Sprite {
     this.right = this.bottom = 0;
   }
 
-  measure(ctx: CanvasRenderingContext2D): MeasureResult {
+  measure(ctx: CanvasRenderingContext2D,
+      maxWidth: number,
+      maxHeight: number): MeasureResult {
     if (this.forceWidth > 0 && this.forceHeight > 0) {
       this.width = this.forceWidth;
       this.height = this.forceHeight;
@@ -47,7 +49,7 @@ export default abstract class Sprite {
         heightAtMost: this.forceHeight + this.getAdditionalY()
       }
     }
-    return this.onMeasure(ctx);
+    return this.onMeasure(ctx, maxWidth, maxHeight);
   }
 
   getAdditionalX() : number {
@@ -66,7 +68,10 @@ export default abstract class Sprite {
   }
 
   // measure for width and height
-  protected abstract onMeasure(ctx: CanvasRenderingContext2D): MeasureResult;
+  protected abstract onMeasure(
+    ctx: CanvasRenderingContext2D,
+    maxWidth: number,
+    maxHeight: number): MeasureResult;
 
   // (left, top) - width, height, those are parent's attribute.
   // And under such situation, we need to calculate the x,y for the layout

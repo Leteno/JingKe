@@ -8,7 +8,10 @@ export default class ImageView extends Sprite {
     this.img.src = imgSrc;
   }
 
-  protected onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
+  protected onMeasure(
+    ctx: CanvasRenderingContext2D,
+    maxWidth: number,
+    maxHeight: number): MeasureResult {
     this.width = this.img.naturalWidth;
     this.height = this.img.naturalHeight;
     return {

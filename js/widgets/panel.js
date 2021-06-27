@@ -25,14 +25,20 @@ var Panel = /** @class */ (function (_super) {
         _this.children = new Array();
         return _this;
     }
-    Panel.prototype.measure = function (ctx) {
-        return this.onMeasure(ctx);
+    Panel.prototype.measure = function (ctx, maxWidth, maxHeight) {
+        if (maxWidth === void 0) { maxWidth = -1; }
+        if (maxHeight === void 0) { maxHeight = -1; }
+        return this.onMeasure(ctx, maxWidth, maxHeight);
     };
-    Panel.prototype.onMeasure = function (ctx) {
+    Panel.prototype.onMeasure = function (ctx, maxWidth, maxHeight) {
         var widthAtMost = 0;
         var heightAtMost = 0;
+        if (this.forceWidth > 0)
+            maxWidth = this.forceWidth;
+        if (this.forceHeight > 0)
+            maxHeight = this.forceHeight;
         this.children.forEach(function (view) {
-            var size = view.measure(ctx);
+            var size = view.measure(ctx, maxWidth, maxHeight);
             widthAtMost = Math.max(size.widthAtMost, widthAtMost);
             heightAtMost = Math.max(size.heightAtMost, heightAtMost);
         });

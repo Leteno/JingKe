@@ -24,7 +24,7 @@ var ImageView = /** @class */ (function (_super) {
         _this.img.src = imgSrc;
         return _this;
     }
-    ImageView.prototype.onMeasure = function (ctx) {
+    ImageView.prototype.onMeasure = function (ctx, maxWidth, maxHeight) {
         this.width = this.img.naturalWidth;
         this.height = this.img.naturalHeight;
         return {

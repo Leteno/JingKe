@@ -22,7 +22,7 @@ var Sprite = /** @class */ (function () {
         this.left = this.top = 0;
         this.right = this.bottom = 0;
     }
-    Sprite.prototype.measure = function (ctx) {
+    Sprite.prototype.measure = function (ctx, maxWidth, maxHeight) {
         if (this.forceWidth > 0 && this.forceHeight > 0) {
             this.width = this.forceWidth;
             this.height = this.forceHeight;
@@ -31,7 +31,7 @@ var Sprite = /** @class */ (function () {
                 heightAtMost: this.forceHeight + this.getAdditionalY()
             };
         }
-        return this.onMeasure(ctx);
+        return this.onMeasure(ctx, maxWidth, maxHeight);
     };
     Sprite.prototype.getAdditionalX = function () {
         var ret = this.left;

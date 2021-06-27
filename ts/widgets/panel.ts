@@ -10,15 +10,25 @@ export default class Panel extends Sprite {
     this.children = new Array();
   }
 
-  public measure(ctx: CanvasRenderingContext2D): MeasureResult {
-    return this.onMeasure(ctx);
+  public measure(
+    ctx: CanvasRenderingContext2D,
+    maxWidth: number=-1,
+    maxHeight: number=-1): MeasureResult {
+    return this.onMeasure(ctx, maxWidth, maxHeight);
   }
 
-  protected onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
+  protected onMeasure(
+    ctx: CanvasRenderingContext2D,
+    maxWidth: number,
+    maxHeight: number): MeasureResult {
     let widthAtMost = 0;
     let heightAtMost = 0;
+
+    if (this.forceWidth > 0) maxWidth = this.forceWidth;
+    if (this.forceHeight > 0) maxHeight = this.forceHeight;
+
     this.children.forEach((view) => {
-      let size = view.measure(ctx)
+      let size = view.measure(ctx, maxWidth, maxHeight);
       widthAtMost = Math.max(size.widthAtMost, widthAtMost)
       heightAtMost = Math.max(size.heightAtMost, heightAtMost)
     });

@@ -36,7 +36,7 @@ var TextView = /** @class */ (function (_super) {
             ctx.font = this.textSize + "px bold";
         }
     };
-    TextView.prototype.onMeasure = function (ctx) {
+    TextView.prototype.onMeasure = function (ctx, maxWidth, maxHeight) {
         ctx.save();
         this.applyStyle(ctx);
         var metric = ctx.measureText(this.text);

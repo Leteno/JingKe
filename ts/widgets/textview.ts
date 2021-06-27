@@ -25,7 +25,10 @@ export default class TextView extends Sprite {
     }
   }
   
-  protected onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
+  protected onMeasure(
+    ctx: CanvasRenderingContext2D,
+    maxWidth: number,
+    maxHeight: number): MeasureResult {
     ctx.save();
     this.applyStyle(ctx);
     let metric = ctx.measureText(this.text);
