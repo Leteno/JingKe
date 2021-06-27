@@ -25,6 +25,7 @@ var TextView = /** @class */ (function (_super) {
         _this.text = text;
         _this.textColor = "black";
         _this.textSize = 24;
+        _this.lines = new Array();
         _this.debug = false;
         return _this;
     }
@@ -39,9 +40,27 @@ var TextView = /** @class */ (function (_super) {
     TextView.prototype.onMeasure = function (ctx, maxWidth, maxHeight) {
         ctx.save();
         this.applyStyle(ctx);
-        var metric = ctx.measureText(this.text);
-        this.width = metric.width;
-        this.height = this.textSize;
+        var charNumEachLine = 1000;
+        var maxTextWidth = maxWidth - this.getAdditionalX();
+        if (maxWidth > 0 && // is valid, not -1;
+            maxTextWidth > 0) {
+            charNumEachLine =
+                TextHelper.getInstance().calculateCharInLine(ctx, this.textSize, maxTextWidth);
+        }
+        this.lineHeight = this.textSize;
+        this.lines.splice(0);
+        this.height = 0;
+        for (var i = 0; i < this.text.length; i += charNumEachLine) {
+            this.lines.push(this.text.substr(i, Math.min(charNumEachLine, this.text.length - i)));
+            this.height += this.lineHeight;
+        }
+        if (this.lines.length > 1) {
+            this.width = maxTextWidth;
+        }
+        else {
+            var metric = ctx.measureText(this.text);
+            this.width = metric.width;
+        }
         ctx.restore();
         return {
             widthAtMost: this.width + this.getAdditionalX(),
@@ -60,7 +79,9 @@ var TextView = /** @class */ (function (_super) {
         }
         ctx.save();
         this.applyStyle(ctx);
-        ctx.fillText(this.text, x, y);
+        for (var i = 0; i < this.lines.length; i++) {
+            ctx.fillText(this.lines[i], x, y + i * this.lineHeight);
+        }
         ctx.restore();
     };
     return TextView;

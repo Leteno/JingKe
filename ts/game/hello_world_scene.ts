@@ -39,6 +39,7 @@ export default class HelloWorldScene implements Scene {
     let longText = new TextView("这是一个非常长，非常长的句子。我希望你能够帮忙换一下行");
     longText.layoutParam = new LayoutParams(Align.START, Align.CENTER)
     longText.top = 100;
+    longText.left = 20;
     this.mainPanel.addView(longText);
   }
 

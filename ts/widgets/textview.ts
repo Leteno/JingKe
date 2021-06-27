@@ -4,6 +4,8 @@ export default class TextView extends Sprite {
   text: string;
   textColor: string;
   textSize: number;
+  lines: Array<string>;
+  lineHeight: number;
 
   debug: boolean;
 
@@ -12,6 +14,7 @@ export default class TextView extends Sprite {
     this.text = text;
     this.textColor = "black";
     this.textSize = 24;
+    this.lines = new Array<string>();
 
     this.debug = false;
   }
@@ -31,9 +34,31 @@ export default class TextView extends Sprite {
     maxHeight: number): MeasureResult {
     ctx.save();
     this.applyStyle(ctx);
-    let metric = ctx.measureText(this.text);
-    this.width = metric.width;
-    this.height = this.textSize;
+
+    let charNumEachLine = 1000;
+    let maxTextWidth = maxWidth - this.getAdditionalX();
+    if (maxWidth > 0 &&  // is valid, not -1;
+        maxTextWidth > 0) {
+      charNumEachLine = 
+        TextHelper.getInstance().calculateCharInLine(
+          ctx, this.textSize, maxTextWidth
+        );
+    }
+
+    this.lineHeight = this.textSize;
+    this.lines.splice(0);
+    this.height = 0;
+    for (let i = 0; i < this.text.length; i += charNumEachLine) {
+      this.lines.push(this.text.substr(i, Math.min(charNumEachLine, this.text.length - i)));
+      this.height += this.lineHeight;
+    }
+    if (this.lines.length > 1) {
+      this.width = maxTextWidth;
+    } else {
+      let metric = ctx.measureText(this.text);
+      this.width = metric.width;
+    }
+
     ctx.restore();
     return {
       widthAtMost: this.width + this.getAdditionalX(),
@@ -52,7 +77,9 @@ export default class TextView extends Sprite {
     }
     ctx.save();
     this.applyStyle(ctx);
-    ctx.fillText(this.text, x, y);
+    for (let i = 0; i < this.lines.length; i++) {
+      ctx.fillText(this.lines[i], x, y + i * this.lineHeight);
+    }
     ctx.restore();
   }
 }
