@@ -53,3 +53,48 @@ export default class TextView extends Sprite {
     ctx.restore();
   }
 }
+// TODO: update measure height. Because we have multiple lines
+
+export class TextHelper {
+  /**
+   * {
+   *   // font size
+   *   "40" : {
+   *     // width
+   *     "300" : 12 // number of char in one line.
+   *   }
+   * }
+   */
+  storeMap: Map<number, Map<number, number>>
+  private static instance: TextHelper;
+  private constructor() {
+    this.storeMap = new Map<number, Map<number, number>>();
+  }
+  public static getInstance() : TextHelper {
+    if (this.instance == null) {
+      this.instance = new TextHelper();
+    }
+    return this.instance;
+  }
+
+  calculateCharInLine(
+      ctx: CanvasRenderingContext2D,
+      textSize: number,
+      maxWidth: number) : number {
+    if (!this.storeMap.has(textSize)) {
+      this.storeMap.set(textSize, new Map<number, number>());
+    }
+    if (this.storeMap.get(textSize).has(maxWidth)) {
+      return this.storeMap.get(textSize).get(maxWidth);
+    }
+    let text = "你好，世界";
+    ctx.save();
+    ctx.font = `$textSize}px bold`;
+    let drawLength = ctx.measureText(text).width;
+    let textLength = text.length;
+    let result = Math.floor(maxWidth / (drawLength / textLength));
+    this.storeMap.get(textSize).set(maxWidth, result);
+    ctx.restore();
+    return result;
+  }
+}

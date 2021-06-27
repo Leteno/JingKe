@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.TextHelper = void 0;
 var sprite_1 = require("./sprite");
 var TextView = /** @class */ (function (_super) {
     __extends(TextView, _super);
@@ -65,3 +66,34 @@ var TextView = /** @class */ (function (_super) {
     return TextView;
 }(sprite_1["default"]));
 exports["default"] = TextView;
+// TODO: update measure height. Because we have multiple lines
+var TextHelper = /** @class */ (function () {
+    function TextHelper() {
+        this.storeMap = new Map();
+    }
+    TextHelper.getInstance = function () {
+        if (this.instance == null) {
+            this.instance = new TextHelper();
+        }
+        return this.instance;
+    };
+    TextHelper.prototype.calculateCharInLine = function (ctx, textSize, maxWidth) {
+        if (!this.storeMap.has(textSize)) {
+            this.storeMap.set(textSize, new Map());
+        }
+        if (this.storeMap.get(textSize).has(maxWidth)) {
+            return this.storeMap.get(textSize).get(maxWidth);
+        }
+        var text = "你好，世界";
+        ctx.save();
+        ctx.font = "$textSize}px bold";
+        var drawLength = ctx.measureText(text).width;
+        var textLength = text.length;
+        var result = Math.floor(maxWidth / (drawLength / textLength));
+        this.storeMap.get(textSize).set(maxWidth, result);
+        ctx.restore();
+        return result;
+    };
+    return TextHelper;
+}());
+exports.TextHelper = TextHelper;

@@ -24,6 +24,10 @@ var HelloWorldScene = /** @class */ (function () {
             imageView.y = animatorImageViewY.getVal();
         };
         this.animators.push(animatorImageViewY);
+        var longText = new textview_1["default"]("这是一个非常长，非常长的句子。我希望你能够帮忙换一下行");
+        longText.layoutParam = new layout_1.LayoutParams(layout_1.Align.START, layout_1.Align.CENTER);
+        longText.top = 100;
+        this.mainPanel.addView(longText);
     }
     HelloWorldScene.prototype.onStart = function (ctx) {
         this.mainPanel.measure(ctx);
