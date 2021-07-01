@@ -1,3 +1,4 @@
+import DualStateInfiniteAnimator from "../animator/dual-state-infinite-animator"
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import Dialogue from "../data/dialogue";
 import { ClickEvent } from "../misc/event";
@@ -10,6 +11,9 @@ export default class DialogueView extends Panel {
   nameViewRight: TextView;
   contentView: TextView;
   animators: Array<NumberLinearAnimator>;
+
+  showHint: boolean;
+  hintAnimator: DualStateInfiniteAnimator;
 
   queue: Array<Dialogue>;
 
@@ -53,11 +57,15 @@ export default class DialogueView extends Panel {
 
     // Animator
     this.animators = new Array<NumberLinearAnimator>();
+    this.hintAnimator = new DualStateInfiniteAnimator(
+      500, false
+    );
 
     // Others
     this.expectedContentText = "你好，冒险者";
     this.queue = new Array<Dialogue>();
     this.debug = false;
+    this.showHint = false;
   }
 
   drawToCanvasInternal(
@@ -77,6 +85,17 @@ export default class DialogueView extends Panel {
       this.width - this.getLandscapeMargin(),
       this.height - this.getPortraitMargin());
     ctx.restore();
+
+    if (this.showHint && this.hintAnimator.getVal()) {
+      ctx.save();
+      ctx.strokeStyle = "black";
+      ctx.translate(
+        this.x + this.width - this.getLandscapeMargin() - 40,
+        this.y + this.height - this.getPortraitMargin() - 40);
+      ctx.ellipse(20, 20, 5, 5, 0, 0, 360);
+      ctx.stroke();
+      ctx.restore();
+    }
 
     if (this.expectedContentText != this.contentView.text) {
       this.contentView.text = this.expectedContentText;
@@ -100,6 +119,7 @@ export default class DialogueView extends Panel {
   }
 
   private updateView(data:Dialogue) {
+    this.showHint = false;
     let view = data.showAtLeft ? this.nameViewLeft
                 : this.nameViewRight;
     view.text = data.username;
@@ -113,8 +133,10 @@ export default class DialogueView extends Panel {
       this.expectedContentText =
         data.content.substr(0, val);
     }).bind(this);
-    contentAnimator.onStop =
-      this.onContentLoadCompleted.bind(this);
+    contentAnimator.onStop = (() => {
+      this.showHint = true;
+      this.onContentLoadCompleted();
+    }).bind(this);
     this.animators.push(contentAnimator);
   }
 
@@ -122,10 +144,10 @@ export default class DialogueView extends Panel {
     this.animators.forEach(animator => {
       animator.update(dt);
     })
+    this.hintAnimator.update(dt);
   }
 
   onContentLoadCompleted() {
-    console.log("onContentLoadComplete");
   }
 
   onclickInternal(event: ClickEvent) {

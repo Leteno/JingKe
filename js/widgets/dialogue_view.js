@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+var dual_state_infinite_animator_1 = require("../animator/dual-state-infinite-animator");
 var number_linear_animator_1 = require("../animator/number-linear-animator");
 var layout_1 = require("../misc/layout");
 var panel_1 = require("./panel");
@@ -48,10 +49,12 @@ var DialogueView = /** @class */ (function (_super) {
         _this.contentView.textSize = 16;
         // Animator
         _this.animators = new Array();
+        _this.hintAnimator = new dual_state_infinite_animator_1["default"](500, false);
         // Others
         _this.expectedContentText = "你好，冒险者";
         _this.queue = new Array();
         _this.debug = false;
+        _this.showHint = false;
         return _this;
     }
     DialogueView.prototype.drawToCanvasInternal = function (ctx, x, y) {
@@ -65,6 +68,14 @@ var DialogueView = /** @class */ (function (_super) {
         ctx.strokeStyle = "black";
         ctx.strokeRect(this.x, this.y, this.width - this.getLandscapeMargin(), this.height - this.getPortraitMargin());
         ctx.restore();
+        if (this.showHint && this.hintAnimator.getVal()) {
+            ctx.save();
+            ctx.strokeStyle = "black";
+            ctx.translate(this.x + this.width - this.getLandscapeMargin() - 40, this.y + this.height - this.getPortraitMargin() - 40);
+            ctx.ellipse(20, 20, 5, 5, 0, 0, 360);
+            ctx.stroke();
+            ctx.restore();
+        }
         if (this.expectedContentText != this.contentView.text) {
             this.contentView.text = this.expectedContentText;
             this.measure(ctx, this.width - this.getLandscapeMargin(), this.height - this.getPortraitMargin());
@@ -83,6 +94,7 @@ var DialogueView = /** @class */ (function (_super) {
     };
     DialogueView.prototype.updateView = function (data) {
         var _this = this;
+        this.showHint = false;
         var view = data.showAtLeft ? this.nameViewLeft
             : this.nameViewRight;
         view.text = data.username;
@@ -93,17 +105,19 @@ var DialogueView = /** @class */ (function (_super) {
             _this.expectedContentText =
                 data.content.substr(0, val);
         }).bind(this);
-        contentAnimator.onStop =
-            this.onContentLoadCompleted.bind(this);
+        contentAnimator.onStop = (function () {
+            _this.showHint = true;
+            _this.onContentLoadCompleted();
+        }).bind(this);
         this.animators.push(contentAnimator);
     };
     DialogueView.prototype.updateTime = function (dt) {
         this.animators.forEach(function (animator) {
             animator.update(dt);
         });
+        this.hintAnimator.update(dt);
     };
     DialogueView.prototype.onContentLoadCompleted = function () {
-        console.log("onContentLoadComplete");
     };
     DialogueView.prototype.onclickInternal = function (event) {
         if (this.animators.length > 0 &&
