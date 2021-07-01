@@ -4,6 +4,7 @@ import SceneManager from "./scene/scene_manager"
 import {timestamp} from "./misc/time"
 import { ClickEvent } from "./misc/event";
 import HelloWorldScene from "./game/hello_world_scene";
+import Scene1 from "./game/scene1";
 
 export default class Main {
   aniId: number;
@@ -30,6 +31,9 @@ export default class Main {
 
     let helloWorldScene = new HelloWorldScene(canvas);
     this.sceneManager.push("helloWorld", helloWorldScene);
+
+    let scene1 = new Scene1(canvas);
+    this.sceneManager.push("scene1", scene1);
 
     this.sceneManager.switchScene("welcome");
     window.cancelAnimationFrame(this.aniId);

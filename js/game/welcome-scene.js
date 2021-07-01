@@ -33,7 +33,7 @@ var WelcomeScene = /** @class */ (function () {
         startBtn.textSize = 24;
         startBtn.visible = false;
         startBtn.onclickInternal = function (event) {
-            _this.sceneManager.switchScene("helloWorld");
+            _this.sceneManager.switchScene("scene1");
             return true;
         };
         var configBtn = new textview_1["default"]("配置");

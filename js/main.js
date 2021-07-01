@@ -5,6 +5,7 @@ var scene_manager_1 = require("./scene/scene_manager");
 var time_1 = require("./misc/time");
 var event_1 = require("./misc/event");
 var hello_world_scene_1 = require("./game/hello_world_scene");
+var scene1_1 = require("./game/scene1");
 var Main = /** @class */ (function () {
     function Main(canvas) {
         this.canvas = canvas;
@@ -19,6 +20,8 @@ var Main = /** @class */ (function () {
         this.sceneManager.push("welcome", welcomeScene);
         var helloWorldScene = new hello_world_scene_1["default"](canvas);
         this.sceneManager.push("helloWorld", helloWorldScene);
+        var scene1 = new scene1_1["default"](canvas);
+        this.sceneManager.push("scene1", scene1);
         this.sceneManager.switchScene("welcome");
         window.cancelAnimationFrame(this.aniId);
         this.aniId = window.requestAnimationFrame(this.bindLoop);

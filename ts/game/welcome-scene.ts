@@ -43,7 +43,7 @@ export default class WelcomeScene implements Scene {
     startBtn.textSize = 24;
     startBtn.visible = false;
     startBtn.onclickInternal = (event: ClickEvent) : boolean => {
-      this.sceneManager.switchScene("helloWorld");
+      this.sceneManager.switchScene("scene1");
       return true;
     }
 
