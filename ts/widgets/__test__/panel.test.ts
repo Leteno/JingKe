@@ -40,17 +40,26 @@ test('removeAll', () => {
 test('drawChildren', () => {
   let panel = new Panel();
   panel.left = 120; panel.top = 150;
+
   let mockDrawFunc1 = jest.fn();
   let mockDrawFunc2 = jest.fn();
+  let mockDrawFunc3 = jest.fn();
+
   let s1 = new TestSprite(100, 100);
   let s2 = new TestSprite(100, 100);
+  let s3 = new TestSprite(100, 100);
+  s3.visible = false;
+
   s1.drawToCanvasInternal = mockDrawFunc1;
   s2.drawToCanvasInternal = mockDrawFunc2;
+  s3.drawToCanvasInternal = mockDrawFunc3;
   s1.left = 1; s1.top = 10;
   s2.left = 2; s2.top = 20;
+  s3.left = 3; s3.top = 30;
 
   panel.addView(s1);
   panel.addView(s2);
+  panel.addView(s3);
   let mockTranslation = jest.fn<void, [number, number]>();
   let ctx = {
     save: function(){},
@@ -70,6 +79,9 @@ test('drawChildren', () => {
   expect(mockDrawFunc1.mock.calls[0][2]).toBe(10);
   expect(mockDrawFunc2.mock.calls[0][1]).toBe(2);
   expect(mockDrawFunc2.mock.calls[0][2]).toBe(20);
+
+  // invisible view should not be drawn
+  expect(mockDrawFunc3.mock.calls.length).toBe(0);
 })
 
 test("onMeasure", () => {
