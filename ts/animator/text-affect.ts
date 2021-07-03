@@ -11,9 +11,9 @@ export function textAlpha(
   time: number,
   textView: TextView
 ) : NumberLinearAnimator {
-  let from = 0, to = 254;
+  let from = 0, to = 255;
   if (fadeIn) {
-    from = 254; to = 0;
+    from = 255; to = 0;
   }
   let fadeInAnimator = new NumberLinearAnimator(from, to, 2000);
   fadeInAnimator.onValChange = val => {

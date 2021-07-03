@@ -27,7 +27,6 @@ export default class NumberLinearAnimator implements Animator<number> {
   update(dt: number) {
     if (this.stop) return;
     this.start += this.feet * dt;
-    this.onValChange(this.start);
     if (this.feet > 0) {
       if (this.start > this.end) {
         this.start = this.end;
@@ -37,6 +36,7 @@ export default class NumberLinearAnimator implements Animator<number> {
         this.start = this.end;
       }
     }
+    this.onValChange(this.start);
     if (this.start === this.end) {
       this.stop = true;
       this.onStop();

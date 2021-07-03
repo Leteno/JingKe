@@ -25,5 +25,5 @@ test("textAlphaFadeOut", () => {
   fadeIn.update(1000);
   expect(textView.textColor).toBe("#7f7f7f")
   fadeIn.update(1000);
-  expect(textView.textColor).toBe("#fefefe")
+  expect(textView.textColor).toBe("#ffffff")
 })

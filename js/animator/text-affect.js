@@ -7,9 +7,9 @@ var number_linear_animator_1 = require("./number-linear-animator");
  * @param fadeIn fadeIn if true, otherwise fadeOut
  */
 function textAlpha(fadeIn, time, textView) {
-    var from = 0, to = 254;
+    var from = 0, to = 255;
     if (fadeIn) {
-        from = 254;
+        from = 255;
         to = 0;
     }
     var fadeInAnimator = new number_linear_animator_1["default"](from, to, 2000);
