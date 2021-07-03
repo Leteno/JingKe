@@ -64,12 +64,12 @@ test('drawChildren', () => {
   expect(mockDrawFunc1).toBeCalled();
   expect(mockDrawFunc2).toBeCalled();
   // assert x, y position.
-  // expect(mockTranslation.mock.calls[0][0]).toBe(120);
-  // expect(mockTranslation.mock.calls[0][1]).toBe(150);
-  // expect(mockDrawFunc1.mock.calls[0][1]).toBe(1);
-  // expect(mockDrawFunc1.mock.calls[0][2]).toBe(10);
-  // expect(mockDrawFunc2.mock.calls[0][1]).toBe(2);
-  // expect(mockDrawFunc2.mock.calls[0][2]).toBe(20);
+  expect(mockTranslation.mock.calls[0][0]).toBe(120);
+  expect(mockTranslation.mock.calls[0][1]).toBe(150);
+  expect(mockDrawFunc1.mock.calls[0][1]).toBe(1);
+  expect(mockDrawFunc1.mock.calls[0][2]).toBe(10);
+  expect(mockDrawFunc2.mock.calls[0][1]).toBe(2);
+  expect(mockDrawFunc2.mock.calls[0][2]).toBe(20);
 })
 
 test("onMeasure", () => {
