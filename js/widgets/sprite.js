@@ -90,6 +90,8 @@ var Sprite = /** @class */ (function () {
             && spY <= this.y + this.height);
     };
     Sprite.prototype.onclick = function (event) {
+        if (!this.visible)
+            return false;
         var inside = easy_math_1["default"].between(this.x, this.x + this.width, event.x)
             && easy_math_1["default"].between(this.y, this.y + this.height, event.y);
         if (!inside)

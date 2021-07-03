@@ -84,11 +84,13 @@ var Panel = /** @class */ (function (_super) {
         ctx.save();
         ctx.translate(this.x, this.y);
         this.children.forEach((function (view) {
-            view.drawToCanvasInternal(ctx, view.x, view.y, view.width, view.height);
+            view.drawToCanvas(ctx);
         }));
         ctx.restore();
     };
     Panel.prototype.onclick = function (event) {
+        if (!this.visible)
+            return false;
         var inside = easy_math_1["default"].between(this.x, this.x + this.width, event.x)
             && easy_math_1["default"].between(this.y, this.y + this.height, event.y);
         if (!inside)

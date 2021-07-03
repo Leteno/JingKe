@@ -56,6 +56,12 @@ test("testPanel", () => {
   expect(viewAClick.mock.calls.length).toBe(1);
   expect(panelClick.mock.calls.length).toBe(1); // no change
 
+  // on invisible view
+  event.x = event.y = 150;
+  viewA.visible = false;
+  expect(panel.onclick(event)).toBe(true);
+  expect(panelClick.mock.calls.length).toBe(2);
+  expect(viewAClick.mock.calls.length).toBe(1);
 })
 
 test("testCenterChild", () => {

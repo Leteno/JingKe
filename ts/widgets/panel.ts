@@ -80,18 +80,13 @@ export default class Panel extends Sprite {
     ctx.save();
     ctx.translate(this.x, this.y);
     this.children.forEach((view => {
-      view.drawToCanvasInternal(
-        ctx,
-        view.x,
-        view.y,
-        view.width,
-        view.height
-      );
+      view.drawToCanvas(ctx);
     }));
     ctx.restore();
   }
 
   onclick(event: ClickEvent) : boolean {
+    if (!this.visible) return false;
     let inside = EasyMath.between(this.x, this.x + this.width, event.x)
       && EasyMath.between(this.y, this.y + this.height, event.y);
     if (!inside) return false;
