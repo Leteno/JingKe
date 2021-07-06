@@ -5,6 +5,8 @@ import {timestamp} from "./misc/time"
 import { ClickEvent } from "./misc/event";
 import HelloWorldScene from "./game/hello_world_scene";
 import Scene1 from "./game/scene1";
+import SimpleScene from "./scene/simple_scene";
+import Dialogue from "./data/dialogue";
 
 export default class Main {
   aniId: number;
@@ -35,7 +37,14 @@ export default class Main {
     let scene1 = new Scene1(canvas);
     this.sceneManager.push("scene1", scene1);
 
-    this.sceneManager.switchScene("welcome");
+    let simpleScene = new SimpleScene(canvas,
+        "Scene 01", "夕阳无限好，狼虎伺机动");
+    this.sceneManager.push("simple", simpleScene);
+    let dialogue = new Dialogue("郑小则",
+      "人生不如意事，十有八九，唯有一二，让你慰藉，希望你能开心");
+    simpleScene.addDialogue(dialogue);
+
+    this.sceneManager.switchScene("simple");
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
       this.bindLoop

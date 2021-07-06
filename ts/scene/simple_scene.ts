@@ -1,7 +1,9 @@
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import { textAlpha } from "../animator/text-affect";
+import Dialogue from "../data/dialogue";
 import { ClickEvent } from "../misc/event";
 import { Align, LayoutParams } from "../misc/layout";
+import DialogueView from "../widgets/dialogue_view";
 import Panel from "../widgets/panel";
 import TextView from "../widgets/textview";
 import Scene from "./scene";
@@ -10,7 +12,10 @@ export default class SimpleScene implements Scene {
   mainPanel: Panel;
   sceneCaption: TextView;
   sceneTitle: TextView;
+  dialogueView: DialogueView;
+  presetDialogues: Array<Dialogue>;
 
+  sceneAnimationFinished: boolean;
   animators: Array<NumberLinearAnimator>;
 
   constructor(canvas: HTMLCanvasElement,
@@ -34,6 +39,17 @@ export default class SimpleScene implements Scene {
     this.animators = new Array<NumberLinearAnimator>();
     this.sceneCaption.textColor = "#FFFFFF";
     this.sceneTitle.textColor = "#FFFFFF";
+
+    this.dialogueView = new DialogueView();
+    this.dialogueView.forceWidth = canvas.width;
+    this.dialogueView.forceHeight = canvas.height / 4;
+    this.dialogueView.layoutParam = new LayoutParams(
+      Align.CENTER, Align.END
+    );
+    this.mainPanel.addView(this.dialogueView);
+
+    this.presetDialogues = new Array<Dialogue>();
+    this.sceneAnimationFinished = false;
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
@@ -53,12 +69,19 @@ export default class SimpleScene implements Scene {
       this.animators.push(captionFadeOut);
       this.animators.push(titleFadeOut);
     }
+    titleFadeOut.onStop = () => {
+      this.sceneAnimationFinished = true;
+      this.presetDialogues.forEach(item => {
+        this.dialogueView.addDialogue(item);
+      })
+    }
   }
 
   update(dt: number) {
     this.animators.forEach(animator => {
       animator.update(dt);
     });
+    this.dialogueView.updateTime(dt);
   }
 
   render(ctx: CanvasRenderingContext2D) {
@@ -67,5 +90,13 @@ export default class SimpleScene implements Scene {
 
   onclick(event: ClickEvent) {
     this.mainPanel.onclick(event);
+  }
+
+  addDialogue(data: Dialogue) {
+    if (this.sceneAnimationFinished) {
+      this.dialogueView.addDialogue(data);
+    } else {
+      this.presetDialogues.push(data);
+    }
   }
 }

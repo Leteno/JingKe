@@ -2,6 +2,7 @@
 exports.__esModule = true;
 var text_affect_1 = require("../animator/text-affect");
 var layout_1 = require("../misc/layout");
+var dialogue_view_1 = require("../widgets/dialogue_view");
 var panel_1 = require("../widgets/panel");
 var textview_1 = require("../widgets/textview");
 var SimpleScene = /** @class */ (function () {
@@ -19,6 +20,13 @@ var SimpleScene = /** @class */ (function () {
         this.animators = new Array();
         this.sceneCaption.textColor = "#FFFFFF";
         this.sceneTitle.textColor = "#FFFFFF";
+        this.dialogueView = new dialogue_view_1["default"]();
+        this.dialogueView.forceWidth = canvas.width;
+        this.dialogueView.forceHeight = canvas.height / 4;
+        this.dialogueView.layoutParam = new layout_1.LayoutParams(layout_1.Align.CENTER, layout_1.Align.END);
+        this.mainPanel.addView(this.dialogueView);
+        this.presetDialogues = new Array();
+        this.sceneAnimationFinished = false;
     }
     SimpleScene.prototype.onStart = function (ctx) {
         var _this = this;
@@ -36,17 +44,32 @@ var SimpleScene = /** @class */ (function () {
             _this.animators.push(captionFadeOut);
             _this.animators.push(titleFadeOut);
         };
+        titleFadeOut.onStop = function () {
+            _this.sceneAnimationFinished = true;
+            _this.presetDialogues.forEach(function (item) {
+                _this.dialogueView.addDialogue(item);
+            });
+        };
     };
     SimpleScene.prototype.update = function (dt) {
         this.animators.forEach(function (animator) {
             animator.update(dt);
         });
+        this.dialogueView.updateTime(dt);
     };
     SimpleScene.prototype.render = function (ctx) {
         this.mainPanel.drawToCanvas(ctx);
     };
     SimpleScene.prototype.onclick = function (event) {
         this.mainPanel.onclick(event);
+    };
+    SimpleScene.prototype.addDialogue = function (data) {
+        if (this.sceneAnimationFinished) {
+            this.dialogueView.addDialogue(data);
+        }
+        else {
+            this.presetDialogues.push(data);
+        }
     };
     return SimpleScene;
 }());

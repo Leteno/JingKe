@@ -28,6 +28,7 @@ var DialogueView = /** @class */ (function (_super) {
         _this.left = 20;
         _this.right = 20;
         _this.bottom = 20;
+        _this.visible = false;
         // Add all views:
         _this.nameViewLeft = new textview_1["default"]("郑大侠");
         _this.nameViewRight = new textview_1["default"]("嘉女士");
@@ -94,6 +95,7 @@ var DialogueView = /** @class */ (function (_super) {
     };
     DialogueView.prototype.updateView = function (data) {
         var _this = this;
+        this.visible = true;
         this.showHint = false;
         var view = data.showAtLeft ? this.nameViewLeft
             : this.nameViewRight;
@@ -134,6 +136,9 @@ var DialogueView = /** @class */ (function (_super) {
             if (this.queue.length > 0) {
                 var front = this.queue.shift();
                 this.updateView(front);
+            }
+            else {
+                this.visible = false;
             }
         }
         return true;

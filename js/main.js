@@ -6,6 +6,8 @@ var time_1 = require("./misc/time");
 var event_1 = require("./misc/event");
 var hello_world_scene_1 = require("./game/hello_world_scene");
 var scene1_1 = require("./game/scene1");
+var simple_scene_1 = require("./scene/simple_scene");
+var dialogue_1 = require("./data/dialogue");
 var Main = /** @class */ (function () {
     function Main(canvas) {
         this.canvas = canvas;
@@ -22,7 +24,11 @@ var Main = /** @class */ (function () {
         this.sceneManager.push("helloWorld", helloWorldScene);
         var scene1 = new scene1_1["default"](canvas);
         this.sceneManager.push("scene1", scene1);
-        this.sceneManager.switchScene("welcome");
+        var simpleScene = new simple_scene_1["default"](canvas, "Scene 01", "夕阳无限好，狼虎伺机动");
+        this.sceneManager.push("simple", simpleScene);
+        var dialogue = new dialogue_1["default"]("郑小则", "人生不如意事，十有八九，唯有一二，让你慰藉，希望你能开心");
+        simpleScene.addDialogue(dialogue);
+        this.sceneManager.switchScene("simple");
         window.cancelAnimationFrame(this.aniId);
         this.aniId = window.requestAnimationFrame(this.bindLoop);
         canvas.onclick = this.onclick.bind(this);

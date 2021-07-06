@@ -31,6 +31,7 @@ export default class DialogueView extends Panel {
     this.left = 20;
     this.right = 20;
     this.bottom = 20;
+    this.visible = false;
 
     // Add all views:
     this.nameViewLeft = new TextView("郑大侠");
@@ -119,6 +120,7 @@ export default class DialogueView extends Panel {
   }
 
   private updateView(data:Dialogue) {
+    this.visible = true;
     this.showHint = false;
     let view = data.showAtLeft ? this.nameViewLeft
                 : this.nameViewRight;
@@ -164,6 +166,8 @@ export default class DialogueView extends Panel {
       if (this.queue.length > 0) {
         let front = this.queue.shift();
         this.updateView(front);
+      } else {
+        this.visible = false;
       }
     }
     return true;
