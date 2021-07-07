@@ -8,6 +8,9 @@ export class MeasureResult {
   heightAtMost: number;
 }
 
+export class Border {
+}
+
 export default abstract class Sprite {
   left: number;
   top: number;
@@ -15,6 +18,7 @@ export default abstract class Sprite {
   bottom: number;
   visible: boolean;
   layoutParam: LayoutParams;
+  border: Border;
 
   // We could force the value here. Need to call measure to update it though.
   forceWidth: number;
@@ -110,6 +114,16 @@ export default abstract class Sprite {
       this.width,
       this.height
     );
+    if (this.border) {
+      ctx.save();
+      ctx.strokeStyle = "black";
+      ctx.strokeRect(
+        this.x, this.y,
+        this.width - this.getLandscapeMargin(),
+        this.height - this.getPortraitMargin()
+      );
+      ctx.restore();
+    }
   }
 
   // protected

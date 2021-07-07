@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.MeasureResult = void 0;
+exports.Border = exports.MeasureResult = void 0;
 var easy_math_1 = require("../misc/easy-math");
 var layout_1 = require("../misc/layout");
 var MeasureResult = /** @class */ (function () {
@@ -9,6 +9,12 @@ var MeasureResult = /** @class */ (function () {
     return MeasureResult;
 }());
 exports.MeasureResult = MeasureResult;
+var Border = /** @class */ (function () {
+    function Border() {
+    }
+    return Border;
+}());
+exports.Border = Border;
 var Sprite = /** @class */ (function () {
     function Sprite(layoutParam, visible) {
         if (layoutParam === void 0) { layoutParam = layout_1.LayoutParams.normal(); }
@@ -78,6 +84,12 @@ var Sprite = /** @class */ (function () {
         if (!this.visible)
             return;
         this.drawToCanvasInternal(ctx, this.x, this.y, this.width, this.height);
+        if (this.border) {
+            ctx.save();
+            ctx.strokeStyle = "black";
+            ctx.strokeRect(this.x, this.y, this.width - this.getLandscapeMargin(), this.height - this.getPortraitMargin());
+            ctx.restore();
+        }
     };
     Sprite.prototype.isCollideWith = function (sp) {
         if (!this.visible || !sp.visible)

@@ -4,6 +4,7 @@ import Dialogue from "../data/dialogue";
 import { ClickEvent } from "../misc/event";
 import { Align, LayoutParams } from "../misc/layout";
 import Panel from "./panel";
+import { Border } from "./sprite";
 import TextView from "./textview";
 
 export default class DialogueView extends Panel {
@@ -32,6 +33,7 @@ export default class DialogueView extends Panel {
     this.right = 20;
     this.bottom = 20;
     this.visible = false;
+    this.border = new Border();
 
     // Add all views:
     this.nameViewLeft = new TextView("郑大侠");
@@ -71,21 +73,15 @@ export default class DialogueView extends Panel {
 
   drawToCanvasInternal(
     ctx: CanvasRenderingContext2D, x: number, y: number) : void {
-
     if (this.debug) {
       ctx.save();
       ctx.fillStyle = "green";
-      ctx.fillRect(this.x, this.y, this.width, this.height);
+      ctx.fillRect(
+        this.x, this.y,
+        this.width - this.getLandscapeMargin(),
+        this.height - this.getPortraitMargin());
       ctx.restore();
     }
-
-    ctx.save();
-    ctx.strokeStyle = "black";
-    ctx.strokeRect(
-      this.x, this.y,
-      this.width - this.getLandscapeMargin(),
-      this.height - this.getPortraitMargin());
-    ctx.restore();
 
     if (this.showHint && this.hintAnimator.getVal()) {
       ctx.save();

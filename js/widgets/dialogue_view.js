@@ -19,6 +19,7 @@ var dual_state_infinite_animator_1 = require("../animator/dual-state-infinite-an
 var number_linear_animator_1 = require("../animator/number-linear-animator");
 var layout_1 = require("../misc/layout");
 var panel_1 = require("./panel");
+var sprite_1 = require("./sprite");
 var textview_1 = require("./textview");
 var DialogueView = /** @class */ (function (_super) {
     __extends(DialogueView, _super);
@@ -29,6 +30,7 @@ var DialogueView = /** @class */ (function (_super) {
         _this.right = 20;
         _this.bottom = 20;
         _this.visible = false;
+        _this.border = new sprite_1.Border();
         // Add all views:
         _this.nameViewLeft = new textview_1["default"]("郑大侠");
         _this.nameViewRight = new textview_1["default"]("嘉女士");
@@ -62,13 +64,9 @@ var DialogueView = /** @class */ (function (_super) {
         if (this.debug) {
             ctx.save();
             ctx.fillStyle = "green";
-            ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.fillRect(this.x, this.y, this.width - this.getLandscapeMargin(), this.height - this.getPortraitMargin());
             ctx.restore();
         }
-        ctx.save();
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(this.x, this.y, this.width - this.getLandscapeMargin(), this.height - this.getPortraitMargin());
-        ctx.restore();
         if (this.showHint && this.hintAnimator.getVal()) {
             ctx.save();
             ctx.strokeStyle = "black";
