@@ -5,6 +5,12 @@ export default abstract class SimpleView extends Sprite {
 
   measure(ctx: CanvasRenderingContext2D, maxWidth: number, maxHeight: number): MeasureResult {
     if (this.forceWidth > 0 && this.forceHeight > 0) {
+      // Align forceSize to fit maxWidth/Height
+      this.forceWidth = Math.min(this.forceWidth,
+        maxWidth - this.getLandscapeMargin());
+      this.forceHeight = Math.min(this.forceHeight,
+        maxHeight - this.getPortraitMargin());
+
       this.width = this.forceWidth;
       this.height = this.forceHeight;
       this.calculateActualSize(

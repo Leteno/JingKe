@@ -34,6 +34,9 @@ export default class SimpleScene implements Scene {
 
     this.mainPanel.forceWidth = canvas.width;
     this.mainPanel.forceHeight = canvas.height;
+    this.mainPanel.padding.left = 20;
+    this.mainPanel.padding.right = 20;
+    this.mainPanel.padding.bottom = 20;
     this.sceneCaption.layoutParam = new LayoutParams(
       Align.CENTER, Align.CENTER
     );

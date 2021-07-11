@@ -18,6 +18,9 @@ export default class Scene1 implements Scene {
     this.mainPanel = new Panel();
     this.mainPanel.forceWidth = canvas.width;
     this.mainPanel.forceHeight = canvas.height;
+    this.mainPanel.padding.left = 20;
+    this.mainPanel.padding.right = 20;
+    this.mainPanel.padding.bottom = 20;
 
     this.dialogueView = new DialogueView();
     this.dialogueView.forceWidth = canvas.width;

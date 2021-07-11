@@ -25,6 +25,9 @@ export default class HelloWorldScene implements Scene {
     this.mainPanel = new Panel();
     this.mainPanel.forceWidth = canvas.width;
     this.mainPanel.forceHeight = canvas.height;
+    this.mainPanel.padding.left = 20;
+    this.mainPanel.padding.right = 20;
+    this.mainPanel.padding.bottom = 20;
 
     this.animators = new Array<Animator<number>>();
 
@@ -49,16 +52,12 @@ export default class HelloWorldScene implements Scene {
     let longText = new TextView("这是一个非常长，非常长的句子。我希望你能够帮忙换一下行");
     longText.layoutParam = new LayoutParams(Align.START, Align.CENTER)
     longText.margin.top = 100;
-    longText.margin.left = 20;
-    longText.margin.right = 40;
     longText.debug = true;
     this.mainPanel.addView(longText);
 
     this.dialogueView = new DialogueView();
-    this.dialogueView.forceWidth = canvas.width -
-      this.dialogueView.padding.left - this.dialogueView.padding.right;
-    this.dialogueView.forceHeight = canvas.height / 4 -
-      this.dialogueView.padding.top - this.dialogueView.padding.bottom;
+    this.dialogueView.forceWidth = canvas.width;
+    this.dialogueView.forceHeight = canvas.height / 4;
     this.mainPanel.addView(this.dialogueView);
     this.dialogueView.addDialogue(new Dialogue(
       "郑虾米",

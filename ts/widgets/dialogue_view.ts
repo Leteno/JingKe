@@ -4,7 +4,7 @@ import Dialogue from "../data/dialogue";
 import { ClickEvent } from "../misc/event";
 import { Align, LayoutParams } from "../misc/layout";
 import Panel from "./panel";
-import { Border } from "./sprite";
+import { Border, MeasureResult } from "./sprite";
 import TextView from "./textview";
 
 export default class DialogueView extends Panel {
@@ -22,6 +22,8 @@ export default class DialogueView extends Panel {
 
   // Hack to update contentView's text
   expectedContentText: string;
+  measureWidthLastTime: number;
+  measureHeightLastTime: number;
 
   constructor() {
     super();
@@ -29,9 +31,6 @@ export default class DialogueView extends Panel {
     this.layoutParam = new LayoutParams(
       Align.START, Align.END
     );
-    this.margin.left = 20;
-    this.margin.right = 20;
-    this.margin.bottom = 20;
     this.visible = false;
     this.border = new Border();
 
@@ -69,6 +68,12 @@ export default class DialogueView extends Panel {
     this.showHint = false;
   }
 
+  measure(ctx: CanvasRenderingContext2D, maxWidth: number, maxHeight: number): MeasureResult {
+    this.measureWidthLastTime = maxWidth;
+    this.measureHeightLastTime = maxHeight;
+    return super.measure(ctx, maxWidth, maxHeight);
+  }
+
   drawToCanvasInternal(
     ctx: CanvasRenderingContext2D) {
     if (this.debug) {
@@ -96,8 +101,9 @@ export default class DialogueView extends Panel {
       this.contentView.text = this.expectedContentText;
       this.measure(
         ctx,
-        this.width - this.getLandscapeMargin(),
-        this.height - this.getPortraitMargin());
+        this.measureWidthLastTime,
+        this.measureHeightLastTime
+      );
     }
     super.drawToCanvasInternal(ctx);
   }
