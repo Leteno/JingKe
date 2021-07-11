@@ -31,6 +31,7 @@ export default abstract class Sprite {
   visible: boolean;
   layoutParam: LayoutParams;
   border: Border;
+  bgColor: string;
 
   debug: boolean;
   debugColor: string;

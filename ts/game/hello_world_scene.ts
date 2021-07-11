@@ -34,6 +34,7 @@ export default class HelloWorldScene implements Scene {
     let text = new TextView("你好，过去");
     text.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     this.mainPanel.addView(text);
+    text.bgColor = "#cccccc";
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     this.mainPanel.addView(imageView);
