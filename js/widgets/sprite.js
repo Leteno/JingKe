@@ -15,6 +15,15 @@ var Border = /** @class */ (function () {
     return Border;
 }());
 exports.Border = Border;
+var _Gap = /** @class */ (function () {
+    function _Gap() {
+        this.left = 0;
+        this.top = 0;
+        this.right = 0;
+        this.bottom = 0;
+    }
+    return _Gap;
+}());
 var Sprite = /** @class */ (function () {
     function Sprite(layoutParam, visible) {
         if (layoutParam === void 0) { layoutParam = layout_1.LayoutParams.normal(); }
@@ -25,72 +34,9 @@ var Sprite = /** @class */ (function () {
         this.forceHeight = -1;
         this.width = this.height = 0;
         this.x = this.y = 0;
-        this.left = this.top = 0;
-        this.right = this.bottom = 0;
+        this.margin = new _Gap();
+        this.padding = new _Gap();
     }
-    Sprite.prototype.measure = function (ctx, maxWidth, maxHeight) {
-        if (this.forceWidth > 0 && this.forceHeight > 0) {
-            this.width = this.forceWidth;
-            this.height = this.forceHeight;
-            return {
-                widthAtMost: this.forceWidth + this.getLandscapeMargin(),
-                heightAtMost: this.forceHeight + this.getPortraitMargin()
-            };
-        }
-        return this.onMeasure(ctx, maxWidth, maxHeight);
-    };
-    Sprite.prototype.getLandscapeMargin = function () {
-        var ret = this.left + this.right;
-        if (layout_1.Align.CENTER == this.layoutParam.xcfg) {
-            ret = Math.max(this.left, this.right) * 2;
-        }
-        return ret;
-    };
-    Sprite.prototype.getPortraitMargin = function () {
-        var ret = this.top + this.bottom;
-        if (layout_1.Align.CENTER == this.layoutParam.xcfg) {
-            ret = Math.max(this.top, this.bottom) * 2;
-        }
-        return ret;
-    };
-    // (left, top) - width, height, those are parent's attribute.
-    // And under such situation, we need to calculate the x,y for the layout
-    Sprite.prototype.onLayout = function (width, height) {
-        switch (this.layoutParam.xcfg) {
-            case layout_1.Align.CENTER:
-                this.x = (width - this.width) / 2 + this.left;
-                break;
-            case layout_1.Align.END:
-                this.x = width - this.width - this.right;
-                break;
-            default:
-                this.x = this.left;
-                break;
-        }
-        switch (this.layoutParam.ycfg) {
-            case layout_1.Align.CENTER:
-                this.y = (height - this.height) / 2 + this.top;
-                break;
-            case layout_1.Align.END:
-                this.y = height - this.height - this.bottom;
-                break;
-            default:
-                this.y = this.top;
-                break;
-        }
-    };
-    // public final
-    Sprite.prototype.drawToCanvas = function (ctx) {
-        if (!this.visible)
-            return;
-        this.drawToCanvasInternal(ctx, this.x, this.y, this.width, this.height);
-        if (this.border) {
-            ctx.save();
-            ctx.strokeStyle = "black";
-            ctx.strokeRect(this.x, this.y, this.width - this.getLandscapeMargin(), this.height - this.getPortraitMargin());
-            ctx.restore();
-        }
-    };
     Sprite.prototype.isCollideWith = function (sp) {
         if (!this.visible || !sp.visible)
             return false;

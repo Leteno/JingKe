@@ -16,7 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.TextHelper = void 0;
-var sprite_1 = require("./sprite");
+var simple_view_1 = require("./simple_view");
 var TextView = /** @class */ (function (_super) {
     __extends(TextView, _super);
     function TextView(text) {
@@ -37,40 +37,42 @@ var TextView = /** @class */ (function (_super) {
             ctx.font = this.textSize + "px bold";
         }
     };
-    TextView.prototype.onMeasure = function (ctx, maxWidth, maxHeight) {
+    TextView.prototype.calculateActualSize = function (ctx, maxWidthForCalculation, maxHeightForCalculation) {
         ctx.save();
         this.applyStyle(ctx);
         var charNumEachLine = 1000;
-        var maxTextWidth = maxWidth - this.getLandscapeMargin();
-        if (maxWidth > 0 && // is valid, not -1;
-            maxTextWidth > 0) {
+        if (maxWidthForCalculation > 0) {
             charNumEachLine =
-                TextHelper.getInstance().calculateCharInLine(ctx, this.textSize, maxTextWidth);
+                TextHelper.getInstance().calculateCharInLine(ctx, this.textSize, maxWidthForCalculation);
         }
         this.lineHeight = this.textSize;
         this.lines.splice(0);
-        this.height = 0;
+        var actualWidth = 0;
+        var actualHeight = 0;
         for (var i = 0; i < this.text.length; i += charNumEachLine) {
             this.lines.push(this.text.substr(i, Math.min(charNumEachLine, this.text.length - i)));
-            this.height += this.lineHeight;
+            actualHeight += this.lineHeight;
         }
         if (this.lines.length > 1) {
-            this.width = maxTextWidth;
+            actualWidth = maxWidthForCalculation;
         }
         else {
             var metric = ctx.measureText(this.text);
-            this.width = metric.width;
+            actualWidth = metric.width;
         }
+        // TODO(juzhen) should we:
+        // actualHeight = min(-, maxHeightForCalculation)
         ctx.restore();
         return {
-            widthAtMost: this.width + this.getLandscapeMargin(),
-            heightAtMost: this.height + this.getPortraitMargin()
+            calcWidth: actualWidth,
+            calcHeight: actualHeight
         };
     };
+    TextView.prototype.onLayout = function () {
+        // no special implementation.
+    };
     // override
-    TextView.prototype.drawToCanvasInternal = function (ctx, x, y) {
-        if (!this.visible)
-            return;
+    TextView.prototype.drawToCanvasInternal = function (ctx) {
         if (this.debug) {
             ctx.save();
             ctx.fillStyle = "pink";
@@ -80,12 +82,12 @@ var TextView = /** @class */ (function (_super) {
         ctx.save();
         this.applyStyle(ctx);
         for (var i = 0; i < this.lines.length; i++) {
-            ctx.fillText(this.lines[i], x, y + i * this.lineHeight);
+            ctx.fillText(this.lines[i], 0, i * this.lineHeight);
         }
         ctx.restore();
     };
     return TextView;
-}(sprite_1["default"]));
+}(simple_view_1["default"]));
 exports["default"] = TextView;
 // TODO: update measure height. Because we have multiple lines
 var TextHelper = /** @class */ (function () {

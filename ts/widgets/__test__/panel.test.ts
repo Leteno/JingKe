@@ -39,7 +39,8 @@ test('removeAll', () => {
 
 test('drawChildren', () => {
   let panel = new Panel();
-  panel.left = 120; panel.top = 150;
+  panel.margin.left = 120; panel.margin.top = 150;
+  panel.padding.left = 33; panel.padding.top = 23;
 
   let mockDrawFunc1 = jest.fn();
   let mockDrawFunc2 = jest.fn();
@@ -53,9 +54,9 @@ test('drawChildren', () => {
   s1.drawToCanvasInternal = mockDrawFunc1;
   s2.drawToCanvasInternal = mockDrawFunc2;
   s3.drawToCanvasInternal = mockDrawFunc3;
-  s1.left = 1; s1.top = 10;
-  s2.left = 2; s2.top = 20;
-  s3.left = 3; s3.top = 30;
+  s1.margin.left = 1; s1.margin.top = 10;
+  s2.margin.left = 2; s2.margin.top = 20;
+  s3.margin.left = 3; s3.margin.top = 30;
 
   panel.addView(s1);
   panel.addView(s2);
@@ -67,18 +68,20 @@ test('drawChildren', () => {
     translate: function(x: number, y: number){},
   } as CanvasRenderingContext2D;
   ctx.translate = mockTranslation;
-  panel.measure(ctx);
-  panel.layout();
+  panel.measure(ctx, 500, 500);
+  panel.layout(500, 500);
   panel.drawToCanvas(ctx);
   expect(mockDrawFunc1).toBeCalled();
   expect(mockDrawFunc2).toBeCalled();
   // assert x, y position.
   expect(mockTranslation.mock.calls[0][0]).toBe(120);
   expect(mockTranslation.mock.calls[0][1]).toBe(150);
-  expect(mockDrawFunc1.mock.calls[0][1]).toBe(1);
-  expect(mockDrawFunc1.mock.calls[0][2]).toBe(10);
-  expect(mockDrawFunc2.mock.calls[0][1]).toBe(2);
-  expect(mockDrawFunc2.mock.calls[0][2]).toBe(20);
+  expect(mockTranslation.mock.calls[1][0]).toBe(33);
+  expect(mockTranslation.mock.calls[1][1]).toBe(23);
+  expect(mockTranslation.mock.calls[2][0]).toBe(1);
+  expect(mockTranslation.mock.calls[2][1]).toBe(10);
+  expect(mockTranslation.mock.calls[3][0]).toBe(2);
+  expect(mockTranslation.mock.calls[3][1]).toBe(20);
 
   // invisible view should not be drawn
   expect(mockDrawFunc3.mock.calls.length).toBe(0);
@@ -89,20 +92,20 @@ test("onMeasure", () => {
   let panel = new Panel();
   panel.forceWidth = panel.forceHeight = 100;
   let s1 = new TestSprite();
-  let onMeasureFn = jest.fn<MeasureResult, any>(((all: any[]):MeasureResult=>{
+  let calculateActualSizeFn = jest.fn<MeasureResult, any>(((all: any[]):MeasureResult=>{
     return {
-      widthAtMost: 10,
-      heightAtMost: 10
+      calcWidth: 10,
+      calcHeight: 10
     };
   }));
   let onLayoutFn = jest.fn();
-  s1.onMeasure = onMeasureFn;
+  s1.calculateActualSize = calculateActualSizeFn;
   s1.onLayout = onLayoutFn;
   panel.addView(s1);
 
-  panel.measure(ctx);
-  expect(onMeasureFn.mock.calls.length).toBe(1)
-  panel.layout();
+  panel.measure(ctx, 100, 100);
+  expect(calculateActualSizeFn.mock.calls.length).toBe(1)
+  panel.layout(100, 100);
   expect(onLayoutFn.mock.calls.length).toBe(1)
 })
 
@@ -110,16 +113,16 @@ test("measureAndLayout", ()=> {
   let ctx = {} as CanvasRenderingContext2D;
 
   let panel = new Panel();
-  panel.left = 12; panel.top = 14;
+  panel.margin.left = 12; panel.margin.top = 14;
   let s1 = new TestSprite(20, 50);
   let s2 = new TestSprite(30, 40);
   s1.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
   s2.layoutParam = new LayoutParams(Align.END, Align.END);
-  s1.left = 11; s1.top = 15;
-  s2.left = 45; s2.top = 46;
+  s1.margin.left = 11; s1.margin.top = 15;
+  s2.margin.left = 45; s2.margin.top = 46;
   panel.addView(s1);
   panel.addView(s2);
-  panel.measure(ctx);
+  panel.measure(ctx, 500, 500);
 
   expect(panel.width).toBe(75);
   expect(panel.height).toBe(86);
@@ -129,7 +132,7 @@ test("measureAndLayout", ()=> {
   expect(s2.width).toBe(30);
   expect(s2.height).toBe(40);
 
-  panel.layout();
+  panel.layout(500, 500);
 
   expect(panel.x).toBe(12);
   expect(panel.y).toBe(14);
@@ -141,8 +144,8 @@ test("measureAndLayout", ()=> {
   let father = new Panel();
   panel.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
   father.addView(panel)
-  father.measure(ctx);
-  father.layout();
+  father.measure(ctx, 500, 500);
+  father.layout(500, 500);
 
   expect(father.width).toBe(99);
   expect(father.height).toBe(114);

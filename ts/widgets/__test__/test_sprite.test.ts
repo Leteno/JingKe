@@ -1,23 +1,26 @@
 
+import SimpleView from "../simple_view";
 import Sprite, { MeasureResult } from "../sprite"
 
-export default class TestSprite extends Sprite {
+export default class TestSprite extends SimpleView {
   constructor(width: number = -1, height: number=-1) {
     super();
     this.width = this.forceWidth = width;
     this.height = this.forceHeight = height;
   }
 
-  public onMeasure(ctx: CanvasRenderingContext2D): MeasureResult {
+  calculateActualSize(ctx: CanvasRenderingContext2D, maxWidthForCalculation: number, maxHeightForCalculation: number): MeasureResult {
     return {
-      widthAtMost: this.width,
-      heightAtMost: this.height
+      calcWidth: this.width,
+      calcHeight: this.height
     }
   }
-  drawToCanvasInternal(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number): void {
-    // do nothing
+
+  onLayout(parentWidth: number, parentHeight: number) {
   }
 
+  drawToCanvasInternal(ctx: CanvasRenderingContext2D) {
+  }
 }
 
 test("good", () => {

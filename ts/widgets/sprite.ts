@@ -4,24 +4,37 @@ import { ClickEvent } from "../misc/event";
 import { Align, LayoutParams } from "../misc/layout";
 
 export class MeasureResult {
-  widthAtMost: number;
-  heightAtMost: number;
+  calcWidth: number;
+  calcHeight: number;
 }
 
 export class Border {
 }
 
-export default abstract class Sprite {
+class _Gap {
   left: number;
   top: number;
   right: number;
   bottom: number;
+
+  constructor() {
+    this.left = 0;
+    this.top = 0;
+    this.right = 0;
+    this.bottom = 0;
+  }
+}
+
+export default abstract class Sprite {
+  margin: _Gap;
+  padding: _Gap;
   visible: boolean;
   layoutParam: LayoutParams;
   border: Border;
 
-  // We could force the value here. Need to call measure to update it though.
+  // forceWidth = actualWidth + padding
   forceWidth: number;
+  // forceHeight = actualHeight + padding
   forceHeight: number;
 
   // These values are calculated.
@@ -38,96 +51,32 @@ export default abstract class Sprite {
     this.forceHeight = -1;
     this.width = this.height = 0;
     this.x = this.y = 0;
-    this.left = this.top = 0;
-    this.right = this.bottom = 0;
+    this.margin = new _Gap();
+    this.padding = new _Gap();
   }
 
-  measure(ctx: CanvasRenderingContext2D,
+  /**
+   * Calculate view.width, view.height
+   * Suppose view.width and view.height will consider
+   * the padding, not margin.
+   * 
+   * Return {Width,Height} this view suppose to be.
+   * include padding and margin.
+   * 
+   * @param maxWidth The parent's maxWidth
+   * @param maxHeight The parrent's maxHeight
+   */
+  abstract measure(ctx: CanvasRenderingContext2D,
       maxWidth: number,
-      maxHeight: number): MeasureResult {
-    if (this.forceWidth > 0 && this.forceHeight > 0) {
-      this.width = this.forceWidth;
-      this.height = this.forceHeight;
-      return {
-        widthAtMost: this.forceWidth + this.getLandscapeMargin(),
-        heightAtMost: this.forceHeight + this.getPortraitMargin()
-      }
-    }
-    return this.onMeasure(ctx, maxWidth, maxHeight);
-  }
+      maxHeight: number): MeasureResult;
 
-  getLandscapeMargin() : number {
-    let ret = this.left + this.right;
-    if (Align.CENTER == this.layoutParam.xcfg) {
-      ret = Math.max(this.left, this.right) * 2;
-    }
-    return ret;
-  }
-  getPortraitMargin() : number {
-    let ret = this.top + this.bottom;
-    if (Align.CENTER == this.layoutParam.xcfg) {
-      ret = Math.max(this.top, this.bottom) * 2;
-    }
-    return ret;
-  }
+  /**
+   * This will calculate view.x, view.y
+   */
+  abstract layout(
+    parentWidth: number, parentHeight: number);
 
-  // measure for width and height
-  protected abstract onMeasure(
-    ctx: CanvasRenderingContext2D,
-    maxWidth: number,
-    maxHeight: number): MeasureResult;
-
-  // (left, top) - width, height, those are parent's attribute.
-  // And under such situation, we need to calculate the x,y for the layout
-  onLayout(width: number, height: number) {
-    switch(this.layoutParam.xcfg) {
-      case Align.CENTER:
-        this.x = (width - this.width) / 2 + this.left;
-        break;
-      case Align.END:
-        this.x = width - this.width - this.right;
-        break;
-      default:
-        this.x = this.left;
-        break;
-    }
-    switch(this.layoutParam.ycfg) {
-      case Align.CENTER:
-        this.y = (height - this.height) / 2 + this.top;
-        break;
-      case Align.END:
-        this.y = height - this.height - this.bottom;
-        break;
-      default:
-        this.y = this.top;
-        break;
-    }
-  }
-
-  // public final
-  drawToCanvas(ctx: CanvasRenderingContext2D) {
-    if (!this.visible) return;
-    this.drawToCanvasInternal(
-      ctx,
-      this.x,
-      this.y,
-      this.width,
-      this.height
-    );
-    if (this.border) {
-      ctx.save();
-      ctx.strokeStyle = "black";
-      ctx.strokeRect(
-        this.x, this.y,
-        this.width - this.getLandscapeMargin(),
-        this.height - this.getPortraitMargin()
-      );
-      ctx.restore();
-    }
-  }
-
-  // protected
-  abstract drawToCanvasInternal(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number): void;
+  abstract drawToCanvas(ctx: CanvasRenderingContext2D);
 
   isCollideWith(sp: Sprite) {
     if (!this.visible || !sp.visible) return false;

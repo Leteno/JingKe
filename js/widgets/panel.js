@@ -16,8 +16,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var easy_math_1 = require("../misc/easy-math");
-var sprite_1 = require("./sprite");
 var event_1 = require("../misc/event");
+var simple_view_1 = require("./simple_view");
 var Panel = /** @class */ (function (_super) {
     __extends(Panel, _super);
     function Panel() {
@@ -25,46 +25,23 @@ var Panel = /** @class */ (function (_super) {
         _this.children = new Array();
         return _this;
     }
-    Panel.prototype.measure = function (ctx, maxWidth, maxHeight) {
-        if (maxWidth === void 0) { maxWidth = -1; }
-        if (maxHeight === void 0) { maxHeight = -1; }
-        return this.onMeasure(ctx, maxWidth, maxHeight);
-    };
-    Panel.prototype.onMeasure = function (ctx, maxWidth, maxHeight) {
-        var widthAtMost = 0;
-        var heightAtMost = 0;
-        if (this.forceWidth > 0)
-            maxWidth = this.forceWidth;
-        if (this.forceHeight > 0)
-            maxHeight = this.forceHeight;
+    Panel.prototype.calculateActualSize = function (ctx, maxWidthForCalculation, maxHeightForCalculation) {
+        var childWidthAtMost = 0;
+        var childHeightAtMost = 0;
         this.children.forEach(function (view) {
-            var size = view.measure(ctx, maxWidth, maxHeight);
-            widthAtMost = Math.max(size.widthAtMost, widthAtMost);
-            heightAtMost = Math.max(size.heightAtMost, heightAtMost);
+            var size = view.measure(ctx, maxWidthForCalculation, maxHeightForCalculation);
+            childWidthAtMost = Math.max(size.calcWidth, childWidthAtMost);
+            childHeightAtMost = Math.max(size.calcHeight, childHeightAtMost);
         });
-        if (this.forceWidth > 0 && this.forceHeight > 0) {
-            this.width = this.forceWidth;
-            this.height = this.forceHeight;
-            return {
-                widthAtMost: this.forceWidth,
-                heightAtMost: this.forceHeight
-            };
-        }
-        this.width = widthAtMost;
-        this.height = heightAtMost;
         return {
-            widthAtMost: widthAtMost + this.getLandscapeMargin(),
-            heightAtMost: heightAtMost + this.getPortraitMargin()
+            calcWidth: childWidthAtMost,
+            calcHeight: childHeightAtMost
         };
     };
-    Panel.prototype.layout = function () {
-        this.onLayout(this.width, this.height);
-    };
-    Panel.prototype.onLayout = function (width, height) {
+    Panel.prototype.onLayout = function (parentWidth, parentHeight) {
         var _this = this;
-        _super.prototype.onLayout.call(this, width, height);
         this.children.forEach(function (view) {
-            view.onLayout(_this.width, _this.height);
+            view.layout(_this.width - _this.padding.left - _this.padding.right, _this.height - _this.padding.top - _this.padding.bottom);
         });
     };
     Panel.prototype.addView = function (view) {
@@ -80,9 +57,9 @@ var Panel = /** @class */ (function (_super) {
         this.children.splice(0);
     };
     // override
-    Panel.prototype.drawToCanvasInternal = function (ctx, x, y) {
+    Panel.prototype.drawToCanvasInternal = function (ctx) {
         ctx.save();
-        ctx.translate(this.x, this.y);
+        ctx.translate(this.padding.left, this.padding.top);
         this.children.forEach((function (view) {
             view.drawToCanvas(ctx);
         }));
@@ -106,5 +83,5 @@ var Panel = /** @class */ (function (_super) {
         return this.onclickInternal(event);
     };
     return Panel;
-}(sprite_1["default"]));
+}(simple_view_1["default"]));
 exports["default"] = Panel;

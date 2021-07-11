@@ -29,9 +29,9 @@ export default class DialogueView extends Panel {
     this.layoutParam = new LayoutParams(
       Align.START, Align.END
     );
-    this.left = 20;
-    this.right = 20;
-    this.bottom = 20;
+    this.margin.left = 20;
+    this.margin.right = 20;
+    this.margin.bottom = 20;
     this.visible = false;
     this.border = new Border();
 
@@ -44,18 +44,18 @@ export default class DialogueView extends Panel {
     this.addView(this.contentView);
 
     // Configure View position
-    this.nameViewLeft.left = 20;
-    this.nameViewLeft.top = 10;
-    this.nameViewRight.right = 60;
-    this.nameViewRight.top = 10;
+    this.nameViewLeft.margin.left = 20;
+    this.nameViewLeft.margin.top = 10;
+    this.nameViewRight.margin.right = 60;
+    this.nameViewRight.margin.top = 10;
     this.nameViewRight.layoutParam = new LayoutParams(
       Align.END, Align.START
     );
     this.nameViewRight.visible = false;
-    this.contentView.left = 20;
-    this.contentView.right = 50;
-    this.contentView.top = 40;
-    this.contentView.bottom = 20;
+    this.contentView.margin.left = 20;
+    this.contentView.margin.right = 50;
+    this.contentView.margin.top = 40;
+    this.contentView.margin.bottom = 20;
     this.contentView.textSize = 16;
 
     // Animator

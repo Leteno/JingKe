@@ -1,6 +1,7 @@
+import SimpleView from "./simple_view";
 import Sprite, { MeasureResult } from "./sprite";
 
-export default class TextView extends Sprite {
+export default class TextView extends SimpleView {
   text: string;
   textColor: string;
   textSize: number;
@@ -28,47 +29,52 @@ export default class TextView extends Sprite {
     }
   }
   
-  protected onMeasure(
+  calculateActualSize(
     ctx: CanvasRenderingContext2D,
-    maxWidth: number,
-    maxHeight: number): MeasureResult {
+    maxWidthForCalculation: number,
+    maxHeightForCalculation: number): MeasureResult {
     ctx.save();
     this.applyStyle(ctx);
 
     let charNumEachLine = 1000;
-    let maxTextWidth = maxWidth - this.getLandscapeMargin();
-    if (maxWidth > 0 &&  // is valid, not -1;
-        maxTextWidth > 0) {
+    if (maxWidthForCalculation > 0) {
       charNumEachLine = 
         TextHelper.getInstance().calculateCharInLine(
-          ctx, this.textSize, maxTextWidth
+          ctx, this.textSize, maxWidthForCalculation
         );
     }
 
     this.lineHeight = this.textSize;
     this.lines.splice(0);
-    this.height = 0;
+    let actualWidth = 0;
+    let actualHeight = 0;
     for (let i = 0; i < this.text.length; i += charNumEachLine) {
       this.lines.push(this.text.substr(i, Math.min(charNumEachLine, this.text.length - i)));
-      this.height += this.lineHeight;
+      actualHeight += this.lineHeight;
     }
     if (this.lines.length > 1) {
-      this.width = maxTextWidth;
+      actualWidth = maxWidthForCalculation;
     } else {
       let metric = ctx.measureText(this.text);
-      this.width = metric.width;
+      actualWidth = metric.width;
     }
+
+    // TODO(juzhen) should we:
+    // actualHeight = min(-, maxHeightForCalculation)
 
     ctx.restore();
     return {
-      widthAtMost: this.width + this.getLandscapeMargin(),
-      heightAtMost: this.height + this.getPortraitMargin()
+      calcWidth: actualWidth,
+      calcHeight: actualHeight
     }
   }
 
+  onLayout() {
+    // no special implementation.
+  }
+
   // override
-  drawToCanvasInternal(ctx: CanvasRenderingContext2D, x:number, y:number) {
-    if (!this.visible) return;
+  drawToCanvasInternal(ctx: CanvasRenderingContext2D) {
     if (this.debug) {
       ctx.save();
       ctx.fillStyle = "pink";
@@ -78,7 +84,10 @@ export default class TextView extends Sprite {
     ctx.save();
     this.applyStyle(ctx);
     for (let i = 0; i < this.lines.length; i++) {
-      ctx.fillText(this.lines[i], x, y + i * this.lineHeight);
+      ctx.fillText(
+        this.lines[i],
+        0,
+        i * this.lineHeight);
     }
     ctx.restore();
   }

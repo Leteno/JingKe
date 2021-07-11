@@ -2,67 +2,57 @@ import EasyMath from "../misc/easy-math"
 import Sprite, { MeasureResult } from "./sprite"
 import {Align} from "../misc/layout"
 import { ClickEvent } from "../misc/event"
+import SimpleView from "./simple_view";
 
-export default class Panel extends Sprite {
+export default class Panel extends SimpleView {
   children: Array<Sprite>;
+
+
   constructor() {
     super();
     this.children = new Array();
   }
 
-  public measure(
-    ctx: CanvasRenderingContext2D,
-    maxWidth: number=-1,
-    maxHeight: number=-1): MeasureResult {
-    return this.onMeasure(ctx, maxWidth, maxHeight);
-  }
 
-  protected onMeasure(
+  calculateActualSize(
     ctx: CanvasRenderingContext2D,
-    maxWidth: number,
-    maxHeight: number): MeasureResult {
-    let widthAtMost = 0;
-    let heightAtMost = 0;
-
-    if (this.forceWidth > 0) maxWidth = this.forceWidth;
-    if (this.forceHeight > 0) maxHeight = this.forceHeight;
+    maxWidthForCalculation: number,
+    maxHeightForCalculation: number): MeasureResult {
+    let childWidthAtMost = 0;
+    let childHeightAtMost = 0;
 
     this.children.forEach((view) => {
-      let size = view.measure(ctx, maxWidth, maxHeight);
-      widthAtMost = Math.max(size.widthAtMost, widthAtMost)
-      heightAtMost = Math.max(size.heightAtMost, heightAtMost)
+      let size = view.measure(
+        ctx,
+        maxWidthForCalculation,
+        maxHeightForCalculation
+      );
+      childWidthAtMost = Math.max(
+        size.calcWidth, childWidthAtMost)
+      childHeightAtMost = Math.max(
+        size.calcHeight, childHeightAtMost)
     });
-    if (this.forceWidth > 0 && this.forceHeight > 0) {
-      this.width = this.forceWidth;
-      this.height = this.forceHeight;
-      return {
-        widthAtMost: this.forceWidth,
-        heightAtMost: this.forceHeight,
-      }
-    }
-    this.width = widthAtMost;
-    this.height = heightAtMost;
+
     return {
-      widthAtMost: widthAtMost + this.getLandscapeMargin(),
-      heightAtMost: heightAtMost + this.getPortraitMargin()
+      calcWidth: childWidthAtMost,
+      calcHeight: childHeightAtMost
     }
   }
 
-  public layout() {
-    this.onLayout(this.width, this.height)
+
+  onLayout(parentWidth: number, parentHeight: number) {
+    this.children.forEach(view => {
+      view.layout(
+        this.width - this.padding.left - this.padding.right,
+        this.height - this.padding.top - this.padding.bottom);
+    })   
   }
 
-  onLayout(width: number, height: number) {
-    super.onLayout(width, height);
-    this.children.forEach(view => {
-      view.onLayout(this.width, this.height);
-    })
-    
-  }
 
   addView(view: Sprite) {
     this.children.push(view);
   }
+
 
   removeView(view: Sprite) {
     let index = this.children.findIndex((v) => v == view);
@@ -71,14 +61,16 @@ export default class Panel extends Sprite {
     }
   }
 
+
   removeAllViews() {
     this.children.splice(0)
   }
 
+
   // override
-  drawToCanvasInternal(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  drawToCanvasInternal(ctx: CanvasRenderingContext2D) {
     ctx.save();
-    ctx.translate(this.x, this.y);
+    ctx.translate(this.padding.left, this.padding.top);
     this.children.forEach((view => {
       view.drawToCanvas(ctx);
     }));

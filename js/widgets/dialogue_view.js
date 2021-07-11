@@ -26,9 +26,9 @@ var DialogueView = /** @class */ (function (_super) {
     function DialogueView() {
         var _this = _super.call(this) || this;
         _this.layoutParam = new layout_1.LayoutParams(layout_1.Align.START, layout_1.Align.END);
-        _this.left = 20;
-        _this.right = 20;
-        _this.bottom = 20;
+        _this.margin.left = 20;
+        _this.margin.right = 20;
+        _this.margin.bottom = 20;
         _this.visible = false;
         _this.border = new sprite_1.Border();
         // Add all views:
@@ -39,16 +39,16 @@ var DialogueView = /** @class */ (function (_super) {
         _this.addView(_this.nameViewRight);
         _this.addView(_this.contentView);
         // Configure View position
-        _this.nameViewLeft.left = 20;
-        _this.nameViewLeft.top = 10;
-        _this.nameViewRight.right = 60;
-        _this.nameViewRight.top = 10;
+        _this.nameViewLeft.margin.left = 20;
+        _this.nameViewLeft.margin.top = 10;
+        _this.nameViewRight.margin.right = 60;
+        _this.nameViewRight.margin.top = 10;
         _this.nameViewRight.layoutParam = new layout_1.LayoutParams(layout_1.Align.END, layout_1.Align.START);
         _this.nameViewRight.visible = false;
-        _this.contentView.left = 20;
-        _this.contentView.right = 50;
-        _this.contentView.top = 40;
-        _this.contentView.bottom = 20;
+        _this.contentView.margin.left = 20;
+        _this.contentView.margin.right = 50;
+        _this.contentView.margin.top = 40;
+        _this.contentView.margin.bottom = 20;
         _this.contentView.textSize = 16;
         // Animator
         _this.animators = new Array();

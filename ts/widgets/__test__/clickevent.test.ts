@@ -80,8 +80,8 @@ test("testCenterChild", () => {
   s.onclickInternal = spriteOnClick;
   panel.addView(s);
 
-  panel.measure({} as CanvasRenderingContext2D)
-  panel.layout();
+  panel.measure({} as CanvasRenderingContext2D, 400, 400)
+  panel.layout(400, 400);
 
   // Click on panel
   panel.onclick(new ClickEvent(0, 0));

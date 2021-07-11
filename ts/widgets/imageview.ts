@@ -1,6 +1,8 @@
+import SimpleView from "./simple_view";
 import Sprite, { MeasureResult } from "./sprite"
 
-export default class ImageView extends Sprite {
+export default class ImageView extends SimpleView {
+
   img: HTMLImageElement;
   constructor(imgSrc: string) {
     super();
@@ -8,24 +10,28 @@ export default class ImageView extends Sprite {
     this.img.src = imgSrc;
   }
 
-  protected onMeasure(
-    ctx: CanvasRenderingContext2D,
-    maxWidth: number,
-    maxHeight: number): MeasureResult {
+  // override
+  drawToCanvasIntdernal(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
+
+  }
+
+  calculateActualSize(ctx: CanvasRenderingContext2D, maxWidthForCalculation: number, maxHeightForCalculation: number): MeasureResult {
     this.width = this.img.naturalWidth;
     this.height = this.img.naturalHeight;
     return {
-      widthAtMost: this.width + this.getLandscapeMargin(),
-      heightAtMost: this.height + this.getPortraitMargin()
+      calcWidth: this.width,
+      calcHeight: this.height
     }
   }
 
-  // override
-  drawToCanvasInternal(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
+  onLayout(parentWidth: number, parentHeight: number) {
+  }
+
+  drawToCanvasInternal(ctx: CanvasRenderingContext2D) {
     ctx.drawImage(
       this.img,
-      this.x,
-      this.y,
+      0,
+      0,
       this.width,
       this.height
     )

@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var sprite_1 = require("./sprite");
+var simple_view_1 = require("./simple_view");
 var ImageView = /** @class */ (function (_super) {
     __extends(ImageView, _super);
     function ImageView(imgSrc) {
@@ -24,18 +24,22 @@ var ImageView = /** @class */ (function (_super) {
         _this.img.src = imgSrc;
         return _this;
     }
-    ImageView.prototype.onMeasure = function (ctx, maxWidth, maxHeight) {
+    // override
+    ImageView.prototype.drawToCanvasIntdernal = function (ctx, x, y, width, height) {
+    };
+    ImageView.prototype.calculateActualSize = function (ctx, maxWidthForCalculation, maxHeightForCalculation) {
         this.width = this.img.naturalWidth;
         this.height = this.img.naturalHeight;
         return {
-            widthAtMost: this.width + this.getLandscapeMargin(),
-            heightAtMost: this.height + this.getPortraitMargin()
+            calcWidth: this.width,
+            calcHeight: this.height
         };
     };
-    // override
-    ImageView.prototype.drawToCanvasInternal = function (ctx, x, y, width, height) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    ImageView.prototype.onLayout = function (parentWidth, parentHeight) {
+    };
+    ImageView.prototype.drawToCanvasInternal = function (ctx) {
+        ctx.drawImage(this.img, 0, 0, this.width, this.height);
     };
     return ImageView;
-}(sprite_1["default"]));
+}(simple_view_1["default"]));
 exports["default"] = ImageView;
