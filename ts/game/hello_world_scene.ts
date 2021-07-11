@@ -73,8 +73,8 @@ export default class HelloWorldScene implements Scene {
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
-    this.mainPanel.measure(ctx, this.mainPanel.width, this.mainPanel.height);
-    this.mainPanel.layout();
+    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
   }
 
   update(dt: number) {

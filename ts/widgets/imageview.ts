@@ -10,11 +10,6 @@ export default class ImageView extends SimpleView {
     this.img.src = imgSrc;
   }
 
-  // override
-  drawToCanvasIntdernal(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
-
-  }
-
   calculateActualSize(ctx: CanvasRenderingContext2D, maxWidthForCalculation: number, maxHeightForCalculation: number): MeasureResult {
     this.width = this.img.naturalWidth;
     this.height = this.img.naturalHeight;

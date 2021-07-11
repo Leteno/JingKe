@@ -7,7 +7,14 @@ import Panel from "../widgets/panel";
 export default class Scene1 implements Scene {
   mainPanel: Panel;
   dialogueView: DialogueView;
+
+  canvasWidth: number;
+  canvasHeight: number;
+
   constructor(canvas: HTMLCanvasElement) {
+    this.canvasWidth = canvas.width;
+    this.canvasHeight = canvas.height;
+
     this.mainPanel = new Panel();
     this.mainPanel.forceWidth = canvas.width;
     this.mainPanel.forceHeight = canvas.height;
@@ -40,8 +47,8 @@ export default class Scene1 implements Scene {
       "那年我 16 岁，而叔父还在燕都太子做门客，我去投奔叔父...."
     ));
 
-    this.mainPanel.measure(ctx);
-    this.mainPanel.layout();
+    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
   }
   update(dt: number) {
     this.dialogueView.updateTime(dt);

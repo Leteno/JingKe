@@ -15,11 +15,17 @@ export default class SimpleScene implements Scene {
   dialogueView: DialogueView;
   presetDialogues: Array<Dialogue>;
 
+  canvasWidth: number;
+  canvasHeight: number;
+
   sceneAnimationFinished: boolean;
   animators: Array<NumberLinearAnimator>;
 
   constructor(canvas: HTMLCanvasElement,
     caption: string, title: string) {
+    this.canvasWidth = canvas.width;
+    this.canvasHeight = canvas.height;
+
     this.mainPanel = new Panel();
     this.sceneCaption = new TextView(caption);
     this.sceneTitle = new TextView(title);
@@ -34,7 +40,7 @@ export default class SimpleScene implements Scene {
     this.sceneTitle.layoutParam = new LayoutParams(
       Align.CENTER, Align.CENTER
     );
-    this.sceneCaption.top = -50;
+    this.sceneCaption.margin.top = -50;
 
     this.animators = new Array<NumberLinearAnimator>();
     this.sceneCaption.textColor = "#FFFFFF";
@@ -53,8 +59,8 @@ export default class SimpleScene implements Scene {
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
-    this.mainPanel.measure(ctx);
-    this.mainPanel.layout();
+    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
 
     let captionFadeIn = textAlpha(true, 2000, this.sceneCaption);
     this.animators.push(captionFadeIn);
