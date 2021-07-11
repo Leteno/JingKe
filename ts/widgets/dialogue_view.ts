@@ -18,8 +18,6 @@ export default class DialogueView extends Panel {
 
   queue: Array<Dialogue>;
 
-  debug: boolean;
-
   // Hack to update contentView's text
   expectedContentText: string;
   measureWidthLastTime: number;
@@ -33,6 +31,7 @@ export default class DialogueView extends Panel {
     );
     this.visible = false;
     this.border = new Border();
+    this.debugColor = "green";
 
     // Add all views:
     this.nameViewLeft = new TextView("郑大侠");
@@ -64,7 +63,6 @@ export default class DialogueView extends Panel {
     // Others
     this.expectedContentText = "你好，冒险者";
     this.queue = new Array<Dialogue>();
-    this.debug = false;
     this.showHint = false;
   }
 
@@ -76,15 +74,7 @@ export default class DialogueView extends Panel {
 
   drawToCanvasInternal(
     ctx: CanvasRenderingContext2D) {
-    if (this.debug) {
-      ctx.save();
-      ctx.fillStyle = "green";
-      ctx.fillRect(
-        0, 0,
-        this.width,
-        this.height);
-      ctx.restore();
-    }
+
 
     if (this.showHint && this.hintAnimator.getVal()) {
       ctx.save();

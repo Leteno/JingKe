@@ -32,6 +32,9 @@ export default abstract class Sprite {
   layoutParam: LayoutParams;
   border: Border;
 
+  debug: boolean;
+  debugColor: string;
+
   // forceWidth = actualWidth + padding
   forceWidth: number;
   // forceHeight = actualHeight + padding
@@ -46,6 +49,8 @@ export default abstract class Sprite {
   constructor(layoutParam: LayoutParams=LayoutParams.normal(), visible:boolean=true) {
     this.layoutParam = layoutParam;
     this.visible = visible;
+    this.debug = false;
+    this.debugColor = "blue";
 
     this.forceWidth = -1;
     this.forceHeight = -1;

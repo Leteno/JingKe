@@ -8,8 +8,6 @@ export default class TextView extends SimpleView {
   lines: Array<string>;
   lineHeight: number;
 
-  debug: boolean;
-
   constructor(text:string="Hello World") {
     super();
     this.text = text;
@@ -17,7 +15,7 @@ export default class TextView extends SimpleView {
     this.textSize = 24;
     this.lines = new Array<string>();
 
-    this.debug = false;
+    this.debugColor = "pink";
   }
 
   applyStyle(ctx: CanvasRenderingContext2D) {
@@ -75,12 +73,6 @@ export default class TextView extends SimpleView {
 
   // override
   drawToCanvasInternal(ctx: CanvasRenderingContext2D) {
-    if (this.debug) {
-      ctx.save();
-      ctx.fillStyle = "pink";
-      ctx.fillRect(this.x, this.y, this.width, this.height);
-      ctx.restore();
-    }
     ctx.save();
     this.applyStyle(ctx);
     for (let i = 0; i < this.lines.length; i++) {

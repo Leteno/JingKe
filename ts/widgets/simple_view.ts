@@ -108,6 +108,16 @@ export default abstract class SimpleView extends Sprite {
     ctx.save();
     ctx.translate(this.x, this.y);
 
+    if (this.debug) {
+      ctx.save();
+      ctx.fillStyle = this.debugColor;
+      ctx.fillRect(
+        0, 0,
+        this.width,
+        this.height);
+      ctx.restore();
+    }
+
     if (this.border) {
       ctx.save();
       ctx.strokeStyle = "black";
