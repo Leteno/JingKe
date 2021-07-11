@@ -14,7 +14,14 @@ export default class HelloWorldScene implements Scene {
   animators: Array<Animator<number>>;
   dialogueView: DialogueView;
 
+  canvasWidth: number;
+  canvasHeight: number;
+
   constructor(canvas: HTMLCanvasElement) {
+
+    this.canvasWidth = canvas.width;
+    this.canvasHeight = canvas.height;
+
     this.mainPanel = new Panel();
     this.mainPanel.forceWidth = canvas.width;
     this.mainPanel.forceHeight = canvas.height;
@@ -27,7 +34,7 @@ export default class HelloWorldScene implements Scene {
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     this.mainPanel.addView(imageView);
-    imageView.left = canvas.width / 3;
+    imageView.margin.left = canvas.width / 3;
     imageView.forceWidth = imageView.forceHeight = 100;
     this.mainPanel.addView(imageView);
 
@@ -41,15 +48,17 @@ export default class HelloWorldScene implements Scene {
 
     let longText = new TextView("这是一个非常长，非常长的句子。我希望你能够帮忙换一下行");
     longText.layoutParam = new LayoutParams(Align.START, Align.CENTER)
-    longText.top = 100;
-    longText.left = 20;
-    longText.right = 40;
+    longText.margin.top = 100;
+    longText.margin.left = 20;
+    longText.margin.right = 40;
     longText.debug = true;
     this.mainPanel.addView(longText);
 
     this.dialogueView = new DialogueView();
-    this.dialogueView.forceWidth = canvas.width;
-    this.dialogueView.forceHeight = canvas.height / 4;
+    this.dialogueView.forceWidth = canvas.width -
+      this.dialogueView.padding.left - this.dialogueView.padding.right;
+    this.dialogueView.forceHeight = canvas.height / 4 -
+      this.dialogueView.padding.top - this.dialogueView.padding.bottom;
     this.mainPanel.addView(this.dialogueView);
     this.dialogueView.addDialogue(new Dialogue(
       "郑虾米",
@@ -64,7 +73,7 @@ export default class HelloWorldScene implements Scene {
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
-    this.mainPanel.measure(ctx);
+    this.mainPanel.measure(ctx, this.mainPanel.width, this.mainPanel.height);
     this.mainPanel.layout();
   }
 

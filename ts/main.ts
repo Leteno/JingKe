@@ -32,7 +32,7 @@ export default class Main {
     this.sceneManager.push("welcome", welcomeScene);
 
     let helloWorldScene = new HelloWorldScene(canvas);
-    this.sceneManager.push("helloWorld", helloWorldScene);
+    this.sceneManager.push("helloworld", helloWorldScene);
 
     let scene1 = new Scene1(canvas);
     this.sceneManager.push("scene1", scene1);
@@ -44,7 +44,7 @@ export default class Main {
       "人生不如意事，十有八九，唯有一二，让你慰藉，希望你能开心");
     simpleScene.addDialogue(dialogue);
 
-    this.sceneManager.switchScene("simple");
+    this.sceneManager.switchScene("helloworld");
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
       this.bindLoop

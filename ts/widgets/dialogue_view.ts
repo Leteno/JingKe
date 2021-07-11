@@ -44,16 +44,14 @@ export default class DialogueView extends Panel {
     this.addView(this.contentView);
 
     // Configure View position
-    this.nameViewLeft.margin.left = 20;
-    this.nameViewLeft.margin.top = 10;
-    this.nameViewRight.margin.right = 60;
-    this.nameViewRight.margin.top = 10;
+    this.padding.left = 20;
+    this.padding.top = 10;
+    this.padding.right = 20;
+    this.padding.bottom = 20;
     this.nameViewRight.layoutParam = new LayoutParams(
       Align.END, Align.START
     );
     this.nameViewRight.visible = false;
-    this.contentView.margin.left = 20;
-    this.contentView.margin.right = 50;
     this.contentView.margin.top = 40;
     this.contentView.margin.bottom = 20;
     this.contentView.textSize = 16;
@@ -72,14 +70,14 @@ export default class DialogueView extends Panel {
   }
 
   drawToCanvasInternal(
-    ctx: CanvasRenderingContext2D, x: number, y: number) : void {
+    ctx: CanvasRenderingContext2D) {
     if (this.debug) {
       ctx.save();
       ctx.fillStyle = "green";
       ctx.fillRect(
-        this.x, this.y,
-        this.width - this.getLandscapeMargin(),
-        this.height - this.getPortraitMargin());
+        0, 0,
+        this.width,
+        this.height);
       ctx.restore();
     }
 
@@ -87,8 +85,8 @@ export default class DialogueView extends Panel {
       ctx.save();
       ctx.strokeStyle = "black";
       ctx.translate(
-        this.x + this.width - this.getLandscapeMargin() - 40,
-        this.y + this.height - this.getPortraitMargin() - 40);
+        this.width - this.padding.right - 30,
+        this.height - this.padding.bottom - 30);
       ctx.ellipse(20, 20, 5, 5, 0, 0, 360);
       ctx.stroke();
       ctx.restore();
@@ -101,7 +99,7 @@ export default class DialogueView extends Panel {
         this.width - this.getLandscapeMargin(),
         this.height - this.getPortraitMargin());
     }
-    super.drawToCanvasInternal(ctx, x, y);
+    super.drawToCanvasInternal(ctx);
   }
 
   addDialogue(data: Dialogue) {
