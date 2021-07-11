@@ -1,1 +1,9 @@
+js/animator/
+js/data/
+js/game/
+js/misc/
+js/scene/
+js/widgets/
+js/main.js
+
 node_modules
