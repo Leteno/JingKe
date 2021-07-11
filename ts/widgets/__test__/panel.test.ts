@@ -1,5 +1,6 @@
 import { Align, LayoutParams } from "../../misc/layout";
 import Panel from "../panel"
+import SimpleView from "../simple_view";
 import Sprite, { MeasureResult } from "../sprite"
 import TestSprite from "./test_sprite.test"
 
@@ -158,4 +159,25 @@ test("measureAndLayout", ()=> {
   expect(s1.y).toBe(33);
   expect(s2.x).toBe(45);
   expect(s2.y).toBe(46);
+})
+
+test("calculateActualSize", () => {
+  // We need to forbid changing the Width/Height
+  // in calculateActualSize
+  let testView = new TestSprite();
+  testView.forceWidth = 100;
+  testView.forceHeight = 100;
+  testView.calculateActualSize = jest.fn<MeasureResult, any[]>(
+    (all: any[]) => {
+      testView.width = 200;
+      testView.height = 200;
+      return {
+        calcWidth: 200,
+        calcHeight: 200
+      }
+  });
+  let ctx = {} as CanvasRenderingContext2D;
+  testView.measure(ctx, 200, 200);
+  expect(testView.width).toBe(100);
+  expect(testView.height).toBe(100);
 })

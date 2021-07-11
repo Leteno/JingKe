@@ -11,12 +11,13 @@ export default abstract class SimpleView extends Sprite {
       this.forceHeight = Math.min(this.forceHeight,
         maxHeight - this.getPortraitMargin());
 
-      this.width = this.forceWidth;
-      this.height = this.forceHeight;
       this.calculateActualSize(
         ctx,
         this.forceWidth - this.padding.left - this.padding.right,
         this.forceHeight - this.padding.top - this.padding.bottom);
+
+      this.width = this.forceWidth;
+      this.height = this.forceHeight;
     } else {
       let measureResult = this.calculateActualSize(
         ctx,

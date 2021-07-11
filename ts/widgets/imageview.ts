@@ -11,11 +11,10 @@ export default class ImageView extends SimpleView {
   }
 
   calculateActualSize(ctx: CanvasRenderingContext2D, maxWidthForCalculation: number, maxHeightForCalculation: number): MeasureResult {
-    this.width = this.img.naturalWidth;
-    this.height = this.img.naturalHeight;
+    // Actually the naturalWidth/Height alwarys be 0 ?
     return {
-      calcWidth: this.width,
-      calcHeight: this.height
+      calcWidth: this.img.naturalWidth,
+      calcHeight: this.img.naturalHeight
     }
   }
 
