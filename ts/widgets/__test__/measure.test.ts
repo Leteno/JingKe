@@ -1,3 +1,4 @@
+import { Align, LayoutType } from "../../misc/layout";
 import Panel from "../panel"
 import TestSprite from "./test_sprite.test";
 
@@ -24,4 +25,51 @@ test("measurePanel", () => {
   panel.measure(ctx, 500, 500);
   expect(panel.width).toBe(400);
   expect(panel.height).toBe(240);
+})
+
+test("MATCH_PARENT", () => {
+  let panel = new Panel();
+  let s1 = new TestSprite(100, 200);
+  let s2 = new TestSprite(300, 100);
+  s1.margin.left = 50;
+  s1.margin.top = 40;
+  s2.margin.left = 60;
+  s2.margin.top = 80;
+  panel.addView(s1);
+  panel.addView(s2);
+  let ctx = {} as CanvasRenderingContext2D;
+
+  panel.measure(ctx, 500, 500);
+  expect(panel.width).toBe(360);
+  expect(panel.height).toBe(240);
+  expect(s1.width).toBe(100);
+  expect(s2.height).toBe(100);
+
+  s1.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+  panel.measure(ctx, 500, 500);
+  expect(panel.width).toBe(500);
+  expect(panel.height).toBe(240);
+  expect(s1.width).toBe(450);
+  expect(s2.height).toBe(100);
+
+  s2.layoutParam.yLayout = LayoutType.MATCH_PARENT;
+  panel.measure(ctx, 500, 500);
+  expect(panel.width).toBe(500);
+  expect(panel.height).toBe(500);
+  expect(s1.width).toBe(450);
+  expect(s2.height).toBe(420);
+
+  s1.layoutParam.xcfg = Align.CENTER;
+  panel.measure(ctx, 500, 500);
+  expect(panel.width).toBe(500);
+  expect(panel.height).toBe(500);
+  expect(s1.width).toBe(400);
+  expect(s2.height).toBe(420);
+
+  s2.layoutParam.ycfg = Align.CENTER;
+  panel.measure(ctx, 500, 500);
+  expect(panel.width).toBe(500);
+  expect(panel.height).toBe(500);
+  expect(s1.width).toBe(400);
+  expect(s2.height).toBe(340);
 })
