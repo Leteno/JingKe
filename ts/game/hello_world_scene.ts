@@ -1,5 +1,5 @@
 import { ClickEvent } from "../misc/event";
-import { Align, LayoutParams } from "../misc/layout";
+import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import Animator from "../animator/animator"
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import Scene from "../scene/scene";
@@ -31,10 +31,17 @@ export default class HelloWorldScene implements Scene {
 
     this.animators = new Array<Animator<number>>();
 
-    let text = new TextView("你好，过去");
+    let text = new TextView("你好，过去(不对齐)");
     text.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
+    text.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.mainPanel.addView(text);
     text.bgColor = "#cccccc";
+
+    let text2 = new TextView("你好，过去(对齐)");
+    text2.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
+    text2.margin.top = 40;
+    this.mainPanel.addView(text2);
+    text2.bgColor = "#eeeeee";
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     this.mainPanel.addView(imageView);
@@ -57,7 +64,7 @@ export default class HelloWorldScene implements Scene {
     this.mainPanel.addView(longText);
 
     this.dialogueView = new DialogueView();
-    this.dialogueView.forceWidth = canvas.width;
+    this.dialogueView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.dialogueView.forceHeight = canvas.height / 4;
     this.mainPanel.addView(this.dialogueView);
     this.dialogueView.addDialogue(new Dialogue(
