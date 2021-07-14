@@ -8,6 +8,7 @@ import Panel from "../widgets/panel";
 import TextView from "../widgets/textview";
 import DialogueView from "../widgets/dialogue_view";
 import Dialogue from "../data/dialogue";
+import OptionView, {Option, OptionCallback} from "../widgets/option_view";
 
 export default class HelloWorldScene implements Scene {
   mainPanel: Panel;
@@ -77,6 +78,19 @@ export default class HelloWorldScene implements Scene {
       "不要讲干话"
       )
     );
+
+    let optionCallback: OptionCallback = {
+      onOptionClicked(option:Option) {
+        console.log("option " + option.text + " is clicked");
+        return true;
+      }
+    };
+
+    let options = new Array<Option>();
+    options.push(new Option("哈哈 我辈岂是蓬蒿人", optionCallback));
+    options.push(new Option("哎呀 俯首甘为孺子牛", optionCallback));
+    let optionView = new OptionView(canvas, options);
+    this.mainPanel.addView(optionView);
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
