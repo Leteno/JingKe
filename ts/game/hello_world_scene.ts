@@ -62,6 +62,8 @@ export default class HelloWorldScene implements Scene {
     longText.layoutParam = new LayoutParams(Align.START, Align.CENTER)
     longText.margin.top = 100;
     longText.debug = true;
+    longText.padding.top = longText.padding.bottom =
+      longText.padding.left = longText.padding.right = 16;
     this.mainPanel.addView(longText);
 
     this.dialogueView = new DialogueView();

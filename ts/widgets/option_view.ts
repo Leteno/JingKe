@@ -56,6 +56,8 @@ export default class OptionView extends Panel {
       return option.callback.onOptionClicked(option);
     };
     textView.layoutParam.xcfg = Align.CENTER;
+    textView.padding.left = textView.padding.right =
+      textView.padding.top = textView.padding.bottom = 5;
     textView.border = new Border();
     textView.bgColor = "#ccbbaa";
     return textView;

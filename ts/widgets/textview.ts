@@ -74,6 +74,7 @@ export default class TextView extends SimpleView {
   // override
   drawToCanvasInternal(ctx: CanvasRenderingContext2D) {
     ctx.save();
+    ctx.translate(this.padding.left, this.padding.bottom);
     this.applyStyle(ctx);
     for (let i = 0; i < this.lines.length; i++) {
       ctx.fillText(
