@@ -91,7 +91,8 @@ export default class HelloWorldScene implements Scene {
     let options = new Array<Option>();
     options.push(new Option("哈哈 我辈岂是蓬蒿人", optionCallback));
     options.push(new Option("哎呀 俯首甘为孺子牛", optionCallback));
-    let optionView = new OptionView(canvas, options);
+    let title = "接受贿赂吗？";
+    let optionView = new OptionView(canvas, title, options);
     this.mainPanel.addView(optionView);
   }
 

@@ -20,7 +20,7 @@ export class Option {
 
 export default class OptionView extends Panel {
 
-  constructor(canvas: HTMLCanvasElement, options: Array<Option>) {
+  constructor(canvas: HTMLCanvasElement, title: string, options: Array<Option>) {
     super();
     this.border = new Border();
     this.layoutParam.xLayout = LayoutType.MATCH_PARENT;
@@ -30,8 +30,14 @@ export default class OptionView extends Panel {
     this.margin.right = 40;
     this.padding.top = 20;
     this.padding.bottom = 20;
+    this.padding.left = 20;
+    this.padding.right = 20;
 
-    let marginTop = 0;
+    let titleView = new TextView(title);
+    titleView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    this.addView(titleView);
+
+    let marginTop = 40;
     options.forEach(opt => {
       let view = this.buildOption(opt);
       view.margin.top = marginTop;
@@ -55,7 +61,6 @@ export default class OptionView extends Panel {
     textView.onclickInternal = event => {
       return option.callback.onOptionClicked(option);
     };
-    textView.layoutParam.xcfg = Align.CENTER;
     textView.padding.left = textView.padding.right =
       textView.padding.top = textView.padding.bottom = 5;
     textView.border = new Border();
