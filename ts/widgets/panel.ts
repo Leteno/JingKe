@@ -83,7 +83,7 @@ export default class Panel extends SimpleView {
       && EasyMath.between(this.y, this.y + this.height, event.y);
     if (!inside) return false;
     // event cut out
-    let childEvent = ClickEvent.alignChildren(event, this.x, this.y);
+    let childEvent = ClickEvent.alignChildren(event, this);
     for (let i = 0; i < this.children.length; i++) {
       let view:Sprite = this.children[i];
       if (view.onclick(childEvent)) {

@@ -1,6 +1,6 @@
 
 import { ClickEvent } from "../../misc/event";
-import { Align, LayoutParams } from "../../misc/layout";
+import { Align, LayoutParams, LayoutType } from "../../misc/layout";
 import Panel from "../panel"
 import Sprite from "../sprite";
 import TestSprite from "./test_sprite.test"
@@ -118,4 +118,49 @@ test("testCenterChild", () => {
   expect(panelOnClick.mock.calls.length).toBe(2);
   expect(spriteOnClick.mock.calls.length).toBe(5);
 
+})
+
+test("padding", () => {
+  let panel = new Panel();
+  panel.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+  panel.layoutParam.yLayout = LayoutType.MATCH_PARENT;
+  let view = new TestSprite(100, 100);
+  panel.addView(view);
+
+  panel.onclickInternal = jest.fn(() => {
+    return true;
+  });
+  view.onclickInternal = jest.fn(() => {
+    return true;
+  });
+
+  let ctx = {} as CanvasRenderingContext2D;
+  panel.measure(ctx, 500, 500);
+  panel.onclick(new ClickEvent(0, 0));
+  expect((panel.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(0);
+  expect((view.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(1);
+
+  panel.onclick(new ClickEvent(110, 110));
+  expect((panel.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(1);
+  expect((view.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(1);
+
+  // After add padding
+  panel.padding.left = panel.padding.top = 40;
+  panel.measure(ctx, 500, 500);
+
+  panel.onclick(new ClickEvent(0, 0));
+  expect((panel.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(2);
+  expect((view.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(1);
+
+  panel.onclick(new ClickEvent(110, 110));
+  expect((panel.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(2);
+  expect((view.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(2);
 })
