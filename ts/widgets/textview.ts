@@ -1,15 +1,34 @@
 import SimpleView from "./simple_view";
 import Sprite, { MeasureResult } from "./sprite";
 
+export class TextEffect {
+  start: number;
+  length: number;
+  draw(ctx: CanvasRenderingContext2D,
+    x: number, y: number,
+    width: number, height: number) {}
+}
+
+class TextEffectRecord {
+  effect: TextEffect;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export default class TextView extends SimpleView {
   text: string;
   textColor: string;
   textSize: number;
   lines: Array<string>;
   lineHeight: number;
+  oneCharWidth: number;
 
   showTextLength: number;
   lineEnds: Array<number>;
+
+  textEffects: Array<TextEffectRecord>;
 
   constructor(text:string="Hello World") {
     super();
@@ -19,6 +38,7 @@ export default class TextView extends SimpleView {
     this.lines = new Array<string>();
     this.lineEnds = new Array<number>();
     this.showTextLength = text.length;
+    this.textEffects = new Array<TextEffectRecord>();
 
     this.debugColor = "pink";
   }
@@ -46,6 +66,8 @@ export default class TextView extends SimpleView {
           ctx, this.textSize, maxWidthForCalculation
         );
     }
+    this.oneCharWidth = TextHelper.getInstance()
+      .calculateOnCharWidth(ctx, this.textSize);
 
     this.lineHeight = this.textSize;
     this.lines.splice(0);
@@ -70,10 +92,43 @@ export default class TextView extends SimpleView {
     // TODO(juzhen) should we:
     // actualHeight = min(-, maxHeightForCalculation)
 
+    // Update effect records when vals like lineHeight,
+    // lineEnds are updated.
+    this.updateEffectRecords();
+
     ctx.restore();
     return {
       calcWidth: actualWidth,
       calcHeight: actualHeight
+    }
+  }
+
+  addEffect(effect: TextEffect) {
+    let record = new TextEffectRecord();
+    record.effect = effect;
+    this.textEffects.push(record);
+    this.updateEffectRecord(record);
+  }
+
+  updateEffectRecords() {
+    this.textEffects.forEach(record => {
+      this.updateEffectRecord(record);
+    });
+  }
+
+  private updateEffectRecord(record: TextEffectRecord) {
+    let e = record.effect;
+    for (let i = 0, lastEnd = 0;
+         i < this.lineEnds.length;
+         lastEnd = this.lineEnds[i], i++) {
+      if (e.start < this.lineEnds[i]) {
+        // Start at this line.
+        // TODO the case like e.start + e.length > lineEnd
+        record.x = (e.start - lastEnd) * this.oneCharWidth;
+        record.y = i * this.lineHeight;
+        record.width = e.length * this.oneCharWidth;
+        record.height = this.lineHeight;
+      }        
     }
   }
 
@@ -109,6 +164,10 @@ export default class TextView extends SimpleView {
         // stop iteration.
         break;
       }
+    }
+    for (let i = 0; i < this.textEffects.length; i++) {
+      let r = this.textEffects[i];
+      r.effect.draw(ctx, r.x, r.y, r.width, r.height);
     }
     ctx.restore();
   }
@@ -156,5 +215,17 @@ export class TextHelper {
     this.storeMap.get(textSize).set(maxWidth, result);
     ctx.restore();
     return result;
+  }
+
+  calculateOnCharWidth(
+    ctx: CanvasRenderingContext2D,
+    textSize: number) {
+      
+    let text = "你好，世界";
+    ctx.save();
+    ctx.font = `${textSize}px bold`;
+    let drawLength = ctx.measureText(text).width;
+    ctx.restore();
+    return drawLength / text.length;
   }
 }

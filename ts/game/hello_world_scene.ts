@@ -5,7 +5,7 @@ import NumberLinearAnimator from "../animator/number-linear-animator";
 import Scene from "../scene/scene";
 import ImageView from "../widgets/imageview";
 import Panel from "../widgets/panel";
-import TextView from "../widgets/textview";
+import TextView, { TextEffect, TextHelper } from "../widgets/textview";
 import DialogueView from "../widgets/dialogue_view";
 import Dialogue from "../data/dialogue";
 import OptionView, {Option, OptionCallback} from "../widgets/option_view";
@@ -43,6 +43,36 @@ export default class HelloWorldScene implements Scene {
     text2.margin.top = 40;
     this.mainPanel.addView(text2);
     text2.bgColor = "#eeeeee";
+
+    let text3 = new TextView("这句子有四个一二三四五六。");
+    text3.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
+    text3.margin.top = -100;
+    this.mainPanel.addView(text3);
+    text3.bgColor = "#bbbbbb";
+
+    let effect = new TextEffect();
+    effect.start = 6;
+    effect.length = 4;
+    effect.draw = (ctx:CanvasRenderingContext2D,
+      x: number, y: number,
+      width: number, height: number) => {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.fillStyle = text3.bgColor;
+        ctx.fillRect(0, 0, width, height);
+
+        let halfHeight = height/2;
+        ctx.fillStyle = "green";
+        let text = "特殊能力";
+        let fontWidth = TextHelper.getInstance().calculateOnCharWidth(ctx, halfHeight);
+        ctx.fillRect(10, halfHeight / 2, text.length * fontWidth, halfHeight);
+        ctx.font = `${halfHeight}px bold`
+        ctx.fillStyle = "white";
+        ctx.fillText(text, 10, halfHeight/2);
+
+        ctx.restore();
+    }
+    text3.addEffect(effect);
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     imageView.margin.left = canvas.width / 3;
