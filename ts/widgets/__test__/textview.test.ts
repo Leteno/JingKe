@@ -32,15 +32,48 @@ test("testCalculate", () => {
   expect(mockMeasureText.mock.calls.length).toBe(0);
 });
 
+test("english", () => {
+  let ctx = {
+    save: () => {},
+    restore: () => {},
+    measureText: (str:string) => {
+      if (str.charCodeAt(0) > 512) {
+        // Is Chinese.
+        return {
+          width: 10 * str.length,
+        };
+      } else {
+        // Is ASII
+        return {
+          width: 5 * str.length
+        }
+      }
+    },
+    translate(x: number, y: number) {},
+  } as CanvasRenderingContext2D;
+  let mockFillText = jest.fn((text:string, x: number, y:number, maxWidth?:number|undefined) => {
+  });
+  ctx.fillText = mockFillText;
+
+  // 22 chars, 220 width
+  let textView = new TextView("大家好，我系渣渣豪，是兄弟，就来 helloworld 砍我把");
+  textView.measure(ctx, 100, 400);
+  textView.drawToCanvas(ctx);
+
+  expect(mockFillText.mock.calls.length).toBe(3);
+  expect(mockFillText.mock.calls[0][0]).toBe("大家好，我系渣渣豪，");
+  expect(mockFillText.mock.calls[1][0]).toBe("是兄弟，就来 hellowo");
+  expect(mockFillText.mock.calls[2][0]).toBe("rld 砍我把");
+})
+
 test("animation", () => {
   let ctx = {
     save: () => {},
     restore: () => {},
-    measureText: (string) => {
+    measureText: (str:string) => {
+      // Is Chinese.
       return {
-        // we assume text is "你好，世界"
-        // so that single char width: 10.
-        width: 50,
+        width: 10 * str.length,
       };
     },
     translate(x: number, y: number) {},

@@ -59,29 +59,42 @@ export default class TextView extends SimpleView {
     ctx.save();
     this.applyStyle(ctx);
 
-    let charNumEachLine = 1000;
-    if (maxWidthForCalculation > 0) {
-      charNumEachLine = 
-        TextHelper.getInstance().calculateCharInLine(
-          ctx, this.textSize, maxWidthForCalculation
-        );
-    }
     this.oneCharWidth = TextHelper.getInstance()
       .calculateOnCharWidth(ctx, this.textSize);
+
+    let chineseFontWidth = TextHelper.getInstance()
+      .calculateChineseCharWidth(ctx, this.textSize);
+    let englishFontWidth = TextHelper.getInstance()
+      .calculateASIICharWidth(ctx, this.textSize);
 
     this.lineHeight = this.textSize;
     this.lines.splice(0);
     this.lineEnds.splice(0);
     let actualWidth = 0;
     let actualHeight = 0;
-    let lineEnd = 0;
-    for (let i = 0; i < this.text.length; i += charNumEachLine) {
-      let endSize = Math.min(charNumEachLine, this.text.length - i);
-      this.lines.push(this.text.substr(i, endSize));
-      lineEnd += endSize;
-      this.lineEnds.push(lineEnd);
-      actualHeight += this.lineHeight;
+
+    let start = 0;
+    let currentWidth = 0;
+    let currentCharSize = 0;
+    for (let i = 0; i < this.text.length; i++) {
+      currentCharSize = (this.text.charCodeAt(i) > 512)
+        ? chineseFontWidth
+        : englishFontWidth;
+      currentWidth += currentCharSize;
+      if (currentWidth > maxWidthForCalculation) {
+        // We could not add this char.
+        this.lines.push(this.text.substr(start, i - start));
+        this.lineEnds.push(i);
+        actualHeight += this.lineHeight;
+        // Don't waste to this time.
+        start = i;
+        currentWidth = currentCharSize;
+        continue;
+      }
     }
+    this.lines.push(this.text.substr(start, this.text.length - start));
+    this.lineEnds.push(this.text.length);
+    actualHeight += this.lineHeight;
     if (this.lines.length > 1) {
       actualWidth = maxWidthForCalculation;
     } else {
@@ -185,9 +198,16 @@ export class TextHelper {
    * }
    */
   storeMap: Map<number, Map<number, number>>
+
+  // fontSize -> width when drawing
+  chineseSizeMap: Map<number, number>;
+  englishSizeMap: Map<number, number>;
+
   private static instance: TextHelper;
   private constructor() {
     this.storeMap = new Map<number, Map<number, number>>();
+    this.chineseSizeMap = new Map<number, number>();
+    this.englishSizeMap = new Map<number, number>();
   }
   public static getInstance() : TextHelper {
     if (this.instance == null) {
@@ -227,5 +247,35 @@ export class TextHelper {
     let drawLength = ctx.measureText(text).width;
     ctx.restore();
     return drawLength / text.length;
+  }
+
+  calculateChineseCharWidth(
+    ctx: CanvasRenderingContext2D,
+    textSize: number) {
+    if (this.chineseSizeMap.has(textSize)) {
+      return this.chineseSizeMap.get(textSize);
+    }
+    let text = "你";
+    ctx.save();
+    ctx.font = `${textSize}px bold`;
+    let drawLength = ctx.measureText(text).width;
+    ctx.restore();
+    this.chineseSizeMap.set(textSize, drawLength);
+    return drawLength;
+  }
+
+  calculateASIICharWidth(
+    ctx: CanvasRenderingContext2D,
+    textSize: number) {
+    if (this.englishSizeMap.has(textSize)) {
+      return this.englishSizeMap.get(textSize);
+    }
+    let text = "a";
+    ctx.save();
+    ctx.font = `${textSize}px bold`;
+    let drawLength = ctx.measureText(text).width;
+    ctx.restore();
+    this.englishSizeMap.set(textSize, drawLength);
+    return drawLength;
   }
 }
