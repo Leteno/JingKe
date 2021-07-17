@@ -1,5 +1,5 @@
 import { number, string } from "yargs";
-import {TextHelper} from "../textview"
+import TextView, {TextHelper} from "../textview"
 
 test("testCalculate", () => {
   let ctx = {
@@ -31,3 +31,48 @@ test("testCalculate", () => {
   // we should not call measure again, as we have cached.
   expect(mockMeasureText.mock.calls.length).toBe(0);
 });
+
+test("animation", () => {
+  let ctx = {
+    save: () => {},
+    restore: () => {},
+    measureText: (string) => {
+      return {
+        // we assume text is "你好，世界"
+        // so that single char width: 10.
+        width: 50,
+      };
+    },
+    translate(x: number, y: number) {},
+  } as CanvasRenderingContext2D;
+
+  let mockFillText = jest.fn((text:string, x: number, y:number, maxWidth?:number|undefined) => {
+  });
+  ctx.fillText = mockFillText;
+
+  // 22 chars, 220 width
+  let textView = new TextView("大家好，我系渣渣豪，是兄弟，就来某地方砍我把");
+  textView.measure(ctx, 100, 400);
+  textView.drawToCanvas(ctx);
+  expect(mockFillText.mock.calls.length).toBe(3);
+  expect(mockFillText.mock.calls[0][0]).toBe("大家好，我系渣渣豪，");
+  expect(mockFillText.mock.calls[1][0]).toBe("是兄弟，就来某地方砍");
+  expect(mockFillText.mock.calls[2][0]).toBe("我把");
+
+  let mockFillText2 = jest.fn((text:string, x: number, y:number, maxWidth?:number|undefined) => {
+  });
+  ctx.fillText = mockFillText2;
+  textView.showTextLength = 3;
+  textView.drawToCanvas(ctx);
+  expect(mockFillText2.mock.calls.length).toBe(1);
+  expect(mockFillText2.mock.calls[0][0]).toBe("大家好");
+
+  let mockFillText3 = jest.fn((text:string, x: number, y:number, maxWidth?:number|undefined) => {
+  });
+  ctx.fillText = mockFillText3;
+  textView.showTextLength = 15;
+  textView.drawToCanvas(ctx);
+  expect(mockFillText3.mock.calls.length).toBe(2);
+  expect(mockFillText3.mock.calls[0][0]).toBe("大家好，我系渣渣豪，");
+  expect(mockFillText3.mock.calls[1][0]).toBe("是兄弟，就");
+})
