@@ -87,7 +87,7 @@ export default class HelloWorldScene implements Scene {
     }
     this.animators.push(animatorImageViewY)
 
-    let longText = new TextView("这是一个非常长，非常长的句子。我希望你能够帮忙换一下行");
+    let longText = new TextView("这是一个非常长，非常长的句子。我希望你能够帮忙换一下行,thank you very much.");
     longText.layoutParam = new LayoutParams(Align.START, Align.CENTER)
     longText.margin.top = 100;
     longText.debug = true;
@@ -101,7 +101,7 @@ export default class HelloWorldScene implements Scene {
     this.mainPanel.addView(this.dialogueView);
     this.dialogueView.addDialogue(new Dialogue(
       "郑虾米",
-      "这是一段很长的话，但是如果你想看完，我也没有任何意见，只是觉得你或许可以做一点更有意义的事情"
+      "这是一段很长的话，但是如果你想看完，Ok, Fine. 我也没有任何意见，只是觉得你或许可以做一点更有意义的事情"
       )
     );
     this.dialogueView.addDialogue(new Dialogue(

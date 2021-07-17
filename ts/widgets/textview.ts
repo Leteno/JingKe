@@ -1,3 +1,4 @@
+import { Character } from "../misc/character";
 import SimpleView from "./simple_view";
 import Sprite, { MeasureResult } from "./sprite";
 
@@ -76,20 +77,32 @@ export default class TextView extends SimpleView {
     let start = 0;
     let currentWidth = 0;
     let currentCharSize = 0;
+    let lastNoneEnglishIndex = 0;
+    let lastNoneEnglishWidth = 0;
     for (let i = 0; i < this.text.length; i++) {
       currentCharSize = (this.text.charCodeAt(i) > 512)
         ? chineseFontWidth
         : englishFontWidth;
       currentWidth += currentCharSize;
       if (currentWidth > maxWidthForCalculation) {
-        // We could not add this char.
-        this.lines.push(this.text.substr(start, i - start));
-        this.lineEnds.push(i);
+        if (lastNoneEnglishIndex == start) {
+          // Whole line contains Alphanumberic
+          lastNoneEnglishIndex = i - 1;
+          lastNoneEnglishWidth = currentWidth - currentCharSize;
+        }
+        this.lines.push(this.text.substr(
+          start, lastNoneEnglishIndex - start + 1
+        ));
+        this.lineEnds.push(lastNoneEnglishIndex + 1);
         actualHeight += this.lineHeight;
         // Don't waste to this time.
-        start = i;
-        currentWidth = currentCharSize;
+        start = lastNoneEnglishIndex + 1;
+        currentWidth = currentWidth - lastNoneEnglishWidth;
         continue;
+      }
+      if (!Character.isAlphanumberic(this.text.charCodeAt(i))) {
+        lastNoneEnglishIndex = i;
+        lastNoneEnglishWidth = currentWidth;
       }
     }
     this.lines.push(this.text.substr(start, this.text.length - start));

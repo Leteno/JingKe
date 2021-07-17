@@ -62,8 +62,8 @@ test("english", () => {
 
   expect(mockFillText.mock.calls.length).toBe(3);
   expect(mockFillText.mock.calls[0][0]).toBe("大家好，我系渣渣豪，");
-  expect(mockFillText.mock.calls[1][0]).toBe("是兄弟，就来 hellowo");
-  expect(mockFillText.mock.calls[2][0]).toBe("rld 砍我把");
+  expect(mockFillText.mock.calls[1][0]).toBe("是兄弟，就来 ");
+  expect(mockFillText.mock.calls[2][0]).toBe("helloworld 砍我把");
 })
 
 test("animation", () => {
