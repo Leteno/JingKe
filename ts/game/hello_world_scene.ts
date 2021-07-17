@@ -45,7 +45,6 @@ export default class HelloWorldScene implements Scene {
     text2.bgColor = "#eeeeee";
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
-    this.mainPanel.addView(imageView);
     imageView.margin.left = canvas.width / 3;
     imageView.forceWidth = imageView.forceHeight = 100;
     this.mainPanel.addView(imageView);

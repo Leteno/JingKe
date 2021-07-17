@@ -18,8 +18,8 @@ export default class DialogueView extends Panel {
 
   queue: Array<Dialogue>;
 
-  // Hack to update contentView's text
-  expectedContentText: string;
+  // Force update due to contentView's text change
+  dirty: boolean;
   measureWidthLastTime: number;
   measureHeightLastTime: number;
 
@@ -61,11 +61,9 @@ export default class DialogueView extends Panel {
     );
 
     // Others
-    this.expectedContentText = "你好，冒险者";
     this.queue = new Array<Dialogue>();
     this.showHint = false;
   }
-
   measure(ctx: CanvasRenderingContext2D, maxWidth: number, maxHeight: number): MeasureResult {
     this.measureWidthLastTime = maxWidth;
     this.measureHeightLastTime = maxHeight;
@@ -76,6 +74,13 @@ export default class DialogueView extends Panel {
     ctx: CanvasRenderingContext2D) {
 
 
+    if (this.dirty) {
+      this.measure(
+        ctx,
+        this.measureWidthLastTime,
+        this.measureHeightLastTime);
+      this.dirty = false;
+    }
     if (this.showHint && this.hintAnimator.getVal()) {
       ctx.save();
       ctx.strokeStyle = "black";
@@ -85,15 +90,6 @@ export default class DialogueView extends Panel {
       ctx.ellipse(20, 20, 5, 5, 0, 0, 360);
       ctx.stroke();
       ctx.restore();
-    }
-
-    if (this.expectedContentText != this.contentView.text) {
-      this.contentView.text = this.expectedContentText;
-      this.measure(
-        ctx,
-        this.measureWidthLastTime,
-        this.measureHeightLastTime
-      );
     }
     super.drawToCanvasInternal(ctx);
   }
@@ -121,9 +117,13 @@ export default class DialogueView extends Panel {
     let contentAnimator = new NumberLinearAnimator(
       0, data.content.length, supposedTime
     );
+    this.contentView.text = data.content;
+    this.contentView.showTextLength = 0;
+
+    this.dirty = true;
+
     contentAnimator.onValChange = (val => {
-      this.expectedContentText =
-        data.content.substr(0, val);
+      this.contentView.showTextLength = Math.floor(val);
     }).bind(this);
     contentAnimator.onStop = (() => {
       this.showHint = true;

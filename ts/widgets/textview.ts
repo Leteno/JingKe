@@ -8,12 +8,17 @@ export default class TextView extends SimpleView {
   lines: Array<string>;
   lineHeight: number;
 
+  showTextLength: number;
+  lineEnds: Array<number>;
+
   constructor(text:string="Hello World") {
     super();
     this.text = text;
     this.textColor = "black";
     this.textSize = 24;
     this.lines = new Array<string>();
+    this.lineEnds = new Array<number>();
+    this.showTextLength = text.length;
 
     this.debugColor = "pink";
   }
@@ -44,10 +49,15 @@ export default class TextView extends SimpleView {
 
     this.lineHeight = this.textSize;
     this.lines.splice(0);
+    this.lineEnds.splice(0);
     let actualWidth = 0;
     let actualHeight = 0;
+    let lineEnd = 0;
     for (let i = 0; i < this.text.length; i += charNumEachLine) {
-      this.lines.push(this.text.substr(i, Math.min(charNumEachLine, this.text.length - i)));
+      let endSize = Math.min(charNumEachLine, this.text.length - i);
+      this.lines.push(this.text.substr(i, endSize));
+      lineEnd += endSize;
+      this.lineEnds.push(lineEnd);
       actualHeight += this.lineHeight;
     }
     if (this.lines.length > 1) {
@@ -76,11 +86,29 @@ export default class TextView extends SimpleView {
     ctx.save();
     ctx.translate(this.padding.left, this.padding.bottom);
     this.applyStyle(ctx);
-    for (let i = 0; i < this.lines.length; i++) {
-      ctx.fillText(
-        this.lines[i],
-        0,
-        i * this.lineHeight);
+    for (let i = 0, lastEnd = 0;
+      i < this.lineEnds.length;
+      lastEnd = this.lineEnds[i], i++) {
+
+      let end = this.lineEnds[i];
+      if (end < this.showTextLength) {
+        // show the total line
+        ctx.fillText(
+          this.lines[i],
+          0,
+          i * this.lineHeight
+        );
+      } else {
+        // this.showTextLength <= current Line end
+        // show sub string [lastEnd, this.showTextLength)
+        ctx.fillText(
+          this.lines[i].substr(0, this.showTextLength - lastEnd),
+          0,
+          i * this.lineHeight
+        );
+        // stop iteration.
+        break;
+      }
     }
     ctx.restore();
   }
