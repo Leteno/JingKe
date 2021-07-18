@@ -18,16 +18,25 @@ class TextEffectRecord {
   height: number;
 }
 
+class DrawLine {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  startIndex: number;
+  endIndex: number;
+  text: string;
+}
+
 export default class TextView extends SimpleView {
   text: string;
   textColor: string;
   textSize: number;
-  lines: Array<string>;
   lineHeight: number;
   oneCharWidth: number;
+  drawLines: Array<DrawLine>;
 
   showTextLength: number;
-  lineEnds: Array<number>;
 
   textEffects: Array<TextEffectRecord>;
 
@@ -36,10 +45,9 @@ export default class TextView extends SimpleView {
     this.text = text;
     this.textColor = "black";
     this.textSize = 24;
-    this.lines = new Array<string>();
-    this.lineEnds = new Array<number>();
     this.showTextLength = text.length;
     this.textEffects = new Array<TextEffectRecord>();
+    this.drawLines = new Array<DrawLine>();
 
     this.debugColor = "pink";
   }
@@ -69,8 +77,7 @@ export default class TextView extends SimpleView {
       .calculateASIICharWidth(ctx, this.textSize);
 
     this.lineHeight = this.textSize;
-    this.lines.splice(0);
-    this.lineEnds.splice(0);
+    this.drawLines.splice(0);
     let actualWidth = 0;
     let actualHeight = 0;
 
@@ -79,6 +86,8 @@ export default class TextView extends SimpleView {
     let currentCharSize = 0;
     let lastNoneEnglishIndex = 0;
     let lastNoneEnglishWidth = 0;
+
+    let currentLine = 0;
     for (let i = 0; i < this.text.length; i++) {
       currentCharSize = (this.text.charCodeAt(i) > 512)
         ? chineseFontWidth
@@ -90,11 +99,17 @@ export default class TextView extends SimpleView {
           lastNoneEnglishIndex = i - 1;
           lastNoneEnglishWidth = currentWidth - currentCharSize;
         }
-        this.lines.push(this.text.substr(
-          start, lastNoneEnglishIndex - start + 1
-        ));
-        this.lineEnds.push(lastNoneEnglishIndex + 1);
         actualHeight += this.lineHeight;
+        let drawLine = new DrawLine();
+        drawLine.x = 0;
+        drawLine.y = currentLine * this.lineHeight;
+        drawLine.width = lastNoneEnglishWidth;
+        drawLine.height = this.lineHeight;
+        drawLine.startIndex = start;
+        drawLine.endIndex = lastNoneEnglishIndex;
+        drawLine.text = this.text.substr(start, lastNoneEnglishIndex - start + 1);
+        this.drawLines.push(drawLine);
+        currentLine++;
         // Don't waste to this time.
         start = lastNoneEnglishIndex + 1;
         currentWidth = currentWidth - lastNoneEnglishWidth;
@@ -105,10 +120,17 @@ export default class TextView extends SimpleView {
         lastNoneEnglishWidth = currentWidth;
       }
     }
-    this.lines.push(this.text.substr(start, this.text.length - start));
-    this.lineEnds.push(this.text.length);
     actualHeight += this.lineHeight;
-    if (this.lines.length > 1) {
+    let drawLine = new DrawLine();
+    drawLine.x = 0;
+    drawLine.y = currentLine * this.lineHeight;
+    drawLine.width = lastNoneEnglishWidth;
+    drawLine.height = this.lineHeight;
+    drawLine.startIndex = start;
+    drawLine.endIndex = lastNoneEnglishIndex;
+    drawLine.text = this.text.substr(start, lastNoneEnglishIndex - start + 1);
+    this.drawLines.push(drawLine);
+    if (this.drawLines.length > 1) {
       actualWidth = maxWidthForCalculation;
     } else {
       let metric = ctx.measureText(this.text);
@@ -144,14 +166,14 @@ export default class TextView extends SimpleView {
 
   private updateEffectRecord(record: TextEffectRecord) {
     let e = record.effect;
-    for (let i = 0, lastEnd = 0;
-         i < this.lineEnds.length;
-         lastEnd = this.lineEnds[i], i++) {
-      if (e.start < this.lineEnds[i]) {
+    for (let i = 0; i < this.drawLines.length; i++) {
+      let drawLine = this.drawLines[i];
+      if (e.start < drawLine.endIndex) {
         // Start at this line.
         // TODO the case like e.start + e.length > lineEnd
-        record.x = (e.start - lastEnd) * this.oneCharWidth;
-        record.y = i * this.lineHeight;
+        record.x = drawLine.x + 
+          (e.start - drawLine.startIndex) * this.oneCharWidth;
+        record.y = drawLine.y;
         record.width = e.length * this.oneCharWidth;
         record.height = this.lineHeight;
       }        
@@ -167,27 +189,24 @@ export default class TextView extends SimpleView {
     ctx.save();
     ctx.translate(this.padding.left, this.padding.bottom);
     this.applyStyle(ctx);
-    for (let i = 0, lastEnd = 0;
-      i < this.lineEnds.length;
-      lastEnd = this.lineEnds[i], i++) {
-
-      let end = this.lineEnds[i];
-      if (end < this.showTextLength) {
-        // show the total line
+    for (let i = 0; i < this.drawLines.length; i++) {
+      let drawLine = this.drawLines[i];
+      let end = drawLine.endIndex;
+      if (end <= this.showTextLength) {
         ctx.fillText(
-          this.lines[i],
-          0,
-          i * this.lineHeight
+          drawLine.text,
+          drawLine.x,
+          drawLine.y
         );
       } else {
-        // this.showTextLength <= current Line end
-        // show sub string [lastEnd, this.showTextLength)
+        // show part of it
         ctx.fillText(
-          this.lines[i].substr(0, this.showTextLength - lastEnd),
-          0,
-          i * this.lineHeight
+          drawLine.text.substr(
+            0,
+            this.showTextLength - drawLine.startIndex),
+          drawLine.x,
+          drawLine.y
         );
-        // stop iteration.
         break;
       }
     }
