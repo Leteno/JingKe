@@ -1,22 +1,6 @@
 import { Character } from "../misc/character";
 import SimpleView from "./simple_view";
-import Sprite, { MeasureResult } from "./sprite";
-
-export class TextEffect {
-  start: number;
-  length: number;
-  draw(ctx: CanvasRenderingContext2D,
-    x: number, y: number,
-    width: number, height: number) {}
-}
-
-class TextEffectRecord {
-  effect: TextEffect;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+import { MeasureResult } from "./sprite";
 
 class DrawLine {
   x: number;
@@ -26,6 +10,34 @@ class DrawLine {
   startIndex: number;
   endIndex: number;
   text: string;
+
+  isPattern: boolean;
+
+  draw: (ctx: CanvasRenderingContext2D,
+    x: number, y: number,
+    width: number, height: number,
+    text: string) => void;
+
+
+  constructor(isPattern: boolean=false) {
+    this.isPattern = isPattern;
+    if (!isPattern) {
+      this.draw = function(ctx: CanvasRenderingContext2D,
+        x: number, y: number,
+        width: number, height: number,
+        text: string) {
+        ctx.fillText(text, x, y);
+      }
+    }
+  }
+}
+
+export interface DrawFunc {
+  draw(
+    ctx: CanvasRenderingContext2D,
+    x: number, y: number,
+    width: number, height: number,
+    text: string):void;
 }
 
 export default class TextView extends SimpleView {
@@ -38,7 +50,7 @@ export default class TextView extends SimpleView {
 
   showTextLength: number;
 
-  textEffects: Array<TextEffectRecord>;
+  textEffects: Map<string, DrawFunc>;
 
   constructor(text:string="Hello World") {
     super();
@@ -46,7 +58,7 @@ export default class TextView extends SimpleView {
     this.textColor = "black";
     this.textSize = 24;
     this.showTextLength = text.length;
-    this.textEffects = new Array<TextEffectRecord>();
+    this.textEffects = new Map<string, DrawFunc>();
     this.drawLines = new Array<DrawLine>();
 
     this.debugColor = "pink";
@@ -81,60 +93,156 @@ export default class TextView extends SimpleView {
     let actualWidth = 0;
     let actualHeight = 0;
 
-    let start = 0;
     let currentWidth = 0;
-    let currentCharSize = 0;
     let lastNoneEnglishIndex = 0;
     let lastNoneEnglishWidth = 0;
+    let start = 0;
+    let x = 0;
+    let y = 0;
 
-    let currentLine = 0;
+    // for pattern:
+    let patStart = -1;
     for (let i = 0; i < this.text.length; i++) {
-      currentCharSize = (this.text.charCodeAt(i) > 512)
-        ? chineseFontWidth
-        : englishFontWidth;
-      currentWidth += currentCharSize;
-      if (currentWidth > maxWidthForCalculation) {
-        if (lastNoneEnglishIndex == start) {
-          // Whole line contains Alphanumberic
-          lastNoneEnglishIndex = i - 1;
-          lastNoneEnglishWidth = currentWidth - currentCharSize;
+      let ch = this.text.charAt(i);
+      let chCode = this.text.charCodeAt(i);
+      /**
+       * Dealing the pattern between \f \g
+       */
+      // Check \f \g are pairing.
+      if (ch == '\f') {
+        patStart = i+1;
+        if (currentWidth > 0) {
+          let drawLine = new DrawLine();
+          drawLine.x = x;
+          drawLine.y = y;
+          drawLine.text = this.text.substr(
+            start, i - start
+          ) // i not include.
+          drawLine.startIndex = start;
+          drawLine.endIndex = i - 1;
+          drawLine.width = currentWidth;
+          drawLine.height = this.lineHeight;
+          drawLine.isPattern = false;
+          this.drawLines.push(drawLine);
+
+          x = x + currentWidth;
         }
-        actualHeight += this.lineHeight;
-        let drawLine = new DrawLine();
-        drawLine.x = 0;
-        drawLine.y = currentLine * this.lineHeight;
-        drawLine.width = lastNoneEnglishWidth;
+        currentWidth = 0;
+        start = i + 1;
+        continue;
+      } else if (ch == '\r') {
+        let drawLine = new DrawLine(true);
+        drawLine.text = this.text.substr(
+          patStart, i - patStart
+        ) // i not include.
+        drawLine.width = currentWidth;
         drawLine.height = this.lineHeight;
+        drawLine.endIndex = i - 1;
         drawLine.startIndex = start;
-        drawLine.endIndex = lastNoneEnglishIndex;
-        drawLine.text = this.text.substr(start, lastNoneEnglishIndex - start + 1);
+        drawLine.x = x;
+        drawLine.y = y;
         this.drawLines.push(drawLine);
-        currentLine++;
-        // Don't waste to this time.
-        start = lastNoneEnglishIndex + 1;
-        currentWidth = currentWidth - lastNoneEnglishWidth;
+
+        x = x + currentWidth;
+
+        patStart = -1;
+        currentWidth = 0;
+        start = i + 1;
         continue;
       }
-      if (!Character.isAlphanumberic(this.text.charCodeAt(i))) {
+
+      // Normal case
+      let currentCharWidth = chCode > 512
+        ? chineseFontWidth
+        : englishFontWidth;
+      currentWidth += currentCharWidth;
+      // Different from currentWidth, actualWidth will keep adding
+      // And the value will be valuable when there is only one line.
+      actualWidth += currentCharWidth;
+      if (x + currentWidth > maxWidthForCalculation) {
+        // Need to have a new line.
+        if (patStart >= 0) {
+          // Inside pattern.
+          if (x == 0) {
+            // already start at 0
+            let warning = "(Pattern length is above maxWidth)";
+            console.warn(warning);
+            let drawLine = new DrawLine();
+            drawLine.x = x;
+            drawLine.y = y;
+            drawLine.startIndex = 0;
+            drawLine.endIndex = warning.length - 1;
+            drawLine.width = warning.length * englishFontWidth;
+            drawLine.height = this.lineHeight;
+            drawLine.text = warning;
+            this.drawLines.push(drawLine);
+          } else {
+            // Try new line.
+            actualHeight += this.lineHeight;
+            x = 0;
+            y += this.lineHeight;
+          }
+          continue;
+        }
+        let drawLine = new DrawLine();
+        drawLine.x = x;
+        drawLine.y = y;
+        drawLine.startIndex = start;
+        drawLine.endIndex = lastNoneEnglishIndex;
+        drawLine.width = lastNoneEnglishWidth;
+        drawLine.height = this.lineHeight;
+        drawLine.text = this.text.substr(
+          start, lastNoneEnglishIndex - start + 1 
+        ) // lastNoneEnglishIndex is included.
+        this.drawLines.push(drawLine);
+
+        actualHeight += this.lineHeight;
+        start = lastNoneEnglishIndex + 1;
+        x = 0;
+        y += this.lineHeight;
+        currentWidth = currentWidth - lastNoneEnglishWidth;
+      }
+      if (!Character.isAlphanumberic(chCode)) {
         lastNoneEnglishIndex = i;
         lastNoneEnglishWidth = currentWidth;
       }
     }
-    actualHeight += this.lineHeight;
-    let drawLine = new DrawLine();
-    drawLine.x = 0;
-    drawLine.y = currentLine * this.lineHeight;
-    drawLine.width = lastNoneEnglishWidth;
-    drawLine.height = this.lineHeight;
-    drawLine.startIndex = start;
-    drawLine.endIndex = lastNoneEnglishIndex;
-    drawLine.text = this.text.substr(start, lastNoneEnglishIndex - start + 1);
-    this.drawLines.push(drawLine);
+    // Scaning the text is over, adding the rest into one line.
+    if (patStart >= 0) {
+      // We should have one pattern, however, didn't find the end.
+      let warning = "(Expect end for pattern)";
+      console.warn(warning);
+      let drawLine = new DrawLine();
+      drawLine.x = x;
+      drawLine.y = y;
+      drawLine.startIndex = 0;
+      drawLine.endIndex = warning.length - 1;
+      drawLine.width = warning.length * englishFontWidth;
+      drawLine.height = this.lineHeight;
+      drawLine.text = warning;
+      this.drawLines.push(drawLine);
+
+      actualHeight += this.lineHeight;
+    } else {
+      let drawLine = new DrawLine();
+      drawLine.x = x;
+      drawLine.y = y;
+      drawLine.startIndex = start;
+      drawLine.endIndex = this.text.length - 1;
+      drawLine.width = currentWidth;
+      drawLine.height = this.lineHeight;
+      drawLine.text = this.text.substr(
+        start, this.text.length - start
+      );
+      this.drawLines.push(drawLine);
+
+      actualHeight += this.lineHeight;
+    }
+
     if (this.drawLines.length > 1) {
       actualWidth = maxWidthForCalculation;
     } else {
-      let metric = ctx.measureText(this.text);
-      actualWidth = metric.width;
+      actualWidth = currentWidth;
     }
 
     // TODO(juzhen) should we:
@@ -142,7 +250,6 @@ export default class TextView extends SimpleView {
 
     // Update effect records when vals like lineHeight,
     // lineEnds are updated.
-    this.updateEffectRecords();
 
     ctx.restore();
     return {
@@ -151,33 +258,8 @@ export default class TextView extends SimpleView {
     }
   }
 
-  addEffect(effect: TextEffect) {
-    let record = new TextEffectRecord();
-    record.effect = effect;
-    this.textEffects.push(record);
-    this.updateEffectRecord(record);
-  }
-
-  updateEffectRecords() {
-    this.textEffects.forEach(record => {
-      this.updateEffectRecord(record);
-    });
-  }
-
-  private updateEffectRecord(record: TextEffectRecord) {
-    let e = record.effect;
-    for (let i = 0; i < this.drawLines.length; i++) {
-      let drawLine = this.drawLines[i];
-      if (e.start < drawLine.endIndex) {
-        // Start at this line.
-        // TODO the case like e.start + e.length > lineEnd
-        record.x = drawLine.x + 
-          (e.start - drawLine.startIndex) * this.oneCharWidth;
-        record.y = drawLine.y;
-        record.width = e.length * this.oneCharWidth;
-        record.height = this.lineHeight;
-      }        
-    }
+  public updatePatternDrawFunc(text: string, fn: DrawFunc) {
+    this.textEffects.set(text, fn);
   }
 
   onLayout() {
@@ -193,26 +275,42 @@ export default class TextView extends SimpleView {
       let drawLine = this.drawLines[i];
       let end = drawLine.endIndex;
       if (end <= this.showTextLength) {
-        ctx.fillText(
-          drawLine.text,
-          drawLine.x,
-          drawLine.y
-        );
+        if (drawLine.draw) {
+          drawLine.draw(
+            ctx,
+            drawLine.x, drawLine.y,
+            drawLine.width, drawLine.height,
+            drawLine.text);
+        } else if (this.textEffects.has(drawLine.text)) {
+          this.textEffects.get(drawLine.text).draw(
+            ctx,
+            drawLine.x, drawLine.y,
+            drawLine.width, drawLine.height,
+            drawLine.text
+          );
+        }
       } else {
         // show part of it
-        ctx.fillText(
-          drawLine.text.substr(
-            0,
-            this.showTextLength - drawLine.startIndex),
-          drawLine.x,
-          drawLine.y
-        );
+        let text = drawLine.text.substr(
+          0,
+          this.showTextLength - drawLine.startIndex)
+        if (drawLine.draw) {
+          drawLine.draw(
+            ctx,
+            drawLine.x, drawLine.y,
+            drawLine.width, drawLine.height,
+            text
+          );
+        } else if (this.textEffects.has(drawLine.text)) {
+          this.textEffects.get(drawLine.text).draw(
+            ctx,
+            drawLine.x, drawLine.y,
+            drawLine.width, drawLine.height,
+            drawLine.text
+          );
+        }
         break;
       }
-    }
-    for (let i = 0; i < this.textEffects.length; i++) {
-      let r = this.textEffects[i];
-      r.effect.draw(ctx, r.x, r.y, r.width, r.height);
     }
     ctx.restore();
   }
