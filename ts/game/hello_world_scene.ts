@@ -9,6 +9,7 @@ import TextView, { DrawFunc, TextHelper } from "../widgets/textview";
 import DialogueView from "../widgets/dialogue_view";
 import Dialogue from "../data/dialogue";
 import OptionView, {Option, OptionCallback} from "../widgets/option_view";
+import { BgText } from "../widgets/richtext";
 
 export default class HelloWorldScene implements Scene {
   mainPanel: Panel;
@@ -44,35 +45,16 @@ export default class HelloWorldScene implements Scene {
     this.mainPanel.addView(text2);
     text2.bgColor = "#eeeeee";
 
-    let text3 = new TextView("这句子有四个\f超级能力\r。");
+    let text3 = new TextView("这句子有四个\f超级能力\r \f+1\r。");
     text3.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     text3.margin.top = -100;
     this.mainPanel.addView(text3);
     text3.bgColor = "#bbbbbb";
 
-    let effect = {
-      draw(ctx:CanvasRenderingContext2D,
-        x: number, y: number,
-        width: number, height: number,
-        text: string) {
-          ctx.save();
-          ctx.translate(x, y);
-          ctx.fillStyle = text3.bgColor;
-          ctx.fillRect(0, 0, width, height);
-  
-          let halfHeight = height/2;
-          ctx.fillStyle = "green";
-          let fontWidth = TextHelper.getInstance().calculateOnCharWidth(ctx, halfHeight);
-          ctx.fillRect(10, halfHeight / 2, text.length * fontWidth, halfHeight);
-          ctx.font = `${halfHeight}px bold`
-          ctx.fillStyle = "white";
-          ctx.fillText(text, 10, halfHeight/2);
-  
-          ctx.restore();
-      };
-    } as DrawFunc;
-    text3.updatePatternDrawFunc("超级能力", effect);
-    // text3.addEffect(effect);
+    let bgText = new BgText("green", "white", Align.END);
+    text3.updatePatternDrawFunc("超级能力", bgText);
+    text3.updatePatternDrawFunc("+1",
+      new BgText(undefined, "white", Align.START));
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     imageView.margin.left = canvas.width / 3;
