@@ -1,5 +1,5 @@
 import { number, string } from "yargs";
-import TextView, {TextHelper} from "../textview"
+import TextView, {DrawFunc, TextHelper} from "../textview"
 
 test("testCalculate", () => {
   let ctx = {
@@ -108,4 +108,56 @@ test("animation", () => {
   expect(mockFillText3.mock.calls.length).toBe(2);
   expect(mockFillText3.mock.calls[0][0]).toBe("大家好，我系渣渣豪，");
   expect(mockFillText3.mock.calls[1][0]).toBe("是兄弟，就");
+})
+
+test("pattern", () => {
+  let ctx = {
+    save: () => {},
+    restore: () => {},
+    measureText: (str:string) => {
+      // Is English.
+      // TODO(): the value is poluted by
+      // the first test case + TextHelper cache
+      return {
+        width: 5 * str.length,
+      };
+    },
+    translate(x: number, y: number) {},
+  } as CanvasRenderingContext2D;
+
+  let mockFillText = jest.fn((text:string, x: number, y:number, maxWidth?:number|undefined) => {
+  });
+  ctx.fillText = mockFillText;
+
+  let textView = new TextView("Hello \fWorld\r, Mr.Zheng");
+  textView.measure(ctx, 500, 500);
+
+  let mockDrawFunc = jest.fn((
+    ctx: CanvasRenderingContext2D,
+    x: number, y: number,
+    width: number, height: number,
+    text: string) => {
+  });
+  textView.updatePatternDrawFunc("World", {
+    draw: mockDrawFunc
+  } as DrawFunc);
+
+  textView.drawToCanvas(ctx);
+
+  expect(mockFillText.mock.calls.length).toBe(2);
+  expect(mockFillText.mock.calls[0][0]).toBe("Hello ");
+  expect(mockFillText.mock.calls[1][0]).toBe(", Mr.Zheng");
+
+  expect(mockDrawFunc.mock.calls.length).toBe(1);
+  expect(mockDrawFunc.mock.calls[0][5]).toBe("World");
+
+  expect(mockFillText.mock.calls[0][1]).toBe(0);
+  expect(mockFillText.mock.calls[0][2]).toBe(0);
+  expect(mockFillText.mock.calls[1][1]).toBe(55);
+  expect(mockFillText.mock.calls[1][2]).toBe(0);
+
+  expect(mockDrawFunc.mock.calls[0][1]).toBe(30);
+  expect(mockDrawFunc.mock.calls[0][2]).toBe(0);
+  expect(mockDrawFunc.mock.calls[0][3]).toBe(25);
+  expect(mockDrawFunc.mock.calls[0][4]).toBe(24);
 })
