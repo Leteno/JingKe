@@ -41,7 +41,7 @@ export class BgText implements DrawFunc {
     ctx.restore();
 
     ctx.save();
-    ctx.font = `${height}px bold`;
+    ctx.font = `${height - 1}px bold`;
     if (this.textColor) {
       ctx.fillStyle = this.textColor;
     }
