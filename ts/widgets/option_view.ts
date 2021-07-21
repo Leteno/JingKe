@@ -28,7 +28,7 @@ export default class OptionView extends LinearLayout {
 
   titleView: TextView;
 
-  constructor(canvas: HTMLCanvasElement, title: string, options: Array<Option>) {
+  constructor(canvas: HTMLCanvasElement) {
     super();
     this.border = new Border();
     this.layoutParam.xLayout = LayoutType.MATCH_PARENT;
@@ -41,8 +41,16 @@ export default class OptionView extends LinearLayout {
     this.padding.left = 20;
     this.padding.right = 20;
 
-    this.titleView = new TextView(title);
+    this.titleView = new TextView();
     this.titleView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+
+    this.bgColor = "#aabbcc";
+    this.visible = false;
+  }
+
+  show(title: string, options: Array<Option>) {
+    this.removeAllViews();
+    this.titleView.setText(title);
     this.addView(this.titleView);
 
     options.forEach(opt => {
@@ -50,8 +58,15 @@ export default class OptionView extends LinearLayout {
       view.margin.top = 10;
       this.addView(view);
     });
+    this.visible = true;
+  }
 
-    this.bgColor = "#aabbcc";
+  hide() {
+    this.visible = false;
+  }
+
+  isShowing() {
+    return this.visible;
   }
 
   onclick(event: ClickEvent) {

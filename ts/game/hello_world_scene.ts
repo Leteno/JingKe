@@ -117,7 +117,8 @@ export default class HelloWorldScene implements Scene {
     optFight.addTextEffect("+1", new BgText(undefined, "white"));
     options.push(optFight);
     let title = "接受贿赂吗？";
-    let optionView = new OptionView(canvas, title, options);
+    let optionView = new OptionView(canvas);
+    optionView.show(title, options);
     this.mainPanel.addView(optionView);
   }
 

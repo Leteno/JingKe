@@ -64,6 +64,11 @@ export default class TextView extends SimpleView {
     this.debugColor = "pink";
   }
 
+  setText(text: string) {
+    this.text = text;
+    this.showTextLength = text.length;
+  }
+
   applyStyle(ctx: CanvasRenderingContext2D) {
     if (this.textColor) {
       ctx.fillStyle = this.textColor;
