@@ -100,8 +100,14 @@ export default class HelloWorldScene implements Scene {
     };
 
     let options = new Array<Option>();
-    options.push(new Option("哈哈 我辈岂是蓬蒿人", optionCallback));
-    options.push(new Option("哎呀 俯首甘为孺子牛", optionCallback));
+    let optDeny = new Option("哈哈 我辈岂是蓬蒿人 \f正气\r\f+1\r", optionCallback);
+    optDeny.addTextEffect("正气", new BgText("green", "white"));
+    optDeny.addTextEffect("+1", new BgText(undefined, "white"));
+    options.push(optDeny);
+    let optAccept = new Option("哎呀 俯首甘为孺子牛 \f金钱\r\f+500\r", optionCallback);
+    optAccept.addTextEffect("金钱", new BgText("yellow", "black"));
+    optAccept.addTextEffect("+500", new BgText(undefined, "white"));
+    options.push(optAccept);
     let title = "接受贿赂吗？";
     let optionView = new OptionView(canvas, title, options);
     this.mainPanel.addView(optionView);

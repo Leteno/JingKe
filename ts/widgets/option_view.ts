@@ -2,7 +2,7 @@ import { ClickEvent } from "../misc/event";
 import { Align, LayoutType } from "../misc/layout";
 import Panel from "./panel";
 import Sprite, { Border } from "./sprite";
-import TextView from "./textview";
+import TextView, { DrawFunc } from "./textview";
 
 export interface OptionCallback {
   onOptionClicked(Option): boolean;
@@ -11,14 +11,22 @@ export interface OptionCallback {
 export class Option {
   text: string;
   callback: OptionCallback;
+  textEffects: Map<string, DrawFunc>;
 
   constructor(text:string, callback: OptionCallback) {
     this.text = text;
     this.callback = callback;
+    this.textEffects = new Map<string, DrawFunc>();
+  }
+
+  addTextEffect(text: string, fn: DrawFunc) {
+    this.textEffects.set(text, fn);
   }
 }
 
 export default class OptionView extends Panel {
+
+  titleView: TextView;
 
   constructor(canvas: HTMLCanvasElement, title: string, options: Array<Option>) {
     super();
@@ -33,9 +41,9 @@ export default class OptionView extends Panel {
     this.padding.left = 20;
     this.padding.right = 20;
 
-    let titleView = new TextView(title);
-    titleView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
-    this.addView(titleView);
+    this.titleView = new TextView(title);
+    this.titleView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    this.addView(this.titleView);
 
     let marginTop = 40;
     options.forEach(opt => {
@@ -58,6 +66,7 @@ export default class OptionView extends Panel {
 
   buildOption(option: Option):Sprite {
     let textView = new TextView(option.text);
+    textView.textSize = 16;
     textView.onclickInternal = event => {
       return option.callback.onOptionClicked(option);
     };
@@ -65,6 +74,11 @@ export default class OptionView extends Panel {
       textView.padding.top = textView.padding.bottom = 5;
     textView.border = new Border();
     textView.bgColor = "#ccbbaa";
+    option.textEffects.forEach((fn, text) => {
+      textView.updatePatternDrawFunc(
+        text, fn
+      );
+    });
     return textView;
   }
 }
