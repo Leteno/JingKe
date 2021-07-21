@@ -108,6 +108,14 @@ export default class HelloWorldScene implements Scene {
     optAccept.addTextEffect("金钱", new BgText("yellow", "black"));
     optAccept.addTextEffect("+500", new BgText(undefined, "white"));
     options.push(optAccept);
+    let optFight = new Option(
+      "你敢羞辱我，打你一顿. \f武力\r\f+1\r \f暴躁\r\f+1\r",
+      optionCallback
+    );
+    optFight.addTextEffect("武力", new BgText("green", "white"));
+    optFight.addTextEffect("暴躁", new BgText("black", "white"));
+    optFight.addTextEffect("+1", new BgText(undefined, "white"));
+    options.push(optFight);
     let title = "接受贿赂吗？";
     let optionView = new OptionView(canvas, title, options);
     this.mainPanel.addView(optionView);
