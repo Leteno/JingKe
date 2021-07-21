@@ -44,7 +44,8 @@ export default class Panel extends SimpleView {
     this.children.forEach(view => {
       view.layout(
         this.width - this.padding.left - this.padding.right,
-        this.height - this.padding.top - this.padding.bottom);
+        this.height - this.padding.top - this.padding.bottom,
+        0, 0);
     })   
   }
 

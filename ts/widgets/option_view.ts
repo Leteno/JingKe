@@ -1,6 +1,6 @@
 import { ClickEvent } from "../misc/event";
 import { Align, LayoutType } from "../misc/layout";
-import Panel from "./panel";
+import LinearLayout from "./linear_layout";
 import Sprite, { Border } from "./sprite";
 import TextView, { DrawFunc } from "./textview";
 
@@ -24,7 +24,7 @@ export class Option {
   }
 }
 
-export default class OptionView extends Panel {
+export default class OptionView extends LinearLayout {
 
   titleView: TextView;
 
@@ -45,11 +45,9 @@ export default class OptionView extends Panel {
     this.titleView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.addView(this.titleView);
 
-    let marginTop = 40;
     options.forEach(opt => {
       let view = this.buildOption(opt);
-      view.margin.top = marginTop;
-      marginTop += 40;
+      view.margin.top = 10;
       this.addView(view);
     });
 

@@ -91,33 +91,35 @@ export default abstract class SimpleView extends Sprite {
     maxWidthForCalculation: number,
     maxHeightForCalculation: number): MeasureResult;
 
-  layout(parentWidth: number, parentHeight: number) {
+  layout(parentWidth: number, parentHeight: number, left: number=0, top:number=0) {
     switch(this.layoutParam.xcfg) {
       case Align.CENTER:
-        this.x = (parentWidth - this.width) / 2 + this.margin.left;
+        this.x = left + (parentWidth - this.width) / 2 + this.margin.left;
         break;
       case Align.END:
-        this.x = parentWidth - this.width - this.margin.right;
+        this.x = left + parentWidth - this.width - this.margin.right;
         break;
       default:
-        this.x = this.margin.left;
+        this.x = left + this.margin.left;
         break;
     }
     switch(this.layoutParam.ycfg) {
       case Align.CENTER:
-        this.y = (parentHeight - this.height) / 2 + this.margin.top;
+        this.y = top + (parentHeight - this.height) / 2 + this.margin.top;
         break;
       case Align.END:
-        this.y = parentHeight - this.height - this.margin.bottom;
+        this.y = top + parentHeight - this.height - this.margin.bottom;
         break;
       default:
-        this.y = this.margin.top;
+        this.y = top + this.margin.top;
         break;
     }
-    this.onLayout(parentWidth, parentHeight);
+    this.onLayout(parentWidth, parentHeight, left, top);
   }
 
-  abstract onLayout(parentWidth: number, parentHeight: number);
+  abstract onLayout(
+    parentWidth: number, parentHeight: number,
+    left: number, top: number);
 
   drawToCanvas(ctx: CanvasRenderingContext2D) {
     if (!this.visible) return;

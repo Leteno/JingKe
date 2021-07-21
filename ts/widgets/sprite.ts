@@ -80,7 +80,8 @@ export default abstract class Sprite {
    * This will calculate view.x, view.y
    */
   abstract layout(
-    parentWidth: number, parentHeight: number);
+    parentWidth: number, parentHeight: number,
+    left: number, top: number);
 
   abstract drawToCanvas(ctx: CanvasRenderingContext2D);
 
