@@ -144,6 +144,7 @@ test("measureAndLayout", ()=> {
 
   let father = new Panel();
   panel.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
+  panel.setIsDirty(true);
   father.addView(panel)
   father.measure(ctx, 500, 500);
   father.layout(500, 500);

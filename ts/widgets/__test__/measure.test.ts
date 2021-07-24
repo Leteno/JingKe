@@ -14,6 +14,8 @@ test("measurePanel", () => {
 
   s1.margin.left = 20;
   s1.margin.top = 40;
+  panel.setIsDirty(true);
+  s1.setIsDirty(true);
   panel.measure(ctx, 500, 500);
   expect(panel.width).toBe(120);
   expect(panel.height).toBe(240);
@@ -22,6 +24,7 @@ test("measurePanel", () => {
   s2.margin.left = 300;
   s2.margin.top = 10;
   panel.addView(s2);
+  panel.setIsDirty(true);
   panel.measure(ctx, 500, 500);
   expect(panel.width).toBe(400);
   expect(panel.height).toBe(240);
@@ -46,6 +49,8 @@ test("MATCH_PARENT", () => {
   expect(s2.height).toBe(100);
 
   s1.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+  s1.setIsDirty(true);
+  panel.setIsDirty(true);
   panel.measure(ctx, 500, 500);
   expect(panel.width).toBe(500);
   expect(panel.height).toBe(240);
@@ -53,6 +58,8 @@ test("MATCH_PARENT", () => {
   expect(s2.height).toBe(100);
 
   s2.layoutParam.yLayout = LayoutType.MATCH_PARENT;
+  s2.setIsDirty(true);
+  panel.setIsDirty(true);
   panel.measure(ctx, 500, 500);
   expect(panel.width).toBe(500);
   expect(panel.height).toBe(500);

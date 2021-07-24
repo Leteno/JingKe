@@ -1,9 +1,21 @@
 import { Align, LayoutType } from "../misc/layout";
+import LayoutCache from "./layout_cache";
 import Sprite, { MeasureResult } from "./sprite";
 
 export default abstract class SimpleView extends Sprite {
 
+  private layoutCache: LayoutCache;
+  constructor() {
+    super();
+    this.layoutCache = new LayoutCache();
+  }
+
   measure(ctx: CanvasRenderingContext2D, maxWidth: number, maxHeight: number): MeasureResult {
+    if (!this.layoutCache.measureParamsChanged(maxWidth, maxHeight) &&
+        !this.layoutCache.isDirty()) {
+      return this.layoutCache.getMeasureResult();
+    }
+    this.layoutCache.saveMeasureParams(maxWidth, maxHeight);
     // The max size this child view could be.
     maxWidth = maxWidth - this.getLandscapeMargin();
     maxHeight = maxHeight - this.getPortraitMargin();
@@ -47,10 +59,12 @@ export default abstract class SimpleView extends Sprite {
       this.height = measureResult.calcHeight +
         this.padding.top + this.padding.bottom;
     }
-    return {
+    let result = {
       calcWidth: this.width + this.getLandscapeMargin(),
       calcHeight: this.height + this.getPortraitMargin()
     }
+    this.layoutCache.saveMeasureResult(result);
+    return result;
   }
 
   /**
@@ -92,6 +106,14 @@ export default abstract class SimpleView extends Sprite {
     maxHeightForCalculation: number): MeasureResult;
 
   layout(parentWidth: number, parentHeight: number, left: number=0, top:number=0) {
+    if (!this.layoutCache.layoutParamsChanged(
+          parentWidth, parentHeight, left, top) &&
+        !this.layoutCache.isDirty()) {
+        return;
+    }
+    this.layoutCache.saveLayoutParams(
+      parentWidth, parentHeight, left, top
+    );
     switch(this.layoutParam.xcfg) {
       case Align.CENTER:
         this.x = left + (parentWidth - this.width) / 2 + this.margin.left;
@@ -123,6 +145,11 @@ export default abstract class SimpleView extends Sprite {
 
   drawToCanvas(ctx: CanvasRenderingContext2D) {
     if (!this.visible) return;
+    if (this.layoutCache.isDirty()) {
+      this.layoutCache.reMeasure(this, ctx);
+      this.layoutCache.reLayout(this);
+      this.layoutCache.setIsDirty(false);
+    }
     ctx.save();
     ctx.translate(this.x, this.y);
 
@@ -160,6 +187,10 @@ export default abstract class SimpleView extends Sprite {
     this.drawToCanvasInternal(ctx);
 
     ctx.restore();
+  }
+
+  setIsDirty(dirty: boolean) {
+    this.layoutCache.setIsDirty(dirty);  
   }
 
   abstract drawToCanvasInternal(ctx: CanvasRenderingContext2D);

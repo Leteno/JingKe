@@ -15,6 +15,7 @@ export default class HelloWorldScene implements Scene {
   mainPanel: Panel;
   animators: Array<Animator<number>>;
   dialogueView: DialogueView;
+  optionView: OptionView;
 
   canvasWidth: number;
   canvasHeight: number;
@@ -92,13 +93,20 @@ export default class HelloWorldScene implements Scene {
       )
     );
 
+    this.optionView = new OptionView(canvas);
+    this.mainPanel.addView(this.optionView);
+  }
+
+  onStart(ctx: CanvasRenderingContext2D) {
+    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
+
     let optionCallback: OptionCallback = {
       onOptionClicked(option:Option) {
         console.log("option " + option.text + " is clicked");
         return true;
       }
     };
-
     let options = new Array<Option>();
     let optDeny = new Option("哈哈 我辈岂是蓬蒿人 \f正气\r\f+1\r", optionCallback);
     optDeny.addTextEffect("正气", new BgText("green", "white"));
@@ -117,14 +125,7 @@ export default class HelloWorldScene implements Scene {
     optFight.addTextEffect("+1", new BgText(undefined, "white"));
     options.push(optFight);
     let title = "接受贿赂吗？";
-    let optionView = new OptionView(canvas);
-    optionView.show(title, options);
-    this.mainPanel.addView(optionView);
-  }
-
-  onStart(ctx: CanvasRenderingContext2D) {
-    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
-    this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
+    this.optionView.show(title, options);
   }
 
   update(dt: number) {

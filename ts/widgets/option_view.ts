@@ -58,6 +58,7 @@ export default class OptionView extends LinearLayout {
       view.margin.top = 10;
       this.addView(view);
     });
+    this.setIsDirty(true);
     this.visible = true;
   }
 
