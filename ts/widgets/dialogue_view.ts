@@ -158,8 +158,16 @@ export default class DialogueView extends Panel {
         this.updateView(front);
       } else {
         this.visible = false;
+        if (this.onDialogueFinished) {
+          this.onDialogueFinished();
+          this.onDialogueFinished = undefined;
+        }
       }
     }
     return true;
+  }
+
+  // Call when no more dialogue follow up
+  onDialogueFinished() {
   }
 }

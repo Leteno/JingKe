@@ -4,6 +4,7 @@ import Dialogue from "../data/dialogue";
 import { ClickEvent } from "../misc/event";
 import { Align, LayoutParams } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
+import OptionView, { Option } from "../widgets/option_view";
 import Panel from "../widgets/panel";
 import TextView from "../widgets/textview";
 import Scene from "./scene";
@@ -14,6 +15,7 @@ export default class SimpleScene implements Scene {
   sceneTitle: TextView;
   dialogueView: DialogueView;
   presetDialogues: Array<Dialogue>;
+  optionView: OptionView;
 
   canvasWidth: number;
   canvasHeight: number;
@@ -56,6 +58,9 @@ export default class SimpleScene implements Scene {
       Align.CENTER, Align.END
     );
     this.mainPanel.addView(this.dialogueView);
+
+    this.optionView = new OptionView(canvas);
+    this.mainPanel.addView(this.optionView);
 
     this.presetDialogues = new Array<Dialogue>();
     this.sceneAnimationFinished = false;
@@ -107,5 +112,11 @@ export default class SimpleScene implements Scene {
     } else {
       this.presetDialogues.push(data);
     }
+  }
+
+  showOptionView(title: string, options: Array<Option>) {
+    this.optionView.show(
+      title, options
+    );
   }
 }

@@ -92,6 +92,9 @@ export default class HelloWorldScene implements Scene {
       "不要讲干话"
       )
     );
+    this.dialogueView.onDialogueFinished = (() => {
+      this.showSimpleOptions();
+    }).bind(this);
 
     this.optionView = new OptionView(canvas);
     this.mainPanel.addView(this.optionView);
@@ -100,25 +103,52 @@ export default class HelloWorldScene implements Scene {
   onStart(ctx: CanvasRenderingContext2D) {
     this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
     this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
+  }
 
-    let optionCallback: OptionCallback = {
+  showSimpleOptions() {
+    let that = this;
+    let denyCallback: OptionCallback = {
       onOptionClicked(option:Option) {
-        console.log("option " + option.text + " is clicked");
+        that.dialogueView.addDialogue(
+          new Dialogue("郑虾米", "谢谢，我不能接受"));
+        that.dialogueView.addDialogue(
+          new Dialogue("蒋小嘉", "我误会你了", false /* showAtLeft */)
+        );
         return true;
       }
     };
     let options = new Array<Option>();
-    let optDeny = new Option("哈哈 我辈岂是蓬蒿人 \f正气\r\f+1\r", optionCallback);
+    let optDeny = new Option("哈哈 我辈岂是蓬蒿人 \f正气\r\f+1\r", denyCallback);
     optDeny.addTextEffect("正气", new BgText("green", "white"));
     optDeny.addTextEffect("+1", new BgText(undefined, "white"));
     options.push(optDeny);
-    let optAccept = new Option("哎呀 俯首甘为孺子牛 \f金钱\r\f+500\r", optionCallback);
+    let acceptCallback: OptionCallback = {
+      onOptionClicked(option:Option) {
+        that.dialogueView.addDialogue(
+          new Dialogue("郑虾米", "谢谢，好啊好啊好啊"));
+        that.dialogueView.addDialogue(
+          new Dialogue("蒋小嘉", "哈哈哈哈哈", false /* showAtLeft */)
+        );
+        return true;
+      }
+    }
+    let optAccept = new Option("哎呀 俯首甘为孺子牛 \f金钱\r\f+500\r", acceptCallback);
     optAccept.addTextEffect("金钱", new BgText("yellow", "black"));
     optAccept.addTextEffect("+500", new BgText(undefined, "white"));
     options.push(optAccept);
+    let fightCallback: OptionCallback = {
+      onOptionClicked(option:Option) {
+        that.dialogueView.addDialogue(
+          new Dialogue("郑虾米", "你不能侮辱我的人格，我要跟你决斗"));
+        that.dialogueView.addDialogue(
+          new Dialogue("蒋小嘉", "啊啊啊啊", false /* showAtLeft */)
+        );
+        return true;
+      }
+    }
     let optFight = new Option(
       "你敢羞辱我，打你一顿. \f武力\r\f+1\r \f暴躁\r\f+1\r",
-      optionCallback
+      fightCallback
     );
     optFight.addTextEffect("武力", new BgText("green", "white"));
     optFight.addTextEffect("暴躁", new BgText("black", "white"));

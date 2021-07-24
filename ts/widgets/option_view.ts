@@ -81,9 +81,10 @@ export default class OptionView extends LinearLayout {
   buildOption(option: Option):Sprite {
     let textView = new TextView(option.text);
     textView.textSize = 16;
-    textView.onclickInternal = event => {
+    textView.onclickInternal = (event => {
+      this.hide();
       return option.callback.onOptionClicked(option);
-    };
+    }).bind(this);
     textView.padding.left = textView.padding.right =
       textView.padding.top = textView.padding.bottom = 5;
     textView.border = new Border();
