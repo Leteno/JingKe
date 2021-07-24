@@ -72,15 +72,6 @@ export default class DialogueView extends Panel {
 
   drawToCanvasInternal(
     ctx: CanvasRenderingContext2D) {
-
-
-    if (this.dirty) {
-      this.measure(
-        ctx,
-        this.measureWidthLastTime,
-        this.measureHeightLastTime);
-      this.dirty = false;
-    }
     if (this.showHint && this.hintAnimator.getVal()) {
       ctx.save();
       ctx.strokeStyle = "black";
@@ -108,9 +99,13 @@ export default class DialogueView extends Panel {
   private updateView(data:Dialogue) {
     this.visible = true;
     this.showHint = false;
-    let view = data.showAtLeft ? this.nameViewLeft
+    let nameView = data.showAtLeft ? this.nameViewLeft
                 : this.nameViewRight;
-    view.text = data.username;
+    nameView.text = data.username;
+    nameView.visible = true;
+    let otherView = data.showAtLeft ? this.nameViewRight
+                : this.nameViewLeft;
+    otherView.visible = false;
 
     this.animators.splice(0);
     let supposedTime = data.content.length * 1000 / data.speed;
@@ -120,7 +115,9 @@ export default class DialogueView extends Panel {
     this.contentView.text = data.content;
     this.contentView.showTextLength = 0;
 
-    this.dirty = true;
+    this.contentView.setIsDirty(true);
+    nameView.setIsDirty(true);
+    otherView.setIsDirty(true);
 
     contentAnimator.onValChange = (val => {
       this.contentView.showTextLength = Math.floor(val);
