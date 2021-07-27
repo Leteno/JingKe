@@ -1,27 +1,31 @@
 import Parcel from "../parcel"
 
 test("test enlarge", ()=> {
-  let p = new Parcel(8);
-  expect(p.getLength()).toBe(8);
+  let p = new Parcel(16);
+  expect(p.getLength()).toBe(16);
 
   // This don't need enlarge
   p.writeInt(123);
-  expect(p.getLength()).toBe(8);
+  p.writeString("Hi");
+  expect(p.getLength()).toBe(16);
 
   // This need enlarge
   p.writeInt(345);
-  expect(p.getLength()).toBe(16);
+  expect(p.getLength()).toBe(32);
 
   // Value should be correct.
   expect(p.readInt()).toBe(123);
+  expect(p.readString()).toBe("Hi");
   expect(p.readInt()).toBe(345);
 })
 
 test("toString and fromString", () => {
   let p = new Parcel();
   p.writeInt(123);
+  p.writeString("Hello world");
   p.writeInt(456);
   expect(p.readInt()).toBe(123);
+  expect(p.readString()).toBe("Hello world");
   expect(p.readInt()).toBe(456);
 
   let data = p.toString();
@@ -29,6 +33,7 @@ test("toString and fromString", () => {
   p0.fromString(data);
   
   expect(p0.readInt()).toBe(123);
+  expect(p0.readString()).toBe("Hello world");
   expect(p0.readInt()).toBe(456);
 })
 
