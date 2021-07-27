@@ -2,6 +2,7 @@ js/animator/
 js/data/
 js/game/
 js/misc/
+js/objects/
 js/scene/
 js/widgets/
 js/main.js
