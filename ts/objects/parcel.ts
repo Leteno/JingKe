@@ -84,7 +84,7 @@ export default class Parcel {
     this._dataView.setInt32(this._writeIndex, str.length);
     this._writeIndex += 4;
     for (let i = 0; i < str.length; i++) {
-      this._dataView.setInt16(this._writeIndex, str.charCodeAt(i));
+      this._dataView.setInt16(this._writeIndex, str.charCodeAt(i), true);
       this._writeIndex += 2;
     }
   }
