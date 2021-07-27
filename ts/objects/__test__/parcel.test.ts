@@ -36,6 +36,8 @@ test("write and read", () => {
   let p = new Parcel();
   p.writeInt(123);
   p.writeString("Miss");
+  p.writeString("中文，懂？");
+  p.writeString("make sure it is ok");
 
   let iArray = new Array<number>();
   iArray.push(12);
@@ -57,6 +59,8 @@ test("write and read", () => {
 
   expect(p.readInt()).toBe(123);
   expect(p.readString()).toBe("Miss");
+  expect(p.readString()).toBe("中文，懂？");
+  expect(p.readString()).toBe("make sure it is ok");
 
   let array1 = p.readNumberArray();
   expect(array1).not.toBeNull();

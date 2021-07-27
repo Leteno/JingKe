@@ -39,7 +39,22 @@ export default class Parcel {
     return result;
   }
   readString(): string {
-    return "";
+    let type = this._dataView.getInt8(this._readIndex);
+    if (type != TYPE.string) {
+      console.warn(`readInt on unexpect type: ${type}, index: ${this._readIndex}`);
+    }
+    this._readIndex++;
+    let size = this._dataView.getInt32(this._readIndex);
+    this._readIndex += 4;
+    let data = this._parcelData.slice(
+      this._readIndex,
+      this._readIndex + size * 2 /** U16 2bytes */);
+    let result = String.fromCharCode.apply(
+      null,
+      new Int16Array(data)
+    );
+    this._readIndex += size * 2;
+    return result;
   }
   readArray() : Array<Parcel> {
     return null;
@@ -59,6 +74,19 @@ export default class Parcel {
   }
 
   writeString(str: string) {
+    /**
+     * Type  1
+     * Length of string 4
+     * U16 need 2bytes (str.length * 2)
+     */
+    this.enlargeIfNeeded(1 + 4 + str.length * 2);
+    this._dataView.setInt8(this._writeIndex++, TYPE.string);
+    this._dataView.setInt32(this._writeIndex, str.length);
+    this._writeIndex += 4;
+    for (let i = 0; i < str.length; i++) {
+      this._dataView.setInt16(this._writeIndex, str.charCodeAt(i));
+      this._writeIndex += 2;
+    }
   }
 
   writeArray(array: Array<Parcel>) {
