@@ -50,6 +50,7 @@ test("write and read", () => {
 
   let sArray = new Array<string>();
   sArray.push("1");
+  sArray.push("我是中国人");
   sArray.push("980");
   p.writeStringArray(sArray);
 
@@ -74,6 +75,7 @@ test("write and read", () => {
   let array2 = p.readStringArray();
   expect(array2).not.toBeNull();
   expect(array2.pop()).toBe("980");
+  expect(array2.pop()).toBe("我是中国人");
   expect(array2.pop()).toBe("1");
 
   let array3 = p.readArray();

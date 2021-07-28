@@ -59,11 +59,47 @@ export default class Parcel {
   readArray() : Array<Parcel> {
     return null;
   }
+
   readNumberArray(): Array<number> {
-    return null;
+    let array = new Array<number>();
+    let type = this._dataView.getInt8(this._readIndex);
+    if (type != TYPE.array) {
+      console.warn(`readInt on unexpect type: ${type}, index: ${this._readIndex}`);
+    }
+    this._readIndex++;
+    let len = this._dataView.getInt32(this._readIndex);
+    this._readIndex += 4;
+    for (let i = 0; i < len; i++) {
+      let data = this._dataView.getInt32(this._readIndex);
+      this._readIndex += 4;
+      array.push(data);
+    }
+    return array;
   }
+
   readStringArray(): Array<string> {
-    return null;
+    let array = new Array<string>();
+    let type = this._dataView.getInt8(this._readIndex);
+    if (type != TYPE.array) {
+      console.warn(`readInt on unexpect type: ${type}, index: ${this._readIndex}`);
+    }
+    this._readIndex++;
+    let len = this._dataView.getInt32(this._readIndex);
+    this._readIndex += 4;
+    for (let i = 0; i < len; i++) {
+      let strlen = this._dataView.getInt32(this._readIndex);
+      this._readIndex += 4;
+      let data = this._parcelData.slice(
+        this._readIndex,
+        this._readIndex + strlen * 2 /** U16 2bytes */);
+      let str = String.fromCharCode.apply(
+        null,
+        new Int16Array(data)
+      );
+      array.push(str);
+      this._readIndex += strlen * 2;
+    }
+    return array;
   }
 
   writeInt(n: number) {
@@ -91,9 +127,33 @@ export default class Parcel {
 
   writeArray(array: Array<Parcel>) {
   }
+
   writeNumberArray(array: Array<number>) {
+    this.enlargeIfNeeded(1 + 4 + array.length * 4);
+    this._dataView.setInt8(this._writeIndex++, TYPE.array);
+    this._dataView.setInt32(this._writeIndex, array.length);
+    this._writeIndex += 4;
+    for (let i = 0; i < array.length; i++) {
+      this._dataView.setInt32(this._writeIndex, array[i]);
+      this._writeIndex += 4;
+    }
   }
+
   writeStringArray(array: Array<string>) {
+    this.enlargeIfNeeded(1 + 4);
+    this._dataView.setInt8(this._writeIndex++, TYPE.array);
+    this._dataView.setInt32(this._writeIndex, array.length);
+    this._writeIndex += 4;
+    for (let i = 0; i < array.length; i++) {
+      let str = array[i];
+      this.enlargeIfNeeded(4 + str.length * 2);
+      this._dataView.setInt32(this._writeIndex, str.length);
+      this._writeIndex += 4;
+      for (let i = 0; i < str.length; i++) {
+        this._dataView.setInt16(this._writeIndex, str.charCodeAt(i), true);
+        this._writeIndex += 2;
+      }
+    }
   }
 
   enlargeIfNeeded(needByte: number) {
