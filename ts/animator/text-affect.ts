@@ -15,7 +15,7 @@ export function textAlpha(
   if (fadeIn) {
     from = 255; to = 0;
   }
-  let fadeInAnimator = new NumberLinearAnimator(from, to, 2000);
+  let fadeInAnimator = new NumberLinearAnimator(from, to, time);
   fadeInAnimator.onValChange = val => {
     let alpha = Math.floor(val).toString(16);
     if (alpha.length == 1) {
