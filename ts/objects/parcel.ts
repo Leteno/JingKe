@@ -70,7 +70,18 @@ export default class Parcel {
   }
 
   readArray() : Array<Parcel> {
-    return null;
+    let result = new Array<Parcel>();
+    let type = this._dataView.getInt8(this._readIndex);
+    if (type != TYPE.array) {
+      console.warn(`readArray on unexpect type: ${type}, index: ${this._readIndex}`);
+    }
+    this._readIndex++;
+    let len = this._dataView.getInt32(this._readIndex);
+    this._readIndex += 4;
+    for (let i = 0; i < len; i++) {
+      result.push(this.readParcel());
+    }
+    return result;
   }
 
   readNumberArray(): Array<number> {
@@ -146,6 +157,14 @@ export default class Parcel {
   }
 
   writeArray(array: Array<Parcel>) {
+    this.enlargeIfNeeded(1 + 4);
+    this._dataView.setInt8(this._writeIndex++, TYPE.array);
+    this._dataView.setInt32(this._writeIndex, array.length);
+    this._writeIndex += 4;
+
+    for (let i = 0; i < array.length; i++) {
+      this.writeParcel(array[i]);
+    }
   }
 
   writeNumberArray(array: Array<number>) {

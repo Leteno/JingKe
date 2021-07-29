@@ -89,6 +89,6 @@ test("write and read", () => {
 
   let array3 = p.readArray();
   expect(array3).not.toBeNull();
-  expect(array3.pop()?.readInt()).toBe(8424);
   expect(array3.pop()?.readString()).toBe("watermelon");
+  expect(array3.pop()?.readInt()).toBe(8424);
 })
