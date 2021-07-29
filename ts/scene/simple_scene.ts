@@ -1,3 +1,4 @@
+import Animator from "../animator/animator";
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import { textAlpha } from "../animator/text-affect";
 import Dialogue from "../data/dialogue";
@@ -6,22 +7,22 @@ import { Align, LayoutParams } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
 import OptionView, { Option } from "../widgets/option_view";
 import Panel from "../widgets/panel";
+import Sprite from "../widgets/sprite";
 import TextView from "../widgets/textview";
 import Scene from "./scene";
 
-export default class SimpleScene implements Scene {
-  mainPanel: Panel;
-  sceneCaption: TextView;
-  sceneTitle: TextView;
-  dialogueView: DialogueView;
-  presetDialogues: Array<Dialogue>;
-  optionView: OptionView;
+export default abstract class SimpleScene implements Scene {
+  private mainPanel: Panel;
+  private sceneCaption: TextView;
+  private sceneTitle: TextView;
+  private dialogueView: DialogueView;
+  private optionView: OptionView;
 
   canvasWidth: number;
   canvasHeight: number;
 
-  sceneAnimationFinished: boolean;
-  animators: Array<NumberLinearAnimator>;
+  private sceneAnimationFinished: boolean;
+  private animators: Array<NumberLinearAnimator>;
 
   constructor(canvas: HTMLCanvasElement,
     caption: string, title: string) {
@@ -65,7 +66,6 @@ export default class SimpleScene implements Scene {
     );
     this.mainPanel.addView(this.dialogueView);
 
-    this.presetDialogues = new Array<Dialogue>();
     this.sceneAnimationFinished = false;
   }
 
@@ -88,11 +88,11 @@ export default class SimpleScene implements Scene {
     }
     titleFadeOut.onStop = () => {
       this.sceneAnimationFinished = true;
-      this.presetDialogues.forEach(item => {
-        this.dialogueView.addDialogue(item);
-      })
+      this.onPageReady();
     }
   }
+
+  abstract onPageReady();
 
   update(dt: number) {
     this.animators.forEach(animator => {
@@ -110,16 +110,28 @@ export default class SimpleScene implements Scene {
   }
 
   addDialogue(data: Dialogue) {
-    if (this.sceneAnimationFinished) {
-      this.dialogueView.addDialogue(data);
-    } else {
-      this.presetDialogues.push(data);
-    }
+    this.dialogueView.addDialogue(data);
   }
 
   showOptionView(title: string, options: Array<Option>) {
     this.optionView.show(
       title, options
     );
+  }
+
+  addAnimator(animator: NumberLinearAnimator) {
+    this.animators.push(animator);
+  }
+
+  addView(view: Sprite) {
+    this.mainPanel.addView(view);
+  }
+
+  forceRepaint() {
+    this.mainPanel.setIsDirty(true);
+  }
+
+  setOnDialogueFinish (fn: ()=>void) {
+    this.dialogueView.onDialogueFinished = fn;
   }
 }

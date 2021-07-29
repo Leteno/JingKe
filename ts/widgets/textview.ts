@@ -67,6 +67,7 @@ export default class TextView extends SimpleView {
   setText(text: string) {
     this.text = text;
     this.showTextLength = text.length;
+    this.setIsDirty(true);
   }
 
   applyStyle(ctx: CanvasRenderingContext2D) {

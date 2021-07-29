@@ -1,3 +1,4 @@
+import Act1 from "./game/act1";
 import WelcomeScene from "./game/welcome-scene";
 import Scene from "./scene/scene";
 import SceneManager from "./scene/scene_manager"
@@ -37,14 +38,10 @@ export default class Main {
     let scene1 = new Scene1(canvas);
     this.sceneManager.push("scene1", scene1);
 
-    let simpleScene = new SimpleScene(canvas,
-        "Scene 01", "夕阳无限好，狼虎伺机动");
-    this.sceneManager.push("simple", simpleScene);
-    let dialogue = new Dialogue("郑小则",
-      "人生不如意事，十有八九，唯有一二，让你慰藉，希望你能开心");
-    simpleScene.addDialogue(dialogue);
+    let act1 = new Act1(canvas);
+    this.sceneManager.push("act1", act1);
 
-    this.sceneManager.switchScene("simple");
+    this.sceneManager.switchScene("act1");
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
       this.bindLoop
