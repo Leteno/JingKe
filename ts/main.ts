@@ -44,7 +44,7 @@ export default class Main {
       "人生不如意事，十有八九，唯有一二，让你慰藉，希望你能开心");
     simpleScene.addDialogue(dialogue);
 
-    this.sceneManager.switchScene("helloworld");
+    this.sceneManager.switchScene("simple");
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
       this.bindLoop

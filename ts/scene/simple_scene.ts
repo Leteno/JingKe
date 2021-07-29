@@ -29,6 +29,12 @@ export default class SimpleScene implements Scene {
     this.canvasHeight = canvas.height;
 
     this.mainPanel = new Panel();
+
+    // Put optionView in the beginning,
+    // to capture click event first.
+    this.optionView = new OptionView(canvas);
+    this.mainPanel.addView(this.optionView);
+
     this.sceneCaption = new TextView(caption);
     this.sceneTitle = new TextView(title);
     this.mainPanel.addView(this.sceneCaption);
@@ -58,9 +64,6 @@ export default class SimpleScene implements Scene {
       Align.CENTER, Align.END
     );
     this.mainPanel.addView(this.dialogueView);
-
-    this.optionView = new OptionView(canvas);
-    this.mainPanel.addView(this.optionView);
 
     this.presetDialogues = new Array<Dialogue>();
     this.sceneAnimationFinished = false;
