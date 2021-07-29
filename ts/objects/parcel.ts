@@ -56,6 +56,19 @@ export default class Parcel {
     this._readIndex += size * 2;
     return result;
   }
+
+  readParcel() : Parcel {
+    let type = this._dataView.getInt8(this._readIndex);
+    if (type != TYPE.parcel) {
+      console.warn(`readParcel on unexpect type: ${type}, index: ${this._readIndex}`);
+    }
+    this._readIndex++;
+    let data = this.readString();
+    let result = new Parcel();
+    result.fromString(data);
+    return result;
+  }
+
   readArray() : Array<Parcel> {
     return null;
   }
@@ -123,6 +136,13 @@ export default class Parcel {
       this._dataView.setInt16(this._writeIndex, str.charCodeAt(i), true);
       this._writeIndex += 2;
     }
+  }
+
+  writeParcel(parcel: Parcel) {
+    this.enlargeIfNeeded(1);
+    this._dataView.setInt8(this._writeIndex++, TYPE.parcel);
+    let str = parcel.toString();
+    this.writeString(str);
   }
 
   writeArray(array: Array<Parcel>) {

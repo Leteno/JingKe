@@ -44,6 +44,11 @@ test("write and read", () => {
   p.writeString("中文，懂？");
   p.writeString("make sure it is ok");
 
+  let px = new Parcel();
+  px.writeString("我能说中文，也能说 English，哈哈");
+  px.writeInt(1234);
+  p.writeParcel(px);
+
   let iArray = new Array<number>();
   iArray.push(12);
   p.writeNumberArray(iArray);
@@ -67,6 +72,10 @@ test("write and read", () => {
   expect(p.readString()).toBe("Miss");
   expect(p.readString()).toBe("中文，懂？");
   expect(p.readString()).toBe("make sure it is ok");
+  let ppx = p.readParcel();
+  expect(ppx).not.toBeNull();
+  expect(ppx.readString()).toBe("我能说中文，也能说 English，哈哈");
+  expect(ppx.readInt()).toBe(1234);
 
   let array1 = p.readNumberArray();
   expect(array1).not.toBeNull();
