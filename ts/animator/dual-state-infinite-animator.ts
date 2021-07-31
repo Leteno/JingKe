@@ -10,7 +10,7 @@ export default class DualStateInfiniteAnimator implements Animator<boolean> {
     this.on = defaultOn;
   }
 
-  update(dt: number) {
+  update(dt: number): number {
     let passTime = this.lastRemainTime + dt;
     let flipTime = Math.floor(passTime / this.interval);
     if (flipTime % 2 == 1) {
@@ -18,6 +18,7 @@ export default class DualStateInfiniteAnimator implements Animator<boolean> {
       this.onValChange(this.on);
     }
     this.lastRemainTime = passTime - flipTime * this.interval;
+    return 0;
   }
   getVal(): boolean {
     return this.on;
