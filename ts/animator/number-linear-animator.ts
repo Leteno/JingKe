@@ -53,8 +53,13 @@ export default class NumberLinearAnimator implements Animator<number> {
   onValChange(val: number) {}
 
   reverse() : NumberLinearAnimator {
+    let properEnd = this.current;
+    if (this.current == this.originalStart) {
+      // animation never start
+      properEnd = this.end;
+    }
     return new NumberLinearAnimator(
-      this.current,
+      properEnd,
       this.originalStart,
       this.totalTime
     )

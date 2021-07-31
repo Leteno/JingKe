@@ -40,3 +40,22 @@ test("feet", () => {
   expect(animator.getVal()).toBe(100)
   expect(animator.onStop as jest.Mock).toBeCalled()
 })
+
+test("reverse", () => {
+  let animator = new NumberLinearAnimator(
+    0, 100, 100
+  );
+
+  let r1 = animator.reverse();
+  expect(r1.originalStart).toBe(100);
+  expect(r1.end).toBe(0);
+  expect(r1.getVal()).toBe(100);
+
+  animator.update(30);
+  expect(animator.getVal()).toBe(30);
+
+  let r2 = animator.reverse();
+  expect(r2.originalStart).toBe(30);
+  expect(r2.end).toBe(0);
+  expect(r2.getVal()).toBe(30);
+})
