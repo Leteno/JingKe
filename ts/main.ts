@@ -41,7 +41,7 @@ export default class Main {
     let act1 = new Act1(canvas);
     this.sceneManager.push("act1", act1);
 
-    this.sceneManager.switchScene("act1");
+    this.sceneManager.switchScene("helloworld");
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
       this.bindLoop
