@@ -11,6 +11,7 @@ import Dialogue from "../data/dialogue";
 import OptionView, {Option, OptionCallback} from "../widgets/option_view";
 import { BgText } from "../widgets/richtext";
 import BirdViewImage from "../widgets/birdview_image";
+import { AnimatorSetBuilder } from "../animator/animator_set";
 
 export default class HelloWorldScene implements Scene {
   mainPanel: Panel;
@@ -44,34 +45,27 @@ export default class HelloWorldScene implements Scene {
       0, 200,
       4000
     );
-    this.animators.push(scanningImage1);
+    let scanningImage2 = new NumberLinearAnimator(
+      0, 100,
+      4000
+    );
     scanningImage1.onValChange = (val) => {
       birdview.sx = val;
     }
-    scanningImage1.onStop = () => {
-      let scanningImage2 = new NumberLinearAnimator(
-        0, 100,
-        4000
-      );
-      this.animators.push(scanningImage2);
-      scanningImage2.onValChange = (val) => {
-        birdview.sy = val;
-      }
-      scanningImage2.onStop = () => {
-        let a1r = scanningImage1.reverse();
-        this.animators.push(a1r);
-        a1r.onValChange = (val) => {
-          birdview.sx = val;
-        }
-        a1r.onStop = () => {
-          let a2r = scanningImage2.reverse();
-          this.animators.push(a2r);
-          a2r.onValChange = (val) => {
-            birdview.sy = val;
-          }
-        }
-      }
+    scanningImage2.onValChange = (val) => {
+      birdview.sy = val;
     }
+    let scanningImage3 = scanningImage1.reverse();
+    let scanningImage4 = scanningImage2.reverse();
+    scanningImage3.onValChange = scanningImage1.onValChange;
+    scanningImage4.onValChange = scanningImage2.onValChange;
+    let scanningImage = new AnimatorSetBuilder()
+      .after(scanningImage1)
+      .after(scanningImage2)
+      .after(scanningImage3)
+      .after(scanningImage4)
+      .build();
+    this.animators.push(scanningImage);
 
     let text = new TextView("你好，过去(不对齐)");
     text.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
