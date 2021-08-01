@@ -59,3 +59,12 @@ test("reverse", () => {
   expect(r2.end).toBe(0);
   expect(r2.getVal()).toBe(30);
 })
+
+test("return val of update()", () => {
+  let animator = new NumberLinearAnimator(
+    0, 100, 100
+  );
+  expect(animator.update(10)).toBe(0);
+  expect(animator.update(80)).toBe(0);
+  expect(animator.update(40)).toBe(30);
+})
