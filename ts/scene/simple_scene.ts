@@ -1,4 +1,6 @@
 import Animator from "../animator/animator";
+import { AnimatorSetBuilder } from "../animator/animator_set";
+import { MeanWhileBuilder } from "../animator/meanwhile";
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import { textAlpha } from "../animator/text-affect";
 import Dialogue from "../data/dialogue";
@@ -74,22 +76,23 @@ export default abstract class SimpleScene implements Scene {
     this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
 
     let captionFadeIn = textAlpha(true, 2000, this.sceneCaption);
-    this.animators.push(captionFadeIn);
     let titleFadeIn = textAlpha(true, 2500, this.sceneTitle);
-    captionFadeIn.onStop = () => {
-      this.animators.push(titleFadeIn);
-    }
-
     let captionFadeOut = textAlpha(false, 2000, this.sceneCaption);
     let titleFadeOut = textAlpha(false, 2000, this.sceneTitle);
-    titleFadeIn.onStop = () => {
-      this.animators.push(captionFadeOut);
-      this.animators.push(titleFadeOut);
-    }
-    titleFadeOut.onStop = () => {
+    let fadeOut = new MeanWhileBuilder()
+      .join(captionFadeOut)
+      .join(titleFadeOut)
+      .build();
+    let animation = new AnimatorSetBuilder()
+      .after(captionFadeIn)
+      .after(titleFadeIn)
+      .after(fadeOut)
+      .build();
+    animation.onStop = () => {
       this.sceneAnimationFinished = true;
       this.onPageReady();
     }
+    this.animators.push(animation);
   }
 
   abstract onPageReady();

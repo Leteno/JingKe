@@ -2,9 +2,9 @@ import Animator from "./animator";
 import NumberLinearAnimator from "./number-linear-animator";
 
 export class AnimatorSet implements Animator<number> {
-  animationList: Array<NumberLinearAnimator>;
+  animationList: Array<Animator<number>>;
   currentIdx: number;
-  constructor(aList: Array<NumberLinearAnimator>) {
+  constructor(aList: Array<Animator<number>>) {
     this.animationList = aList;
     this.currentIdx = 0;
   }
@@ -40,13 +40,13 @@ export class AnimatorSet implements Animator<number> {
 }
 
 export class AnimatorSetBuilder {
-  animations: Array<NumberLinearAnimator>;
+  animations: Array<Animator<number>>;
 
   constructor() {
-    this.animations = new Array<NumberLinearAnimator>();
+    this.animations = new Array<Animator<number>>();
   }
 
-  after(animator: NumberLinearAnimator): AnimatorSetBuilder {
+  after(animator: Animator<number>): AnimatorSetBuilder {
     this.animations.push(animator);
     return this;
   }
