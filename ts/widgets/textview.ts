@@ -70,6 +70,10 @@ export default class TextView extends SimpleView {
     this.setIsDirty(true);
   }
 
+  setTransparent() {
+    this.textColor = "#FFFFFF";
+  }
+
   applyStyle(ctx: CanvasRenderingContext2D) {
     if (this.textColor) {
       ctx.fillStyle = this.textColor;

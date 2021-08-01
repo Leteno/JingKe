@@ -1,3 +1,4 @@
+import { AnimatorSetBuilder } from "../animator/animator_set";
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import { textAlpha } from "../animator/text-affect"
 import Timeout from "../animator/timeout";
@@ -24,15 +25,19 @@ export default class Act1 extends SimpleScene {
     this.forceRepaint();
 
     let that = this;
+    desc.setTransparent();
+    let showDesc = textAlpha(true, 500, desc);
     let timeout = new Timeout(6500);
-    timeout.onStop = () => {
-      let dismissDesc = textAlpha(false, 500, desc);
-      dismissDesc.onStop = () => {
-        that.addFirstMeetDialogues();
-      }
-      that.addAnimator(dismissDesc);
+    let dismissDesc = textAlpha(false, 500, desc);
+    let descAnimationSet = new AnimatorSetBuilder()
+      .after(showDesc)
+      .after(timeout)
+      .after(dismissDesc)
+      .build();
+    descAnimationSet.onStop = () => {
+      that.addFirstMeetDialogues();
     }
-    this.addAnimator(timeout);
+    this.addAnimator(descAnimationSet);
   }
 
   addFirstMeetDialogues() {

@@ -22,7 +22,7 @@ export default abstract class SimpleScene implements Scene {
   canvasHeight: number;
 
   private sceneAnimationFinished: boolean;
-  private animators: Array<NumberLinearAnimator>;
+  private animators: Array<Animator<number>>;
 
   constructor(canvas: HTMLCanvasElement,
     caption: string, title: string) {
@@ -54,7 +54,7 @@ export default abstract class SimpleScene implements Scene {
     );
     this.sceneCaption.margin.top = -50;
 
-    this.animators = new Array<NumberLinearAnimator>();
+    this.animators = new Array<Animator<number>>();
     this.sceneCaption.textColor = "#FFFFFF";
     this.sceneTitle.textColor = "#FFFFFF";
 
@@ -119,7 +119,7 @@ export default abstract class SimpleScene implements Scene {
     );
   }
 
-  addAnimator(animator: NumberLinearAnimator) {
+  addAnimator(animator: Animator<number>) {
     this.animators.push(animator);
   }
 
