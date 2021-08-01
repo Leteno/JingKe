@@ -85,7 +85,9 @@ export default class Panel extends SimpleView {
     if (!inside) return false;
     // event cut out
     let childEvent = ClickEvent.alignChildren(event, this);
-    for (let i = 0; i < this.children.length; i++) {
+    // The last one is in the front of the audience.
+    // We should let it capture first.
+    for (let i = this.children.length - 1; i >= 0; i--) {
       let view:Sprite = this.children[i];
       if (view.onclick(childEvent)) {
         return true;
