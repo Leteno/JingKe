@@ -7,7 +7,8 @@ import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import SimpleScene from "../scene/simple_scene"
 import ImageView from "../widgets/imageview";
 import TextView from "../widgets/textview";
-import {Option} from "../widgets/option_view"
+import {Option, OptionCallback} from "../widgets/option_view"
+import { Sequence } from "../schedule/sequence";
 
 export default class Act1 extends SimpleScene {
 
@@ -42,20 +43,50 @@ export default class Act1 extends SimpleScene {
   }
 
   addFirstMeetDialogues() {
-    this.addDialogue(new Dialogue(
-      "荆棘",
-      "舅舅，我来看你了，近来可好?"
-    ));
-    this.addDialogue(new Dialogue(
-      "荆轲",
-      "我这边还好，那么多年不见，你已经这么高了，随我进城把。",
-      false
-    ));
-    this.addDialogue(new Dialogue(
-      "荆棘",
-      "好"
-    ));
-    this.setOnDialogueFinish(this.setupMainPanel.bind(this));
+    let that = this;
+    let sequence = new Sequence();
+    sequence.addIntoSequence({
+      onStart() {
+        that.addDialogue(new Dialogue(
+          "荆棘",
+          "舅舅，我来看你了，近来可好?"
+        ));
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          "我这边还好，那么多年不见，你已经这么高了，这段时间在家学了什么呢？",
+          false
+        ));
+        that.setOnDialogueFinish(sequence.next.bind(sequence));
+      }
+    });
+    sequence.addIntoSequence({
+      onStart() {
+        let options = new Array<Option>();
+        {
+          let callback:OptionCallback = {
+            onOptionClicked(opt: Option): boolean {
+              sequence.next();
+              return true;
+            }
+          }
+          let opt1 = new Option("蒸熊掌", callback);
+          let opt2 = new Option("蒸鹿尾", callback);
+          let opt3 = new Option("烧花鸡", callback);
+          options.push(opt1, opt2, opt3);
+        }
+        that.showOptionView("我学了", options);
+      }
+    });
+    sequence.addIntoSequence({
+      onStart() {
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          "不错不错。"
+        ));
+        that.setOnDialogueFinish(that.setupMainPanel.bind(that));
+      }
+    });
+    sequence.startOne();
   }
 
   setupMainPanel() {

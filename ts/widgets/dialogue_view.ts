@@ -165,6 +165,7 @@ export default class DialogueView extends Panel {
   }
 
   // Call when no more dialogue follow up
+  // Will call once.
   onDialogueFinished() {
   }
 }
