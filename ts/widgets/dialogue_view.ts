@@ -18,11 +18,6 @@ export default class DialogueView extends Panel {
 
   queue: Array<Dialogue>;
 
-  // Force update due to contentView's text change
-  dirty: boolean;
-  measureWidthLastTime: number;
-  measureHeightLastTime: number;
-
   constructor() {
     super();
 
@@ -63,11 +58,6 @@ export default class DialogueView extends Panel {
     // Others
     this.queue = new Array<Dialogue>();
     this.showHint = false;
-  }
-  measure(ctx: CanvasRenderingContext2D, maxWidth: number, maxHeight: number): MeasureResult {
-    this.measureWidthLastTime = maxWidth;
-    this.measureHeightLastTime = maxHeight;
-    return super.measure(ctx, maxWidth, maxHeight);
   }
 
   drawToCanvasInternal(
