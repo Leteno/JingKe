@@ -11,7 +11,7 @@ import TextView from "../widgets/textview";
 export default class Act1 extends SimpleScene {
 
   constructor(canvas: HTMLCanvasElement) {
-    super(canvas, "Act 01", "夕阳无限好");
+    super(canvas, "Act 01", "北风起，黄花娇嫩惹人怜");
   }
 
   onPageReady() {
