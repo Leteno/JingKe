@@ -23,7 +23,6 @@ export default abstract class SimpleScene implements Scene {
   canvasWidth: number;
   canvasHeight: number;
 
-  private sceneAnimationFinished: boolean;
   private animators: Array<Animator<number>>;
 
   constructor(canvas: HTMLCanvasElement,
@@ -67,8 +66,6 @@ export default abstract class SimpleScene implements Scene {
       Align.CENTER, Align.END
     );
     this.mainPanel.addView(this.dialogueView);
-
-    this.sceneAnimationFinished = false;
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
@@ -89,7 +86,6 @@ export default abstract class SimpleScene implements Scene {
       .after(fadeOut)
       .build();
     animation.onStop = () => {
-      this.sceneAnimationFinished = true;
       this.onPageReady();
     }
     this.animators.push(animation);
