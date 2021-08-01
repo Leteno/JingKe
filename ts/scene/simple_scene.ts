@@ -35,7 +35,6 @@ export default abstract class SimpleScene implements Scene {
     // Put optionView in the beginning,
     // to capture click event first.
     this.optionView = new OptionView(canvas);
-    this.mainPanel.addView(this.optionView);
 
     this.sceneCaption = new TextView(caption);
     this.sceneTitle = new TextView(title);
@@ -71,6 +70,8 @@ export default abstract class SimpleScene implements Scene {
   onStart(ctx: CanvasRenderingContext2D) {
     this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
     this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
+    this.optionView.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.optionView.layout(this.canvasWidth, this.canvasHeight);
 
     let captionFadeIn = textAlpha(true, 2000, this.sceneCaption);
     let titleFadeIn = textAlpha(true, 2500, this.sceneTitle);
@@ -102,9 +103,13 @@ export default abstract class SimpleScene implements Scene {
 
   render(ctx: CanvasRenderingContext2D) {
     this.mainPanel.drawToCanvas(ctx);
+    this.optionView.drawToCanvas(ctx);
   }
 
   onclick(event: ClickEvent) {
+    if (this.optionView.onclick(event)) {
+      return;
+    }
     this.mainPanel.onclick(event);
   }
 

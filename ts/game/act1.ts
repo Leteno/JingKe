@@ -7,11 +7,12 @@ import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import SimpleScene from "../scene/simple_scene"
 import ImageView from "../widgets/imageview";
 import TextView from "../widgets/textview";
+import {Option} from "../widgets/option_view"
 
 export default class Act1 extends SimpleScene {
 
   constructor(canvas: HTMLCanvasElement) {
-    super(canvas, "Act 01", "北风起，黄花娇嫩惹人怜");
+    super(canvas, "Act 01", "北风起，黄花正娇嫩");
   }
 
   onPageReady() {
@@ -63,5 +64,25 @@ export default class Act1 extends SimpleScene {
     image.layoutParam.ycfg = Align.CENTER;
     this.addView(image);
     this.forceRepaint();
+    this.showSimpleOptions();
+  }
+
+  showSimpleOptions() {
+    let that = this;
+    let options = new Array<Option>();
+    let optionCallback = {
+      onOptionClicked(op: Option):boolean {
+        that.addDialogue(new Dialogue("另一个我", "这些都是可以的，关键在行动，关键在坚持"));
+        return true;
+      }
+    }
+    let opt1 = new Option("要有很多很多的钱", optionCallback);
+    let opt2 = new Option("成为一名科学家", optionCallback);
+    let opt3 = new Option("写出令自己满意的作品，最好能流传", optionCallback);
+    options.push(opt1);
+    options.push(opt2);
+    options.push(opt3);
+
+    this.showOptionView("你有什么理想吗？", options);
   }
 }
