@@ -9,11 +9,13 @@ export interface OptionCallback {
 }
 
 export class Option {
+  id: number;
   text: string;
   callback: OptionCallback;
   textEffects: Map<string, DrawFunc>;
 
-  constructor(text:string, callback: OptionCallback) {
+  constructor(id: number, text:string, callback: OptionCallback) {
+    this.id = id;
     this.text = text;
     this.callback = callback;
     this.textEffects = new Map<string, DrawFunc>();

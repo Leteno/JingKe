@@ -151,7 +151,12 @@ export default class HelloWorldScene implements Scene {
       }
     };
     let options = new Array<Option>();
-    let optDeny = new Option("哈哈 我辈岂是蓬蒿人 \f正气\r\f+1\r", denyCallback);
+    enum OPT {
+      DENY = 0,
+      ACCEPT = 1,
+      FIGHT = 2
+    }
+    let optDeny = new Option(OPT.DENY, "哈哈 我辈岂是蓬蒿人 \f正气\r\f+1\r", denyCallback);
     optDeny.addTextEffect("正气", new BgText("green", "white"));
     optDeny.addTextEffect("+1", new BgText(undefined, "white"));
     options.push(optDeny);
@@ -165,7 +170,7 @@ export default class HelloWorldScene implements Scene {
         return true;
       }
     }
-    let optAccept = new Option("哎呀 俯首甘为孺子牛 \f金钱\r\f+500\r", acceptCallback);
+    let optAccept = new Option(OPT.ACCEPT, "哎呀 俯首甘为孺子牛 \f金钱\r\f+500\r", acceptCallback);
     optAccept.addTextEffect("金钱", new BgText("yellow", "black"));
     optAccept.addTextEffect("+500", new BgText(undefined, "white"));
     options.push(optAccept);
@@ -180,6 +185,7 @@ export default class HelloWorldScene implements Scene {
       }
     }
     let optFight = new Option(
+      OPT.FIGHT,
       "你敢羞辱我，打你一顿. \f武力\r\f+1\r \f暴躁\r\f+1\r",
       fightCallback
     );

@@ -63,15 +63,31 @@ export default class Act1 extends SimpleScene {
       onStart() {
         let options = new Array<Option>();
         {
+          enum OPT {
+            BEAR = 0,
+            DEER = 1,
+            CHICKEN = 2,
+          }
           let callback:OptionCallback = {
             onOptionClicked(opt: Option): boolean {
+              switch(opt.id) {
+                case OPT.BEAR:
+                  console.log("You have learned how to cook bear");
+                  break;
+                case OPT.DEER:
+                  console.log("You have learned how to cook deer");
+                  break;
+                case OPT.CHICKEN:
+                  console.log("You have learned how to cook chicken");
+                  break;
+              }
               sequence.next();
               return true;
             }
           }
-          let opt1 = new Option("蒸熊掌", callback);
-          let opt2 = new Option("蒸鹿尾", callback);
-          let opt3 = new Option("烧花鸡", callback);
+          let opt1 = new Option(OPT.BEAR, "蒸熊掌", callback);
+          let opt2 = new Option(OPT.DEER, "蒸鹿尾", callback);
+          let opt3 = new Option(OPT.CHICKEN, "烧花鸡", callback);
           options.push(opt1, opt2, opt3);
         }
         that.showOptionView("我学了", options);
@@ -110,9 +126,9 @@ export default class Act1 extends SimpleScene {
         return true;
       }
     }
-    let opt1 = new Option("要有很多很多的钱", optionCallback);
-    let opt2 = new Option("成为一名科学家", optionCallback);
-    let opt3 = new Option("写出令自己满意的作品，最好能流传", optionCallback);
+    let opt1 = new Option(1, "要有很多很多的钱", optionCallback);
+    let opt2 = new Option(2, "成为一名科学家", optionCallback);
+    let opt3 = new Option(3, "写出令自己满意的作品，最好能流传", optionCallback);
     options.push(opt1);
     options.push(opt2);
     options.push(opt3);
