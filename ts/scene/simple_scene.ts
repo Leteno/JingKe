@@ -117,6 +117,10 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.addDialogue(data);
   }
 
+  hideDialogue() {
+    this.dialogueView.visible = false;
+  }
+
   showOptionView(title: string, options: Array<Option>) {
     this.optionView.show(
       title, options

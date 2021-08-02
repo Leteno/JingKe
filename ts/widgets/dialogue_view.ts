@@ -144,7 +144,6 @@ export default class DialogueView extends Panel {
         let front = this.queue.shift();
         this.updateView(front);
       } else {
-        this.visible = false;
         if (this.onDialogueFinished) {
           this.onDialogueFinished();
           this.onDialogueFinished = undefined;

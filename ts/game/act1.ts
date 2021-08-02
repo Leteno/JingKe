@@ -83,7 +83,10 @@ export default class Act1 extends SimpleScene {
           "荆轲",
           "不错不错。"
         ));
-        that.setOnDialogueFinish(that.setupMainPanel.bind(that));
+        that.setOnDialogueFinish(() => {
+          that.hideDialogue();
+          that.setupMainPanel();
+        });
       }
     });
     sequence.startOne();
