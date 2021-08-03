@@ -59,12 +59,12 @@ export default abstract class SimpleScene implements Scene {
     this.sceneTitle.textColor = "#FFFFFF";
 
     this.dialogueView = new DialogueView();
-    this.dialogueView.forceWidth = canvas.width;
+    this.dialogueView.forceWidth = canvas.width - 40;
     this.dialogueView.forceHeight = canvas.height / 4;
-    this.dialogueView.layoutParam = new LayoutParams(
-      Align.CENTER, Align.END
-    );
-    this.mainPanel.addView(this.dialogueView);
+    this.dialogueView.margin.left = 20;
+    this.dialogueView.margin.bottom = 20;
+    this.dialogueView.layoutParam.xcfg = Align.START;
+    this.dialogueView.layoutParam.ycfg = Align.END;
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
@@ -72,6 +72,8 @@ export default abstract class SimpleScene implements Scene {
     this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
     this.optionView.measure(ctx, this.canvasWidth, this.canvasHeight);
     this.optionView.layout(this.canvasWidth, this.canvasHeight);
+    this.dialogueView.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.dialogueView.layout(this.canvasWidth, this.canvasHeight);
 
     let captionFadeIn = textAlpha(true, 2000, this.sceneCaption);
     let titleFadeIn = textAlpha(true, 2500, this.sceneTitle);
@@ -103,11 +105,15 @@ export default abstract class SimpleScene implements Scene {
 
   render(ctx: CanvasRenderingContext2D) {
     this.mainPanel.drawToCanvas(ctx);
+    this.dialogueView.drawToCanvas(ctx);
     this.optionView.drawToCanvas(ctx);
   }
 
   onclick(event: ClickEvent) {
     if (this.optionView.onclick(event)) {
+      return;
+    }
+    if (this.dialogueView.onclick(event)) {
       return;
     }
     this.mainPanel.onclick(event);
