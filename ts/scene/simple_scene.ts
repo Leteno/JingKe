@@ -5,7 +5,7 @@ import NumberLinearAnimator from "../animator/number-linear-animator";
 import { textAlpha } from "../animator/text-affect";
 import Dialogue from "../data/dialogue";
 import { ClickEvent } from "../misc/event";
-import { Align, LayoutParams } from "../misc/layout";
+import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
 import OptionView, { Option } from "../widgets/option_view";
 import Panel from "../widgets/panel";
@@ -59,11 +59,11 @@ export default abstract class SimpleScene implements Scene {
     this.sceneTitle.textColor = "#FFFFFF";
 
     this.dialogueView = new DialogueView();
-    this.dialogueView.forceWidth = canvas.width - 40;
+    this.dialogueView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.dialogueView.forceHeight = canvas.height / 4;
     this.dialogueView.margin.left = 20;
     this.dialogueView.margin.bottom = 20;
-    this.dialogueView.layoutParam.xcfg = Align.START;
+    this.dialogueView.layoutParam.xcfg = Align.CENTER;
     this.dialogueView.layoutParam.ycfg = Align.END;
   }
 

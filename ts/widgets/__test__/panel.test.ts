@@ -1,4 +1,4 @@
-import { Align, LayoutParams } from "../../misc/layout";
+import { Align, LayoutParams, LayoutType } from "../../misc/layout";
 import Panel from "../panel"
 import SimpleView from "../simple_view";
 import Sprite, { MeasureResult } from "../sprite"
@@ -137,8 +137,8 @@ test("measureAndLayout", ()=> {
 
   expect(panel.x).toBe(12);
   expect(panel.y).toBe(14);
-  expect(s1.x).toBe(38.5);
-  expect(s1.y).toBe(33);
+  expect(s1.x).toBe(27.5);
+  expect(s1.y).toBe(18);
   expect(s2.x).toBe(45);
   expect(s2.y).toBe(46);
 
@@ -153,11 +153,11 @@ test("measureAndLayout", ()=> {
   expect(father.height).toBe(114);
   expect(panel.width).toBe(75);
   expect(panel.height).toBe(86);
-  expect(panel.x).toBe(24);
-  expect(panel.y).toBe(28);
+  expect(panel.x).toBe(12);
+  expect(panel.y).toBe(14);
   // Nothing change inside.
-  expect(s1.x).toBe(38.5);
-  expect(s1.y).toBe(33);
+  expect(s1.x).toBe(27.5);
+  expect(s1.y).toBe(18);
   expect(s2.x).toBe(45);
   expect(s2.y).toBe(46);
 })
@@ -181,4 +181,42 @@ test("calculateActualSize", () => {
   testView.measure(ctx, 200, 200);
   expect(testView.width).toBe(100);
   expect(testView.height).toBe(100);
+})
+
+test("Match Parent with margin (x)", () => {
+  let panel = new Panel();
+  panel.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+  panel.margin.left = 20;
+
+  let ctx = {} as CanvasRenderingContext2D;
+  panel.measure(ctx, 200, 200);
+  panel.layout(200, 200);
+  expect(panel.width).toBe(180);
+  expect(panel.x).toBe(20);
+
+  panel.layoutParam.xcfg = Align.CENTER;
+  panel.setIsDirty(true);
+  panel.measure(ctx, 200, 200);
+  panel.layout(200, 200);
+  expect(panel.width).toBe(160);
+  expect(panel.x).toBe(20);
+})
+
+test("Match Parent with margin (y)", () => {
+  let panel = new Panel();
+  panel.layoutParam.yLayout = LayoutType.MATCH_PARENT;
+  panel.margin.bottom = 20;
+
+  let ctx = {} as CanvasRenderingContext2D;
+  panel.measure(ctx, 200, 200);
+  panel.layout(200, 200);
+  expect(panel.height).toBe(180);
+  expect(panel.y).toBe(0);
+
+  panel.layoutParam.ycfg = Align.CENTER;
+  panel.setIsDirty(true);
+  panel.measure(ctx, 200, 200);
+  panel.layout(200, 200);
+  expect(panel.height).toBe(160);
+  expect(panel.y).toBe(20);
 })
