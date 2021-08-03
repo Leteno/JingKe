@@ -9,6 +9,8 @@ import ImageView from "../widgets/imageview";
 import TextView from "../widgets/textview";
 import {Option, OptionCallback} from "../widgets/option_view"
 import { Sequence } from "../schedule/sequence";
+import Main from "../main";
+import { Event, Player } from "../data/player";
 
 export default class Act1 extends SimpleScene {
 
@@ -81,6 +83,7 @@ export default class Act1 extends SimpleScene {
                   console.log("You have learned how to cook chicken");
                   break;
               }
+              Main.getPlayer().saveChoose(Event.FRE_WHAT_LEARN, opt.id);
               sequence.next();
               return true;
             }
@@ -95,16 +98,37 @@ export default class Act1 extends SimpleScene {
     });
     sequence.addIntoSequence({
       onStart() {
+        let word = "不错不错。";
+        let opt = Main.getPlayer().getChoose(Event.FRE_WHAT_LEARN);
+        switch(opt) {
+          case 0:
+            word += "熊掌可好吃了";
+            break;
+          case 1:
+            word += "鹿尾大补啊";
+            break;
+          case 2:
+            word += "大吉大利，今晚吃鸡";
+            break;
+          case Player.CHOOSE_NOT_FOUND:
+            sequence.next();
+            return;
+        }
         that.addDialogue(new Dialogue(
           "荆轲",
-          "不错不错。"
+          word
         ));
         that.setOnDialogueFinish(() => {
-          that.hideDialogue();
-          that.setupMainPanel();
+          sequence.next();
         });
       }
     });
+    sequence.addIntoSequence({
+      onStart() {
+        that.hideDialogue();
+        that.setupMainPanel();
+      }
+    })
     sequence.startOne();
   }
 

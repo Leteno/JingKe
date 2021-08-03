@@ -8,6 +8,7 @@ import HelloWorldScene from "./game/hello_world_scene";
 import Scene1 from "./game/scene1";
 import SimpleScene from "./scene/simple_scene";
 import Dialogue from "./data/dialogue";
+import { Player } from "./data/player";
 
 export default class Main {
   aniId: number;
@@ -17,6 +18,8 @@ export default class Main {
 
   last: number;
   sceneManager: SceneManager;
+
+  static player: Player;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -78,5 +81,13 @@ export default class Main {
 
   onclick(event: PointerEvent) {
     this.sceneManager.currentScene.onclick(ClickEvent.from(event))
+  }
+
+  static getPlayer() : Player {
+    if (this.player == null) {
+      this.player = new Player();
+      // Read from disk.
+    }
+    return this.player;
   }
 }
