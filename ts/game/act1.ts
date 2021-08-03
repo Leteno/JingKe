@@ -11,6 +11,7 @@ import {Option, OptionCallback} from "../widgets/option_view"
 import { Sequence } from "../schedule/sequence";
 import Main from "../main";
 import { Event, Player } from "../data/player";
+import BirdViewImage from "../widgets/birdview_image";
 
 export default class Act1 extends SimpleScene {
 
@@ -116,7 +117,13 @@ export default class Act1 extends SimpleScene {
         }
         that.addDialogue(new Dialogue(
           "荆轲",
-          word
+          word,
+          false
+        ));
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          "快随我入城把",
+          false
         ));
         that.setOnDialogueFinish(() => {
           sequence.next();
@@ -128,17 +135,61 @@ export default class Act1 extends SimpleScene {
         that.hideDialogue();
         that.setupMainPanel();
       }
-    })
+    });
     sequence.startOne();
   }
 
   setupMainPanel() {
-    let image = new ImageView("res/artichoke_PNG30.png");
-    image.layoutParam.xcfg = Align.CENTER;
-    image.layoutParam.ycfg = Align.CENTER;
-    this.addView(image);
+    let cityPhoto = new BirdViewImage("res/city_of_yan.png");
+    cityPhoto.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    cityPhoto.forceHeight = this.canvasHeight * 2 / 3;
+    cityPhoto.layoutParam.xcfg = Align.CENTER;
+    cityPhoto.layoutParam.ycfg = Align.CENTER;
+    this.addView(cityPhoto);
     this.forceRepaint();
-    this.showSimpleOptions();
+
+    let that = this;
+    let sequence = new Sequence();
+    sequence.addIntoSequence({
+      onStart() {
+        let timeout = new Timeout(1000);
+        let scanAnimate1 = new NumberLinearAnimator(
+          0, 100, 2000
+        );
+        scanAnimate1.onValChange = (val) => {
+          cityPhoto.sx = val;
+        }
+        let scanAnimate2 = scanAnimate1.reverse();
+        scanAnimate2.onValChange = scanAnimate1.onValChange;
+        let scanAnimation = new AnimatorSetBuilder()
+          .after(timeout)
+          .after(scanAnimate1)
+          .after(scanAnimate2)
+          .build();
+        scanAnimation.onStop = () => {
+          sequence.next();
+        }
+        that.addAnimator(scanAnimation);
+      }
+    });
+    sequence.addIntoSequence({
+      onStart() {
+        that.addDialogue(new Dialogue(
+          "荆棘",
+          "噫嘘唏，人真多啊。"
+        ))
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          "多乎哉，不多也",
+          false
+        ))
+        that.setOnDialogueFinish(() => {
+          that.showSimpleOptions();
+          sequence.next();
+        })
+      }
+    })
+    sequence.startOne();
   }
 
   showSimpleOptions() {
