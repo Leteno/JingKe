@@ -116,7 +116,8 @@ export default abstract class SimpleView extends Sprite {
     );
     switch(this.layoutParam.xcfg) {
       case Align.CENTER:
-        this.x = left + (parentWidth - this.width) / 2;
+        this.x = left + (parentWidth - this.width) / 2
+                + this.margin.left - this.margin.right;
         break;
       case Align.END:
         this.x = left + parentWidth - this.width - this.margin.right;
@@ -127,7 +128,8 @@ export default abstract class SimpleView extends Sprite {
     }
     switch(this.layoutParam.ycfg) {
       case Align.CENTER:
-        this.y = top + (parentHeight - this.height) / 2;
+        this.y = top + (parentHeight - this.height) / 2
+                + this.margin.top - this.margin.bottom;
         break;
       case Align.END:
         this.y = top + parentHeight - this.height - this.margin.bottom;
