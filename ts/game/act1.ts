@@ -12,6 +12,7 @@ import { Sequence } from "../schedule/sequence";
 import Main from "../main";
 import { Event, Player } from "../data/player";
 import BirdViewImage from "../widgets/birdview_image";
+import LinearLayout from "../widgets/linear_layout";
 
 export default class Act1 extends SimpleScene {
 
@@ -146,6 +147,24 @@ export default class Act1 extends SimpleScene {
     cityPhoto.layoutParam.xcfg = Align.CENTER;
     cityPhoto.layoutParam.ycfg = Align.CENTER;
     this.addView(cityPhoto);
+    let placeRegion = new LinearLayout();
+    placeRegion.forceWidth = 100;
+    placeRegion.layoutParam.xcfg = Align.END;
+    placeRegion.margin.right = 10;
+    placeRegion.margin.top = 40 + this.canvasHeight / 6;
+    this.addView(placeRegion);
+
+    let palace = new ImageView("res/copyleft/place_yan_palace.png");
+    palace.forceWidth = 100;
+    palace.forceHeight = 100;
+    placeRegion.addView(palace);
+    let market = new ImageView("res/copyleft/place_market.png");
+    market.forceWidth = 100;
+    market.forceHeight = 100;
+    market.margin.top = 10;
+    placeRegion.addView(market);
+
+    placeRegion.visible = false;
     this.forceRepaint();
 
     let that = this;
@@ -153,6 +172,7 @@ export default class Act1 extends SimpleScene {
     sequence.addIntoSequence({
       onStart() {
         let timeout = new Timeout(1000);
+        let timeout2 = new Timeout(1000);
         let scanAnimate1 = new NumberLinearAnimator(
           0, 100, 2000
         );
@@ -164,6 +184,7 @@ export default class Act1 extends SimpleScene {
         let scanAnimation = new AnimatorSetBuilder()
           .after(timeout)
           .after(scanAnimate1)
+          .after(timeout2)
           .after(scanAnimate2)
           .build();
         scanAnimation.onStop = () => {
@@ -183,6 +204,24 @@ export default class Act1 extends SimpleScene {
           "多乎哉，不多也",
           false
         ))
+        that.setOnDialogueFinish(() => {
+          sequence.next();
+        })
+      }
+    })
+    sequence.addIntoSequence({
+      onStart() {
+        placeRegion.visible = true;
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          "这上面分别是太子丹的住所，你可以在里面找到 太子丹 樊于期 秦舞阳 燕姬 还有我",
+          false
+        ));
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          "而下面是集市，我的好朋友高渐离，狗屠也在那里",
+          false
+        ));
         that.setOnDialogueFinish(() => {
           that.showSimpleOptions();
           sequence.next();
