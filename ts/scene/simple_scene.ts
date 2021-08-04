@@ -65,6 +65,7 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.margin.bottom = 20;
     this.dialogueView.layoutParam.xcfg = Align.CENTER;
     this.dialogueView.layoutParam.ycfg = Align.END;
+    this.dialogueView.bgColor = "#f5bb10";
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
