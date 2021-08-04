@@ -62,6 +62,7 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.dialogueView.forceHeight = canvas.height / 4;
     this.dialogueView.margin.left = 20;
+    this.dialogueView.margin.right = 20;
     this.dialogueView.margin.bottom = 20;
     this.dialogueView.layoutParam.xcfg = Align.CENTER;
     this.dialogueView.layoutParam.ycfg = Align.END;
