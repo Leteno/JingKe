@@ -244,6 +244,7 @@ export default class Act1 extends SimpleScene {
         ));
         that.setOnDialogueFinish(() => {
           market.pointerPosition = PointerPosition.NONE;
+          palace.showNoteSign = true;
           that.showSimpleOptions();
           sequence.next();
         })

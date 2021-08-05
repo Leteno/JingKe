@@ -9,14 +9,17 @@ export enum PointerPosition {
 export default class ImageView extends SimpleView {
 
   private static pointer: HTMLImageElement;
+  private static noteSign: HTMLImageElement;
 
   img: HTMLImageElement;
   pointerPosition: PointerPosition;
+  showNoteSign: boolean;
   constructor(imgSrc: string) {
     super();
     this.img = new Image();
     this.img.src = imgSrc;
     this.pointerPosition = PointerPosition.NONE;
+    this.showNoteSign = false;
   }
 
   static drawPointer(
@@ -44,6 +47,27 @@ export default class ImageView extends SimpleView {
     ctx.restore();
   }
 
+
+  static drawNoteSign(
+    ctx: CanvasRenderingContext2D,
+    view: ImageView) {
+    if (!view.showNoteSign) {
+      return;
+    }
+    if (ImageView.noteSign == null) {
+      ImageView.noteSign = new Image();
+      ImageView.noteSign.src = "res/created/note_sign.png"
+    }
+    ctx.save();
+    let size = 30;
+    ctx.drawImage(
+      ImageView.noteSign,
+      view.width - size, 0,
+      size, size
+    )
+    ctx.restore();
+  }
+
   calculateActualSize(ctx: CanvasRenderingContext2D, maxWidthForCalculation: number, maxHeightForCalculation: number): MeasureResult {
     // Actually the naturalWidth/Height alwarys be 0 ?
     return {
@@ -64,5 +88,6 @@ export default class ImageView extends SimpleView {
       this.height
     )
     ImageView.drawPointer(ctx, this.pointerPosition, this);
+    ImageView.drawNoteSign(ctx, this);
   }
 }
