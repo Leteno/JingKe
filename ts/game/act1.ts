@@ -5,7 +5,7 @@ import Timeout from "../animator/timeout";
 import Dialogue from "../data/dialogue";
 import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import SimpleScene from "../scene/simple_scene"
-import ImageView from "../widgets/imageview";
+import ImageView, { PointerPosition } from "../widgets/imageview";
 import TextView from "../widgets/textview";
 import {Option, OptionCallback} from "../widgets/option_view"
 import { Sequence } from "../schedule/sequence";
@@ -212,6 +212,7 @@ export default class Act1 extends SimpleScene {
     sequence.addIntoSequence({
       onStart() {
         placeRegion.visible = true;
+        palace.pointerPosition = PointerPosition.LEFT;
         that.addDialogue(new Dialogue(
           "荆轲",
           "这上面分别是太子丹的住所，你可以在里面找到 太子丹 樊于期 秦舞阳 燕姬 还有我",
