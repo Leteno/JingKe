@@ -148,19 +148,19 @@ export default class Act1 extends SimpleScene {
     cityPhoto.layoutParam.ycfg = Align.CENTER;
     this.addView(cityPhoto);
     let placeRegion = new LinearLayout();
-    placeRegion.forceWidth = 100;
+    placeRegion.forceWidth = 80;
     placeRegion.layoutParam.xcfg = Align.END;
     placeRegion.margin.right = 10;
     placeRegion.margin.top = 40 + this.canvasHeight / 6;
     this.addView(placeRegion);
 
     let palace = new ImageView("res/copyleft/place_yan_palace.png");
-    palace.forceWidth = 100;
-    palace.forceHeight = 100;
+    palace.forceWidth = 80;
+    palace.forceHeight = 80;
     placeRegion.addView(palace);
     let market = new ImageView("res/copyleft/place_market.png");
-    market.forceWidth = 100;
-    market.forceHeight = 100;
+    market.forceWidth = 80;
+    market.forceHeight = 80;
     market.margin.top = 10;
     placeRegion.addView(market);
 
@@ -218,17 +218,27 @@ export default class Act1 extends SimpleScene {
           "这上面分别是太子丹的住所，你可以在里面找到 太子丹 樊于期 秦舞阳 燕姬 还有我",
           false
         ));
+        that.setOnDialogueFinish(() => {
+          palace.pointerPosition = PointerPosition.NONE;
+          sequence.next();
+        });
+      }
+    })
+    sequence.addIntoSequence({
+      onStart() {
+        market.pointerPosition = PointerPosition.LEFT;
         that.addDialogue(new Dialogue(
           "荆轲",
           "而下面是集市，我的好朋友高渐离，狗屠也在那里",
           false
         ));
         that.setOnDialogueFinish(() => {
+          market.pointerPosition = PointerPosition.NONE;
           that.showSimpleOptions();
           sequence.next();
         })
       }
-    })
+    });
     sequence.startOne();
   }
 
