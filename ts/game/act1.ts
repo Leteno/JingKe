@@ -218,10 +218,7 @@ export default class Act1 extends SimpleScene {
         that.addDialogue(new Dialogue(
           "荆轲",
           new Text("这上面分别是太子丹的住所，你可以在里面找到\f太子丹\r\f樊于期\r\f秦舞阳\r\f燕姬\r还有我")
-           .updatePatternDrawFunc("太子丹", peopleEffect)
-           .updatePatternDrawFunc("樊于期", peopleEffect)
-           .updatePatternDrawFunc("秦舞阳", peopleEffect)
-           .updatePatternDrawFunc("燕姬", peopleEffect),
+           .setDefaultEffect(peopleEffect),
           false
         ));
         that.setOnDialogueFinish(() => {
@@ -237,8 +234,7 @@ export default class Act1 extends SimpleScene {
         that.addDialogue(new Dialogue(
           "荆轲",
           new Text("而下面是集市，我的好朋友\f高渐离\r，\f狗屠\r也在那里")
-            .updatePatternDrawFunc("高渐离", peopleEffect)
-            .updatePatternDrawFunc("狗屠", peopleEffect),
+            .setDefaultEffect(peopleEffect),
           false
         ));
         that.setOnDialogueFinish(() => {

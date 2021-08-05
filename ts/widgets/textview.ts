@@ -42,6 +42,7 @@ export interface DrawFunc {
 
 export class Text {
   textEffects: Map<string, DrawFunc>;
+  defaultEffect: DrawFunc;
   content: string
   constructor(content: string) {
     this.content = content;
@@ -51,6 +52,11 @@ export class Text {
   public updatePatternDrawFunc(
     text: string, fn: DrawFunc): Text {
     this.textEffects.set(text, fn);
+    return this;
+  }
+
+  public setDefaultEffect(fn: DrawFunc): Text {
+    this.defaultEffect = fn;
     return this;
   }
 }
@@ -306,6 +312,13 @@ export default class TextView extends SimpleView {
             drawLine.width, drawLine.height,
             drawLine.text
           );
+        } else if (this.text.defaultEffect) {
+          this.text.defaultEffect.draw(
+            ctx,
+            drawLine.x, drawLine.y,
+            drawLine.width, drawLine.height,
+            drawLine.text
+          );
         }
       } else {
         // show part of it
@@ -321,6 +334,13 @@ export default class TextView extends SimpleView {
           );
         } else if (this.text.textEffects.has(drawLine.text)) {
           this.text.textEffects.get(drawLine.text).draw(
+            ctx,
+            drawLine.x, drawLine.y,
+            drawLine.width, drawLine.height,
+            drawLine.text
+          );
+        } else if (this.text.defaultEffect) {
+          this.text.defaultEffect.draw(
             ctx,
             drawLine.x, drawLine.y,
             drawLine.width, drawLine.height,
