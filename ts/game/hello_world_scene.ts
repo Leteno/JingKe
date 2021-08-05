@@ -5,7 +5,7 @@ import NumberLinearAnimator from "../animator/number-linear-animator";
 import Scene from "../scene/scene";
 import ImageView from "../widgets/imageview";
 import Panel from "../widgets/panel";
-import TextView, { DrawFunc, TextHelper } from "../widgets/textview";
+import TextView, { DrawFunc, Text, TextHelper } from "../widgets/textview";
 import DialogueView from "../widgets/dialogue_view";
 import Dialogue from "../data/dialogue";
 import OptionView, {Option, OptionCallback} from "../widgets/option_view";
@@ -67,28 +67,27 @@ export default class HelloWorldScene implements Scene {
       .build();
     this.animators.push(scanningImage);
 
-    let text = new TextView("你好，过去(不对齐)");
+    let text = new TextView(new Text("你好，过去(不对齐)"));
     text.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     text.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.mainPanel.addView(text);
     text.bgColor = "#cccccc";
 
-    let text2 = new TextView("你好，过去(对齐)");
+    let text2 = new TextView(new Text("你好，过去(对齐)"));
     text2.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     text2.margin.top = 40;
     this.mainPanel.addView(text2);
     text2.bgColor = "#eeeeee";
 
-    let text3 = new TextView("这句子有四个\f超级能力\r \f+1\r。");
+    let text3 = new TextView(
+      new Text("这句子有四个\f超级能力\r \f+1\r。")
+        .updatePatternDrawFunc("超级能力", new BgText("green", "white", Align.END))
+        .updatePatternDrawFunc("+1", new BgText(undefined, "white", Align.START))
+    );
     text3.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     text3.margin.top = -100;
     this.mainPanel.addView(text3);
     text3.bgColor = "#bbbbbb";
-
-    let bgText = new BgText("green", "white", Align.END);
-    text3.updatePatternDrawFunc("超级能力", bgText);
-    text3.updatePatternDrawFunc("+1",
-      new BgText(undefined, "white", Align.START));
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
     imageView.margin.left = canvas.width / 3;
@@ -103,7 +102,7 @@ export default class HelloWorldScene implements Scene {
     }
     this.animators.push(animatorImageViewY)
 
-    let longText = new TextView("这是一个非常长，非常长的句子。我希望你能够帮忙换一下行,thank you very much.");
+    let longText = new TextView(new Text("这是一个非常长，非常长的句子。我希望你能够帮忙换一下行,thank you very much."));
     longText.layoutParam = new LayoutParams(Align.START, Align.CENTER)
     longText.margin.top = 100;
     longText.debug = true;
@@ -117,12 +116,12 @@ export default class HelloWorldScene implements Scene {
     this.mainPanel.addView(this.dialogueView);
     this.dialogueView.addDialogue(new Dialogue(
       "郑虾米",
-      "这是一段很长的话，但是如果你想看完，Ok, Fine. 我也没有任何意见，只是觉得你或许可以做一点更有意义的事情"
+      new Text("这是一段很长的话，但是如果你想看完，Ok, Fine. 我也没有任何意见，只是觉得你或许可以做一点更有意义的事情")
       )
     );
     this.dialogueView.addDialogue(new Dialogue(
       "郑虾米",
-      "不要讲干话"
+      new Text("不要讲干话")
       )
     );
     this.dialogueView.onDialogueFinished = (() => {
@@ -143,9 +142,9 @@ export default class HelloWorldScene implements Scene {
     let denyCallback: OptionCallback = {
       onOptionClicked(option:Option) {
         that.dialogueView.addDialogue(
-          new Dialogue("郑虾米", "谢谢，我不能接受"));
+          new Dialogue("郑虾米", new Text("谢谢，我不能接受")));
         that.dialogueView.addDialogue(
-          new Dialogue("蒋小嘉", "我误会你了", false /* showAtLeft */)
+          new Dialogue("蒋小嘉", new Text("我误会你了"), false /* showAtLeft */)
         );
         return true;
       }
@@ -156,45 +155,51 @@ export default class HelloWorldScene implements Scene {
       ACCEPT = 1,
       FIGHT = 2
     }
-    let optDeny = new Option(OPT.DENY, "哈哈 我辈岂是蓬蒿人 \f正气\r\f+1\r", denyCallback);
-    optDeny.addTextEffect("正气", new BgText("green", "white"));
-    optDeny.addTextEffect("+1", new BgText(undefined, "white"));
+    let optDeny = new Option(
+      OPT.DENY,
+      new Text("哈哈 我辈岂是蓬蒿人 \f正气\r\f+1\r")
+        .updatePatternDrawFunc("正气", new BgText("green", "white"))
+        .updatePatternDrawFunc("+1", new BgText(undefined, "white")),
+      denyCallback);
     options.push(optDeny);
     let acceptCallback: OptionCallback = {
       onOptionClicked(option:Option) {
         that.dialogueView.addDialogue(
-          new Dialogue("郑虾米", "谢谢，好啊好啊好啊"));
+          new Dialogue("郑虾米", new Text("谢谢，好啊好啊好啊")));
         that.dialogueView.addDialogue(
-          new Dialogue("蒋小嘉", "哈哈哈哈哈", false /* showAtLeft */)
+          new Dialogue("蒋小嘉", new Text("哈哈哈哈哈"), false /* showAtLeft */)
         );
         return true;
       }
     }
-    let optAccept = new Option(OPT.ACCEPT, "哎呀 俯首甘为孺子牛 \f金钱\r\f+500\r", acceptCallback);
-    optAccept.addTextEffect("金钱", new BgText("yellow", "black"));
-    optAccept.addTextEffect("+500", new BgText(undefined, "white"));
+    let optAccept = new Option(
+      OPT.ACCEPT,
+      new Text("哎呀 俯首甘为孺子牛 \f金钱\r\f+500\r")
+        .updatePatternDrawFunc("金钱", new BgText("yellow", "black"))
+        .updatePatternDrawFunc("+500", new BgText(undefined, "white")),
+      acceptCallback);
     options.push(optAccept);
     let fightCallback: OptionCallback = {
       onOptionClicked(option:Option) {
         that.dialogueView.addDialogue(
-          new Dialogue("郑虾米", "你不能侮辱我的人格，我要跟你决斗"));
+          new Dialogue("郑虾米", new Text("你不能侮辱我的人格，我要跟你决斗")));
         that.dialogueView.addDialogue(
-          new Dialogue("蒋小嘉", "啊啊啊啊", false /* showAtLeft */)
+          new Dialogue("蒋小嘉", new Text("啊啊啊啊"), false /* showAtLeft */)
         );
         return true;
       }
     }
     let optFight = new Option(
       OPT.FIGHT,
-      "你敢羞辱我，打你一顿. \f武力\r\f+1\r \f暴躁\r\f+1\r",
+      new Text("你敢羞辱我，打你一顿. \f武力\r\f+1\r \f暴躁\r\f+1\r")
+        .updatePatternDrawFunc("武力", new BgText("green", "white"))
+        .updatePatternDrawFunc("暴躁", new BgText("black", "white"))
+        .updatePatternDrawFunc("+1", new BgText(undefined, "white")),
       fightCallback
     );
-    optFight.addTextEffect("武力", new BgText("green", "white"));
-    optFight.addTextEffect("暴躁", new BgText("black", "white"));
-    optFight.addTextEffect("+1", new BgText(undefined, "white"));
     options.push(optFight);
     let title = "接受贿赂吗？";
-    this.optionView.show(title, options);
+    this.optionView.show(new Text(title), options);
   }
 
   update(dt: number) {

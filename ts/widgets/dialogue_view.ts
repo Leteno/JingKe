@@ -5,7 +5,7 @@ import { ClickEvent } from "../misc/event";
 import { Align, LayoutParams } from "../misc/layout";
 import Panel from "./panel";
 import { Border, MeasureResult } from "./sprite";
-import TextView from "./textview";
+import TextView, { Text } from "./textview";
 
 export default class DialogueView extends Panel {
   nameViewLeft: TextView;
@@ -29,9 +29,9 @@ export default class DialogueView extends Panel {
     this.debugColor = "green";
 
     // Add all views:
-    this.nameViewLeft = new TextView("郑大侠");
-    this.nameViewRight = new TextView("嘉女士");
-    this.contentView = new TextView("你好，冒险者");
+    this.nameViewLeft = new TextView(new Text("郑大侠"));
+    this.nameViewRight = new TextView(new Text("嘉女士"));
+    this.contentView = new TextView(new Text("你好，冒险者"));
     this.addView(this.nameViewLeft);
     this.addView(this.nameViewRight);
     this.addView(this.contentView);
@@ -91,18 +91,18 @@ export default class DialogueView extends Panel {
     this.showHint = false;
     let nameView = data.showAtLeft ? this.nameViewLeft
                 : this.nameViewRight;
-    nameView.text = data.username;
+    nameView.setText(new Text(data.username));
     nameView.visible = true;
     let otherView = data.showAtLeft ? this.nameViewRight
                 : this.nameViewLeft;
     otherView.visible = false;
 
     this.animators.splice(0);
-    let supposedTime = data.content.length * 1000 / data.speed;
+    let supposedTime = data.content.content.length * 1000 / data.speed;
     let contentAnimator = new NumberLinearAnimator(
-      0, data.content.length, supposedTime
+      0, data.content.content.length, supposedTime
     );
-    this.contentView.text = data.content;
+    this.contentView.setText(data.content);
     this.contentView.showTextLength = 0;
 
     this.contentView.setIsDirty(true);

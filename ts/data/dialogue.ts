@@ -1,7 +1,9 @@
 
+import {Text} from "../widgets/textview"
+
 export default class Dialogue {
   username: string;
-  content: string;
+  content: Text;
   showAtLeft: boolean;
 
   // How many character per second.
@@ -9,7 +11,7 @@ export default class Dialogue {
 
   constructor(
       username: string,
-      content: string,
+      content: Text,
       showAtLeft: boolean=true,
       speed: number=20,
   ) {

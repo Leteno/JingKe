@@ -2,7 +2,7 @@ import { ClickEvent } from "../misc/event";
 import { Align, LayoutType } from "../misc/layout";
 import LinearLayout from "./linear_layout";
 import Sprite, { Border } from "./sprite";
-import TextView, { DrawFunc } from "./textview";
+import TextView, { DrawFunc, Text } from "./textview";
 
 export interface OptionCallback {
   onOptionClicked(Option): boolean;
@@ -10,19 +10,13 @@ export interface OptionCallback {
 
 export class Option {
   id: number;
-  text: string;
+  text: Text;
   callback: OptionCallback;
-  textEffects: Map<string, DrawFunc>;
 
-  constructor(id: number, text:string, callback: OptionCallback) {
+  constructor(id: number, text:Text, callback: OptionCallback) {
     this.id = id;
     this.text = text;
     this.callback = callback;
-    this.textEffects = new Map<string, DrawFunc>();
-  }
-
-  addTextEffect(text: string, fn: DrawFunc) {
-    this.textEffects.set(text, fn);
   }
 }
 
@@ -50,7 +44,7 @@ export default class OptionView extends LinearLayout {
     this.visible = false;
   }
 
-  show(title: string, options: Array<Option>) {
+  show(title: Text, options: Array<Option>) {
     this.removeAllViews();
     this.titleView.setText(title);
     this.addView(this.titleView);
@@ -91,11 +85,6 @@ export default class OptionView extends LinearLayout {
       textView.padding.top = textView.padding.bottom = 5;
     textView.border = new Border();
     textView.bgColor = "#ccbbaa";
-    option.textEffects.forEach((fn, text) => {
-      textView.updatePatternDrawFunc(
-        text, fn
-      );
-    });
     return textView;
   }
 }

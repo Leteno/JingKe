@@ -3,7 +3,7 @@ import NumberLinearAnimator from "../animator/number-linear-animator";
 import Scene from "../scene/scene"
 import {Align, LayoutParams} from "../misc/layout"
 import Panel from "../widgets/panel";
-import TextView from "../widgets/textview";
+import TextView, { Text } from "../widgets/textview";
 import { ClickEvent } from "../misc/event";
 import SceneManager from "../scene/scene_manager";
 
@@ -25,7 +25,7 @@ export default class WelcomeScene implements Scene {
     this.canvasHeight = canvas.height;
   }
   onStart(ctx: CanvasRenderingContext2D) {
-    let textView = new TextView("荆轲刺秦王");
+    let textView = new TextView(new Text("荆轲刺秦王"));
     textView.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     this.mainPanel.addView(textView);
     textView.textColor = "black";
@@ -36,7 +36,7 @@ export default class WelcomeScene implements Scene {
       return true;
     }
 
-    let startBtn = new TextView("开始游戏");
+    let startBtn = new TextView(new Text("开始游戏"));
     startBtn.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     this.mainPanel.addView(startBtn);
     startBtn.textColor = "black";
@@ -47,7 +47,7 @@ export default class WelcomeScene implements Scene {
       return true;
     }
 
-    let configBtn = new TextView("配置");
+    let configBtn = new TextView(new Text("配置"));
     configBtn.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     this.mainPanel.addView(configBtn);
     configBtn.textColor = "black";
@@ -63,12 +63,12 @@ export default class WelcomeScene implements Scene {
     this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
 
 
-    let text:string = textView.text;
+    let text:string = textView.text.content;
     let animatorTextViewString = new NumberLinearAnimator(
-      0, textView.text.length, 1500
+      0, textView.text.content.length, 1500
     )
     animatorTextViewString.onValChange = function(val: number) {
-      textView.text = text.substring(0, Math.floor(val))
+      textView.text.content = text.substring(0, Math.floor(val))
     }
     animatorTextViewString.onStop = function() {
       setTimeout(() => {

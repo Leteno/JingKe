@@ -10,7 +10,7 @@ import DialogueView from "../widgets/dialogue_view";
 import OptionView, { Option } from "../widgets/option_view";
 import Panel from "../widgets/panel";
 import Sprite from "../widgets/sprite";
-import TextView from "../widgets/textview";
+import TextView, { Text } from "../widgets/textview";
 import Scene from "./scene";
 
 export default abstract class SimpleScene implements Scene {
@@ -26,7 +26,7 @@ export default abstract class SimpleScene implements Scene {
   private animators: Array<Animator<number>>;
 
   constructor(canvas: HTMLCanvasElement,
-    caption: string, title: string) {
+    caption: Text, title: Text) {
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
 
@@ -129,7 +129,7 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.visible = false;
   }
 
-  showOptionView(title: string, options: Array<Option>) {
+  showOptionView(title: Text, options: Array<Option>) {
     this.optionView.show(
       title, options
     );

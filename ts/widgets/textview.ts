@@ -40,8 +40,23 @@ export interface DrawFunc {
     text: string):void;
 }
 
+export class Text {
+  textEffects: Map<string, DrawFunc>;
+  content: string
+  constructor(content: string) {
+    this.content = content;
+    this.textEffects = new Map<string, DrawFunc>();
+  }
+
+  public updatePatternDrawFunc(
+    text: string, fn: DrawFunc): Text {
+    this.textEffects.set(text, fn);
+    return this;
+  }
+}
+
 export default class TextView extends SimpleView {
-  text: string;
+  text: Text;
   textColor: string;
   textSize: number;
   lineHeight: number;
@@ -50,23 +65,20 @@ export default class TextView extends SimpleView {
 
   showTextLength: number;
 
-  textEffects: Map<string, DrawFunc>;
-
-  constructor(text:string="Hello World") {
+  constructor(text:Text= new Text("Hello world")) {
     super();
     this.text = text;
     this.textColor = "black";
     this.textSize = 24;
-    this.showTextLength = text.length;
-    this.textEffects = new Map<string, DrawFunc>();
+    this.showTextLength = text.content.length;
     this.drawLines = new Array<DrawLine>();
 
     this.debugColor = "pink";
   }
 
-  setText(text: string) {
+  setText(text: Text) {
     this.text = text;
-    this.showTextLength = text.length;
+    this.showTextLength = text.content.length;
     this.setIsDirty(true);
   }
 
@@ -112,11 +124,11 @@ export default class TextView extends SimpleView {
 
     // for pattern:
     let patStart = -1;
-    for (let i = 0; i < this.text.length; i++) {
-      let ch = this.text.charAt(i);
-      let chCode = this.text.charCodeAt(i);
+    for (let i = 0; i < this.text.content.length; i++) {
+      let ch = this.text.content.charAt(i);
+      let chCode = this.text.content.charCodeAt(i);
       /**
-       * Dealing the pattern between \f \g
+       * Dealing the pattern between \f \r
        */
       // Check \f \g are pairing.
       if (ch == '\f') {
@@ -125,7 +137,7 @@ export default class TextView extends SimpleView {
           let drawLine = new DrawLine();
           drawLine.x = x;
           drawLine.y = y;
-          drawLine.text = this.text.substr(
+          drawLine.text = this.text.content.substr(
             start, i - start
           ) // i not include.
           drawLine.startIndex = start;
@@ -142,7 +154,7 @@ export default class TextView extends SimpleView {
         continue;
       } else if (ch == '\r') {
         let drawLine = new DrawLine(true);
-        drawLine.text = this.text.substr(
+        drawLine.text = this.text.content.substr(
           patStart, i - patStart
         ) // i not include.
         drawLine.width = currentWidth;
@@ -201,7 +213,7 @@ export default class TextView extends SimpleView {
         drawLine.endIndex = lastNoneEnglishIndex;
         drawLine.width = lastNoneEnglishWidth;
         drawLine.height = this.lineHeight;
-        drawLine.text = this.text.substr(
+        drawLine.text = this.text.content.substr(
           start, lastNoneEnglishIndex - start + 1 
         ) // lastNoneEnglishIndex is included.
         this.drawLines.push(drawLine);
@@ -238,11 +250,11 @@ export default class TextView extends SimpleView {
       drawLine.x = x;
       drawLine.y = y;
       drawLine.startIndex = start;
-      drawLine.endIndex = this.text.length - 1;
+      drawLine.endIndex = this.text.content.length - 1;
       drawLine.width = currentWidth;
       drawLine.height = this.lineHeight;
-      drawLine.text = this.text.substr(
-        start, this.text.length - start
+      drawLine.text = this.text.content.substr(
+        start, this.text.content.length - start
       );
       this.drawLines.push(drawLine);
 
@@ -268,10 +280,6 @@ export default class TextView extends SimpleView {
     }
   }
 
-  public updatePatternDrawFunc(text: string, fn: DrawFunc) {
-    this.textEffects.set(text, fn);
-  }
-
   onLayout() {
     // no special implementation.
   }
@@ -291,8 +299,8 @@ export default class TextView extends SimpleView {
             drawLine.x, drawLine.y,
             drawLine.width, drawLine.height,
             drawLine.text);
-        } else if (this.textEffects.has(drawLine.text)) {
-          this.textEffects.get(drawLine.text).draw(
+        } else if (this.text.textEffects.has(drawLine.text)) {
+          this.text.textEffects.get(drawLine.text).draw(
             ctx,
             drawLine.x, drawLine.y,
             drawLine.width, drawLine.height,
@@ -311,8 +319,8 @@ export default class TextView extends SimpleView {
             drawLine.width, drawLine.height,
             text
           );
-        } else if (this.textEffects.has(drawLine.text)) {
-          this.textEffects.get(drawLine.text).draw(
+        } else if (this.text.textEffects.has(drawLine.text)) {
+          this.text.textEffects.get(drawLine.text).draw(
             ctx,
             drawLine.x, drawLine.y,
             drawLine.width, drawLine.height,

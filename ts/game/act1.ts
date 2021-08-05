@@ -6,24 +6,25 @@ import Dialogue from "../data/dialogue";
 import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import SimpleScene from "../scene/simple_scene"
 import ImageView, { PointerPosition } from "../widgets/imageview";
-import TextView from "../widgets/textview";
+import TextView, { Text } from "../widgets/textview";
 import {Option, OptionCallback} from "../widgets/option_view"
 import { Sequence } from "../schedule/sequence";
 import Main from "../main";
 import { Event, Player } from "../data/player";
 import BirdViewImage from "../widgets/birdview_image";
 import LinearLayout from "../widgets/linear_layout";
+import { BgText } from "../widgets/richtext";
 
 export default class Act1 extends SimpleScene {
 
   constructor(canvas: HTMLCanvasElement) {
-    super(canvas, "Act 01", "北风起，黄花正娇嫩");
+    super(canvas, new Text("Act 01"), new Text("北风起，黄花正娇嫩"));
   }
 
   onPageReady() {
     let desc = new TextView();
-    desc.setText("战国末年，秦国吞并韩赵，势逼燕国。在此之际，燕太子丹记挂着质于秦的私仇。" +
-      "你正投奔在太子做门客的舅舅，荆轲");
+    desc.setText(new Text("战国末年，秦国吞并韩赵，势逼燕国。在此之际，燕太子丹记挂着质于秦的私仇。" +
+      "你正投奔在太子做门客的舅舅，荆轲"));
     desc.layoutParam.xcfg = Align.CENTER;
     desc.layoutParam.ycfg = Align.CENTER;
     desc.padding.left = desc.padding.right = 30;
@@ -53,11 +54,11 @@ export default class Act1 extends SimpleScene {
       onStart() {
         that.addDialogue(new Dialogue(
           "荆棘",
-          "舅舅，我来看你了，近来可好?"
+          new Text("舅舅，我来看你了，近来可好?")
         ));
         that.addDialogue(new Dialogue(
           "荆轲",
-          "我这边还好，那么多年不见，你已经这么高了，这段时间在家学了什么呢？",
+          new Text("我这边还好，那么多年不见，你已经这么高了，这段时间在家学了什么呢？"),
           false
         ));
         that.setOnDialogueFinish(sequence.next.bind(sequence));
@@ -90,12 +91,12 @@ export default class Act1 extends SimpleScene {
               return true;
             }
           }
-          let opt1 = new Option(OPT.BEAR, "蒸熊掌", callback);
-          let opt2 = new Option(OPT.DEER, "蒸鹿尾", callback);
-          let opt3 = new Option(OPT.CHICKEN, "烧花鸡", callback);
+          let opt1 = new Option(OPT.BEAR, new Text("蒸熊掌"), callback);
+          let opt2 = new Option(OPT.DEER, new Text("蒸鹿尾"), callback);
+          let opt3 = new Option(OPT.CHICKEN, new Text("烧花鸡"), callback);
           options.push(opt1, opt2, opt3);
         }
-        that.showOptionView("我学了", options);
+        that.showOptionView(new Text("我学了"), options);
       }
     });
     sequence.addIntoSequence({
@@ -118,12 +119,12 @@ export default class Act1 extends SimpleScene {
         }
         that.addDialogue(new Dialogue(
           "荆轲",
-          word,
+          new Text(word),
           false
         ));
         that.addDialogue(new Dialogue(
           "荆轲",
-          "快随我入城把",
+          new Text("快随我入城把"),
           false
         ));
         that.setOnDialogueFinish(() => {
@@ -197,11 +198,11 @@ export default class Act1 extends SimpleScene {
       onStart() {
         that.addDialogue(new Dialogue(
           "荆棘",
-          "噫嘘唏，人真多啊。"
+          new Text("噫嘘唏，人真多啊。")
         ))
         that.addDialogue(new Dialogue(
           "荆轲",
-          "多乎哉，不多也",
+          new Text("多乎哉，不多也"),
           false
         ))
         that.setOnDialogueFinish(() => {
@@ -213,9 +214,14 @@ export default class Act1 extends SimpleScene {
       onStart() {
         placeRegion.visible = true;
         palace.pointerPosition = PointerPosition.LEFT;
+        let peopleEffect = new BgText("green", "white");
         that.addDialogue(new Dialogue(
           "荆轲",
-          "这上面分别是太子丹的住所，你可以在里面找到 太子丹 樊于期 秦舞阳 燕姬 还有我",
+          new Text("这上面分别是太子丹的住所，你可以在里面找到\f太子丹\r\f樊于期\r\f秦舞阳\r\f燕姬\r还有我")
+           .updatePatternDrawFunc("太子丹", peopleEffect)
+           .updatePatternDrawFunc("樊于期", peopleEffect)
+           .updatePatternDrawFunc("秦舞阳", peopleEffect)
+           .updatePatternDrawFunc("燕姬", peopleEffect),
           false
         ));
         that.setOnDialogueFinish(() => {
@@ -227,9 +233,12 @@ export default class Act1 extends SimpleScene {
     sequence.addIntoSequence({
       onStart() {
         market.pointerPosition = PointerPosition.LEFT;
+        let peopleEffect = new BgText("green", "white");
         that.addDialogue(new Dialogue(
           "荆轲",
-          "而下面是集市，我的好朋友高渐离，狗屠也在那里",
+          new Text("而下面是集市，我的好朋友\f高渐离\r，\f狗屠\r也在那里")
+            .updatePatternDrawFunc("高渐离", peopleEffect)
+            .updatePatternDrawFunc("狗屠", peopleEffect),
           false
         ));
         that.setOnDialogueFinish(() => {
@@ -247,17 +256,17 @@ export default class Act1 extends SimpleScene {
     let options = new Array<Option>();
     let optionCallback = {
       onOptionClicked(op: Option):boolean {
-        that.addDialogue(new Dialogue("另一个我", "这些都是可以的，关键在行动，关键在坚持"));
+        that.addDialogue(new Dialogue("另一个我", new Text("这些都是可以的，关键在行动，关键在坚持")));
         return true;
       }
     }
-    let opt1 = new Option(1, "要有很多很多的钱", optionCallback);
-    let opt2 = new Option(2, "成为一名科学家", optionCallback);
-    let opt3 = new Option(3, "写出令自己满意的作品，最好能流传", optionCallback);
+    let opt1 = new Option(1, new Text("要有很多很多的钱"), optionCallback);
+    let opt2 = new Option(2, new Text("成为一名科学家"), optionCallback);
+    let opt3 = new Option(3, new Text("写出令自己满意的作品，最好能流传"), optionCallback);
     options.push(opt1);
     options.push(opt2);
     options.push(opt3);
 
-    this.showOptionView("你有什么理想吗？", options);
+    this.showOptionView(new Text("你有什么理想吗？"), options);
   }
 }
