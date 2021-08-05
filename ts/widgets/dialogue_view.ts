@@ -145,8 +145,9 @@ export default class DialogueView extends Panel {
         this.updateView(front);
       } else {
         if (this.onDialogueFinished) {
-          this.onDialogueFinished();
+          let callback = this.onDialogueFinished;
           this.onDialogueFinished = undefined;
+          callback();
         }
       }
     }
