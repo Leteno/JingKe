@@ -164,6 +164,11 @@ export default class Act1 extends SimpleScene {
     market.forceHeight = 80;
     market.margin.top = 10;
     placeRegion.addView(market);
+    let back = new ImageView("res/created/back.png");
+    back.forceWidth = 80;
+    back.forceHeight = 80;
+    back.margin.top = 10;
+    placeRegion.addView(back);
 
     placeRegion.visible = false;
     this.forceRepaint();
