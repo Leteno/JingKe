@@ -1,5 +1,5 @@
 import { number, string } from "yargs";
-import TextView, {DrawFunc, TextHelper} from "../textview"
+import TextView, {DrawFunc, Text, TextHelper} from "../textview"
 
 test("testCalculate", () => {
   let ctx = {
@@ -56,7 +56,7 @@ test("english", () => {
   ctx.fillText = mockFillText;
 
   // 22 chars, 220 width
-  let textView = new TextView("大家好，我系渣渣豪，是兄弟，就来 helloworld 砍我把");
+  let textView = new TextView(new Text("大家好，我系渣渣豪，是兄弟，就来 helloworld 砍我把"));
   textView.measure(ctx, 100, 400);
   textView.drawToCanvas(ctx);
 
@@ -84,7 +84,7 @@ test("animation", () => {
   ctx.fillText = mockFillText;
 
   // 22 chars, 220 width
-  let textView = new TextView("大家好，我系渣渣豪，是兄弟，就来某地方砍我把");
+  let textView = new TextView(new Text("大家好，我系渣渣豪，是兄弟，就来某地方砍我把"));
   textView.measure(ctx, 100, 400);
   textView.drawToCanvas(ctx);
   expect(mockFillText.mock.calls.length).toBe(3);
@@ -129,18 +129,20 @@ test("pattern", () => {
   });
   ctx.fillText = mockFillText;
 
-  let textView = new TextView("Hello \fWorld\r, Mr.Zheng");
-  textView.measure(ctx, 500, 500);
-
   let mockDrawFunc = jest.fn((
     ctx: CanvasRenderingContext2D,
     x: number, y: number,
     width: number, height: number,
     text: string) => {
   });
-  textView.updatePatternDrawFunc("World", {
-    draw: mockDrawFunc
-  } as DrawFunc);
+  let textView = new TextView(
+    new Text("Hello \fWorld\r, Mr.Zheng")
+      .updatePatternDrawFunc("World", {
+        draw: mockDrawFunc
+      } as DrawFunc
+    )
+  );
+  textView.measure(ctx, 500, 500);
 
   textView.drawToCanvas(ctx);
 
