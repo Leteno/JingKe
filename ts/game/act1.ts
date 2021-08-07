@@ -14,6 +14,7 @@ import { Event, Player } from "../data/player";
 import BirdViewImage from "../widgets/birdview_image";
 import LinearLayout from "../widgets/linear_layout";
 import { BgText } from "../widgets/richtext";
+import { Place, PlaceAndPeopleView } from "../compose/place_and_people_view";
 
 export default class Act1 extends SimpleScene {
 
@@ -148,29 +149,12 @@ export default class Act1 extends SimpleScene {
     cityPhoto.layoutParam.xcfg = Align.CENTER;
     cityPhoto.layoutParam.ycfg = Align.CENTER;
     this.addView(cityPhoto);
-    let placeRegion = new LinearLayout();
-    placeRegion.forceWidth = 80;
-    placeRegion.layoutParam.xcfg = Align.END;
-    placeRegion.margin.right = 10;
-    placeRegion.margin.top = 40 + this.canvasHeight / 6;
-    this.addView(placeRegion);
-
-    let palace = new ImageView("res/copyleft/place_yan_palace.png");
-    palace.forceWidth = 80;
-    palace.forceHeight = 80;
-    placeRegion.addView(palace);
-    let market = new ImageView("res/copyleft/place_market.png");
-    market.forceWidth = 80;
-    market.forceHeight = 80;
-    market.margin.top = 10;
-    placeRegion.addView(market);
-    let back = new ImageView("res/created/back.png");
-    back.forceWidth = 80;
-    back.forceHeight = 80;
-    back.margin.top = 10;
-    placeRegion.addView(back);
-
-    placeRegion.visible = false;
+    let placeAndPeopleView = new PlaceAndPeopleView();
+    placeAndPeopleView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    placeAndPeopleView.margin.left = 10;
+    placeAndPeopleView.margin.right = 10;
+    placeAndPeopleView.margin.top = 40 + this.canvasHeight/6;
+    this.addView(placeAndPeopleView);
     this.forceRepaint();
 
     let that = this;
@@ -215,10 +199,16 @@ export default class Act1 extends SimpleScene {
         })
       }
     })
+    let mainPlace = new Place();
+    let palace = new Place();
+    let market = new Place();
+    palace.imageSrc = "res/copyleft/place_yan_palace.png";
+    market.imageSrc = "res/copyleft/place_market.png";
+    mainPlace.places.push(palace, market);
     sequence.addIntoSequence({
       onStart() {
-        placeRegion.visible = true;
         palace.pointerPosition = PointerPosition.LEFT;
+        placeAndPeopleView.updatePlace(mainPlace);
         let peopleEffect = new BgText("green", "white");
         that.addDialogue(new Dialogue(
           "荆轲",
@@ -228,6 +218,7 @@ export default class Act1 extends SimpleScene {
         ));
         that.setOnDialogueFinish(() => {
           palace.pointerPosition = PointerPosition.NONE;
+          placeAndPeopleView.updatePlace(mainPlace);
           sequence.next();
         });
       }
@@ -235,6 +226,7 @@ export default class Act1 extends SimpleScene {
     sequence.addIntoSequence({
       onStart() {
         market.pointerPosition = PointerPosition.LEFT;
+        placeAndPeopleView.updatePlace(mainPlace);
         let peopleEffect = new BgText("green", "white");
         that.addDialogue(new Dialogue(
           "荆轲",
@@ -245,6 +237,7 @@ export default class Act1 extends SimpleScene {
         that.setOnDialogueFinish(() => {
           market.pointerPosition = PointerPosition.NONE;
           palace.showNoteSign = true;
+          placeAndPeopleView.updatePlace(mainPlace);
           that.showSimpleOptions();
           sequence.next();
         })
