@@ -1,7 +1,7 @@
 import { BindableData } from "../../data/bindable_data";
 import SimpleView from "../simple_view";
 import { MeasureResult } from "../sprite";
-import { defaultCtx } from "./ctx.test";
+import { defaultCtx } from "./default_value.test";
 
 test("data binding", () => {
   class TestData extends BindableData {

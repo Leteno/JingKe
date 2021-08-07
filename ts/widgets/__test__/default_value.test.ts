@@ -10,6 +10,10 @@ export let defaultCtx = {
     };
   },
   translate(x: number, y: number) {},
+  drawImage(
+    img:HTMLImageElement,
+    dx: number, dy: number,
+    dw: number, dh: number) {},
 } as CanvasRenderingContext2D;
 
 test("", ()=> {})
