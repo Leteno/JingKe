@@ -1,3 +1,4 @@
+import { BindableData } from "../data/bindable_data";
 import { Align, LayoutType } from "../misc/layout";
 import LayoutCache from "./layout_cache";
 import Sprite, { MeasureResult } from "./sprite";
@@ -5,6 +6,11 @@ import Sprite, { MeasureResult } from "./sprite";
 export default abstract class SimpleView extends Sprite {
 
   private layoutCache: LayoutCache;
+
+  // Databinding support
+  private bindedData: BindableData;
+  private onBind: (v:Sprite, data: BindableData) => void;
+
   constructor() {
     super();
     this.layoutCache = new LayoutCache();
@@ -152,6 +158,10 @@ export default abstract class SimpleView extends Sprite {
       this.layoutCache.reLayout(this);
       this.layoutCache.setIsDirty(false);
     }
+    if (this.bindedData && this.onBind && this.bindedData.dirty) {
+      this.onBind(this, this.bindedData);
+      this.bindedData.dirty = false;
+    }
     ctx.save();
     ctx.translate(this.x, this.y);
 
@@ -193,6 +203,12 @@ export default abstract class SimpleView extends Sprite {
 
   setIsDirty(dirty: boolean) {
     this.layoutCache.setIsDirty(dirty);  
+  }
+
+  bindData(data: BindableData, fn: (v:Sprite, d:BindableData)=>void) {
+    this.bindedData = data;
+    this.onBind = fn;
+    this.onBind(this, data);
   }
 
   abstract drawToCanvasInternal(ctx: CanvasRenderingContext2D);

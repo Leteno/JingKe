@@ -233,7 +233,7 @@ export default class Act1 extends SimpleScene {
         ));
         that.setOnDialogueFinish(() => {
           palace.pointerPosition = PointerPosition.NONE;
-          placeAndPeopleView.updatePlace(mainPlace);
+          palace.dirty = true;
           sequence.next();
         });
       }
@@ -241,7 +241,7 @@ export default class Act1 extends SimpleScene {
     sequence.addIntoSequence({
       onStart() {
         market.pointerPosition = PointerPosition.LEFT;
-        placeAndPeopleView.updatePlace(mainPlace);
+        market.dirty = true;
         let peopleEffect = new BgText("green", "white");
         that.addDialogue(new Dialogue(
           "荆轲",
@@ -252,7 +252,8 @@ export default class Act1 extends SimpleScene {
         that.setOnDialogueFinish(() => {
           market.pointerPosition = PointerPosition.NONE;
           palace.showNoteSign = true;
-          placeAndPeopleView.updatePlace(mainPlace);
+          market.dirty = true;
+          palace.dirty = true;
           that.showSimpleOptions();
           sequence.next();
         })

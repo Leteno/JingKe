@@ -1,21 +1,23 @@
+import { BindableData } from "../data/bindable_data";
 import { Align, LayoutType } from "../misc/layout";
 import ImageView, { PointerPosition } from "../widgets/imageview";
 import LinearLayout from "../widgets/linear_layout";
 import Panel from "../widgets/panel";
 
-export class People {
+export class People extends BindableData {
   showNoteSign: boolean;
   imageSrc: string;
   pointerPosition: PointerPosition;
   onclickListener: ()=>void
 
   constructor() {
+    super();
     this.showNoteSign = false;
     this.pointerPosition = PointerPosition.NONE;
   }
 }
 
-export class Place {
+export class Place extends BindableData{
   showNoteSign: boolean;
   pointerPosition: PointerPosition;
   imageSrc: string;
@@ -26,6 +28,7 @@ export class Place {
   onBackListener: ()=>void;
 
   constructor() {
+    super();
     this.showNoteSign = false;
     this.pointerPosition = PointerPosition.NONE;
     this.peoples = new Array<People>();
@@ -66,15 +69,18 @@ export class PlaceAndPeopleView extends Panel {
         placeView.forceWidth = 80;
         placeView.forceHeight = 80;
         placeView.margin.bottom = 10;
-        placeView.showNoteSign = p.showNoteSign;
-        placeView.pointerPosition = p.pointerPosition;
-        placeView.onclickInternal = (event) => {
-          if (p.onclickListener) {
-            p.onclickListener();
+        placeView.bindData(p, (v:ImageView, d:Place) => {
+          v.img.src = d.imageSrc;
+          v.showNoteSign = d.showNoteSign;
+          v.pointerPosition = d.pointerPosition;
+          v.onclickInternal = () => {
+            if (d.onclickListener) {
+              d.onclickListener();
+            }
+            that.updatePlace(d);
+            return true;
           }
-          that.updatePlace(p);
-          return true;
-        }
+        })
         this.placePanel.addView(placeView);
       })
     }
@@ -85,14 +91,17 @@ export class PlaceAndPeopleView extends Panel {
         peopleView.forceWidth = 80;
         peopleView.forceHeight = 80;
         peopleView.margin.bottom = 10;
-        peopleView.showNoteSign = p.showNoteSign;
-        peopleView.pointerPosition = p.pointerPosition;
-        peopleView.onclickInternal = () => {
-          if (p.onclickListener) {
-            p.onclickListener();
+        peopleView.bindData(p, (v: ImageView, d:People)=> {
+          v.img.src = d.imageSrc;
+          v.showNoteSign = d.showNoteSign;
+          v.pointerPosition = d.pointerPosition;
+          v.onclickInternal = () => {
+            if (d.onclickListener) {
+              d.onclickListener();
+            }
+            return true;
           }
-          return true;
-        }
+        });
         this.peoplePanel.addView(peopleView);
       })
     }
