@@ -68,7 +68,7 @@ export class PlaceAndPeopleView extends Panel {
         placeView.margin.bottom = 10;
         placeView.showNoteSign = p.showNoteSign;
         placeView.pointerPosition = p.pointerPosition;
-        placeView.onclick = (event) => {
+        placeView.onclickInternal = (event) => {
           if (p.onclickListener) {
             p.onclickListener();
           }
@@ -87,7 +87,7 @@ export class PlaceAndPeopleView extends Panel {
         peopleView.margin.bottom = 10;
         peopleView.showNoteSign = p.showNoteSign;
         peopleView.pointerPosition = p.pointerPosition;
-        peopleView.onclick = () => {
+        peopleView.onclickInternal = () => {
           if (p.onclickListener) {
             p.onclickListener();
           }
@@ -102,7 +102,7 @@ export class PlaceAndPeopleView extends Panel {
       backView.forceWidth = 80;
       backView.forceHeight = 80;
       backView.margin.bottom = 10;
-      backView.onclick = (event) => {
+      backView.onclickInternal = (event) => {
         if (place.onBackListener) {
           place.onBackListener();
         }
