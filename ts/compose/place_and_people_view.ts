@@ -7,15 +7,12 @@ export class People {
   showNoteSign: boolean;
   imageSrc: string;
   pointerPosition: PointerPosition;
+  onclickListener: ()=>void
 
   constructor() {
     this.showNoteSign = false;
     this.pointerPosition = PointerPosition.NONE;
   }
-}
-
-export class BackListener {
-  onBackBtnClick: ()=>{}
 }
 
 export class Place {
@@ -24,14 +21,18 @@ export class Place {
   imageSrc: string;
   peoples: Array<People>;
   places: Array<Place>;
-  backListener: BackListener;
+  parent: Place;
+  onclickListener: ()=>void;
+  onBackListener: ()=>void;
 
   constructor() {
     this.showNoteSign = false;
     this.pointerPosition = PointerPosition.NONE;
     this.peoples = new Array<People>();
     this.places = new Array<Place>();
-    this.backListener = undefined;
+    this.parent = undefined;
+    this.onBackListener = undefined;
+    this.onclickListener = undefined;
   }
 }
 
@@ -51,11 +52,13 @@ export class PlaceAndPeopleView extends Panel {
   }
 
   updatePlace(place: Place) {
+    this.refineEvent(place);
     this.place = place;
     this.setIsDirty(true);
 
     this.peoplePanel.removeAllViews();
     this.placePanel.removeAllViews();
+    let that:PlaceAndPeopleView = this;
 
     if (place && place.places) {
       place.places.forEach(p => {
@@ -65,6 +68,13 @@ export class PlaceAndPeopleView extends Panel {
         placeView.margin.bottom = 10;
         placeView.showNoteSign = p.showNoteSign;
         placeView.pointerPosition = p.pointerPosition;
+        placeView.onclick = (event) => {
+          if (p.onclickListener) {
+            p.onclickListener();
+          }
+          that.updatePlace(p);
+          return true;
+        }
         this.placePanel.addView(placeView);
       })
     }
@@ -77,17 +87,26 @@ export class PlaceAndPeopleView extends Panel {
         peopleView.margin.bottom = 10;
         peopleView.showNoteSign = p.showNoteSign;
         peopleView.pointerPosition = p.pointerPosition;
+        peopleView.onclick = () => {
+          if (p.onclickListener) {
+            p.onclickListener();
+          }
+          return true;
+        }
         this.peoplePanel.addView(peopleView);
       })
     }
 
-    if (place && place.backListener) {
+    if (place && place.parent) {
       let backView = new ImageView("res/created/back.png")
       backView.forceWidth = 80;
       backView.forceHeight = 80;
       backView.margin.bottom = 10;
       backView.onclick = (event) => {
-        place.backListener.onBackBtnClick();
+        if (place.onBackListener) {
+          place.onBackListener();
+        }
+        that.updatePlace(place.parent);
         return true;
       }
       this.placePanel.addView(backView);
@@ -96,5 +115,22 @@ export class PlaceAndPeopleView extends Panel {
     // when parent is dirty.
     this.peoplePanel.setIsDirty(true);
     this.placePanel.setIsDirty(true);
+  }
+
+  /**
+   * Refine the event in place:
+   * * SubPlace should have parent.
+   * 
+   * So here we will not refine all the descendants
+   * we only care about the children, as the next generation
+   * will be refined in next updatePlace(child)
+   * @param place 
+   */
+  private refineEvent(place: Place) {
+    if (place && place.places) {
+      place.places.forEach(child => {
+        child.parent = place;
+      })
+    }
   }
 }

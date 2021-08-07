@@ -14,7 +14,7 @@ import { Event, Player } from "../data/player";
 import BirdViewImage from "../widgets/birdview_image";
 import LinearLayout from "../widgets/linear_layout";
 import { BgText } from "../widgets/richtext";
-import { Place, PlaceAndPeopleView } from "../compose/place_and_people_view";
+import { People, Place, PlaceAndPeopleView } from "../compose/place_and_people_view";
 
 export default class Act1 extends SimpleScene {
 
@@ -202,8 +202,23 @@ export default class Act1 extends SimpleScene {
     let mainPlace = new Place();
     let palace = new Place();
     let market = new Place();
+    let fanwuji = new People();
+    let juzi = new People();
+    let businessman = new People();
     palace.imageSrc = "res/copyleft/place_yan_palace.png";
     market.imageSrc = "res/copyleft/place_market.png";
+    fanwuji.imageSrc = "res/copyleft/people_fanwuji.png";
+    fanwuji.onclickListener = ()=>{
+      console.log("fanwuji was clicked");
+    }
+    juzi.imageSrc = "res/copyleft/people_juzi.png";
+    businessman.imageSrc = "res/copyleft/people_businessman.png";
+    businessman.onclickListener = () => {
+      console.log("businessman was clicked");
+    }
+    palace.peoples.push(fanwuji);
+    mainPlace.peoples.push(juzi);
+    market.peoples.push(businessman);
     mainPlace.places.push(palace, market);
     sequence.addIntoSequence({
       onStart() {
