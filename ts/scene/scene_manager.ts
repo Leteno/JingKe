@@ -6,9 +6,19 @@ export default class SceneManager {
   currentScene: Scene;
   ctx: CanvasRenderingContext2D;
 
-  constructor(ctx: CanvasRenderingContext2D) {
+  static sInstance: SceneManager;
+
+  private constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx;
     this.sceneMap = new Map<string, Scene>();
+  }
+
+  static getInstance(): SceneManager {
+    return this.sInstance;
+  }
+
+  static init(ctx: CanvasRenderingContext2D) {
+    this.sInstance = new SceneManager(ctx);
   }
 
   push(key: string, scene: Scene) : boolean {

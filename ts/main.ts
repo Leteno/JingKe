@@ -17,7 +17,6 @@ export default class Main {
   canvas: HTMLCanvasElement;
 
   last: number;
-  sceneManager: SceneManager;
 
   static player: Player;
 
@@ -31,20 +30,20 @@ export default class Main {
     this.ctx.textBaseline = "top";
     this.last = timestamp();
 
-    this.sceneManager = new SceneManager(this.ctx);
-    let welcomeScene = new WelcomeScene(this.sceneManager, canvas);
-    this.sceneManager.push("welcome", welcomeScene);
+    SceneManager.init(this.ctx);
+    let welcomeScene = new WelcomeScene(SceneManager.getInstance(), canvas);
+    SceneManager.getInstance().push("welcome", welcomeScene);
 
     let helloWorldScene = new HelloWorldScene(canvas);
-    this.sceneManager.push("helloworld", helloWorldScene);
+    SceneManager.getInstance().push("helloworld", helloWorldScene);
 
     let scene1 = new Scene1(canvas);
-    this.sceneManager.push("scene1", scene1);
+    SceneManager.getInstance().push("scene1", scene1);
 
     let act1 = new Act1(canvas);
-    this.sceneManager.push("act1", act1);
+    SceneManager.getInstance().push("act1", act1);
 
-    this.sceneManager.switchScene("act1");
+    SceneManager.getInstance().switchScene("act1");
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
       this.bindLoop
@@ -64,12 +63,12 @@ export default class Main {
   }
 
   update(dt: number) {
-    this.sceneManager.currentScene.update(dt);
+    SceneManager.getInstance().currentScene.update(dt);
   }
 
   render() {
     this.clearScreen();
-    this.sceneManager.currentScene.render(this.ctx);
+    SceneManager.getInstance().currentScene.render(this.ctx);
   }
 
   clearScreen() {
@@ -80,7 +79,7 @@ export default class Main {
   }
 
   onclick(event: PointerEvent) {
-    this.sceneManager.currentScene.onclick(ClickEvent.from(event))
+    SceneManager.getInstance().currentScene.onclick(ClickEvent.from(event))
   }
 
   static getPlayer() : Player {

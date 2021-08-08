@@ -4,7 +4,8 @@ import TestScene from "./test_scene.test"
 
 test("simple", () => {
   let ctx = {} as CanvasRenderingContext2D;
-  let manager = new SceneManager(ctx);
+  SceneManager.init(ctx);
+  let manager = SceneManager.getInstance();
   let s1 = new TestScene();
   let s1OnStart = jest.fn();
   s1.onStart = s1OnStart;
@@ -25,7 +26,8 @@ test("simple", () => {
 
 test("switchScene", () => {
   let ctx = {} as CanvasRenderingContext2D;
-  let manager = new SceneManager(ctx);
+  SceneManager.init(ctx);
+  let manager = SceneManager.getInstance();
   let s1 = new TestScene();
   let s1OnStart = jest.fn();
   s1.onStart = s1OnStart;
