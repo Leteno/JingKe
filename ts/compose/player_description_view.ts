@@ -1,4 +1,5 @@
 import { ABILITY, Player } from "../data/player";
+import { ClickEvent } from "../misc/event";
 import { Align } from "../misc/layout";
 import LinearLayout from "../widgets/linear_layout";
 import Panel from "../widgets/panel";
@@ -35,6 +36,15 @@ export default class PlayerDescriptionView extends Panel {
     this.bindData(player, (v:PlayerDescriptionView, p: Player) => {
       v.onPlayerUpdate(p);
     });
+  }
+
+  onTouchOutside(event: ClickEvent): boolean {
+    // Hide when touch outside.
+    if (this.visible) {
+      this.visible = false;
+      return true;
+    }
+    return false;
   }
 
   private onPlayerUpdate(player: Player) {

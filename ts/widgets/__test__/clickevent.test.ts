@@ -2,8 +2,10 @@
 import { ClickEvent } from "../../misc/event";
 import { Align, LayoutParams, LayoutType } from "../../misc/layout";
 import Panel from "../panel"
+import SimpleView from "../simple_view";
 import Sprite from "../sprite";
 import TestSprite from "./test_sprite.test"
+import {defaultCtx} from "./default_value.test"
 
 test("testSimpleView", () => {
   let view = new TestSprite(100, 100);
@@ -163,4 +165,76 @@ test("padding", () => {
     .toBe(2);
   expect((view.onclickInternal as jest.Mock).mock.calls.length)
     .toBe(2);
+})
+
+test("onTouchOutside", () => {
+  let mainPanel = new Panel();
+  mainPanel.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+  mainPanel.layoutParam.yLayout = LayoutType.MATCH_PARENT;
+  let v1 = new TestSprite(10, 10);
+  let v2 = new TestSprite(10, 10);
+  mainPanel.onclickInternal = jest.fn(() => {
+    return true;
+  })
+  v1.onclickInternal = jest.fn(() => {
+    return true;
+  })
+  v2.onclickInternal = jest.fn(() => {
+    return true;
+  })
+
+  mainPanel.addView(v1);
+  mainPanel.addView(v2);
+
+  v2.margin.top = 20;
+
+  mainPanel.measure(defaultCtx, 100, 100);
+  mainPanel.layout(100, 100);
+
+  let clickOutside = new ClickEvent(20, 20);
+  mainPanel.onclick(clickOutside);
+
+  expect((mainPanel.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(1);
+  expect((v1.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(0);
+  expect((v2.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(0);
+
+  let clickOnV2 = new ClickEvent(10, 20);
+  mainPanel.onclick(clickOnV2);
+
+  expect((mainPanel.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(1);
+  expect((v1.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(0);
+  expect((v2.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(1);
+
+  v1.onTouchOutside = jest.fn((event: ClickEvent) => {
+    // handle touch outside event.
+    return true;
+  });
+  // re-send the click event:
+  mainPanel.onclick(clickOutside);
+  expect((mainPanel.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(1);
+  expect((v1.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(0);
+  expect((v2.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(1);
+  expect((v1.onTouchOutside as jest.Mock)
+    .mock.calls.length).toBe(1);
+
+  // Still capture by v2, because we pass
+  // onclick event to v2 first.
+  mainPanel.onclick(clickOnV2);
+  expect((mainPanel.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(1);
+  expect((v1.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(0);
+  expect((v2.onclickInternal as jest.Mock)
+    .mock.calls.length).toBe(2);
+  expect((v1.onTouchOutside as jest.Mock)
+    .mock.calls.length).toBe(1);
 })
