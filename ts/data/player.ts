@@ -1,5 +1,5 @@
 import Parcel from "../objects/parcel";
-import { Serializable } from "../objects/serializable";
+import { BindableAndSerializable, Serializable } from "../objects/serializable";
 
 export enum Event {
   FRE_BEGIN = 0,
@@ -8,10 +8,19 @@ export enum Event {
   FRE_WHAT_CHARECTOR = 3,
 }
 
-export class Player extends Serializable {
+export enum ABILITY {
+  LOYAL = 0, // 侠义
+  ATTACK = 1, // 勇武
+  INTELIGENCE = 2, // 智慧
+  TRUST = 3, // 信誉
+}
+
+export class Player extends BindableAndSerializable {
   name: string;
   version: number;
   chooses: Map<number, number>;
+  abilities: Array<number>;
+  specials: Array<string>;
 
   static CHOOSE_NOT_FOUND:number = -1;
 
@@ -20,6 +29,14 @@ export class Player extends Serializable {
     this.name = "荆棘";
     this.version = 1;
     this.chooses = new Map<number, number>();
+    this.abilities = new Array<number>();
+    this.specials = new Array<string>();
+
+    // Abilities
+    this.abilities[ABILITY.ATTACK] = 0;
+    this.abilities[ABILITY.INTELIGENCE] = 0;
+    this.abilities[ABILITY.LOYAL] = 0;
+    this.abilities[ABILITY.TRUST] = 0;
   }
 
   saveChoose(event: Event, choose: number) {

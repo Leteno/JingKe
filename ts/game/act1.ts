@@ -10,7 +10,7 @@ import TextView, { Text } from "../widgets/textview";
 import {Option, OptionCallback} from "../widgets/option_view"
 import { Sequence } from "../schedule/sequence";
 import Main from "../main";
-import { Event, Player } from "../data/player";
+import { ABILITY, Event, Player } from "../data/player";
 import BirdViewImage from "../widgets/birdview_image";
 import LinearLayout from "../widgets/linear_layout";
 import { BgText } from "../widgets/richtext";
@@ -104,20 +104,25 @@ export default class Act1 extends SimpleScene {
       onStart() {
         let word = "不错不错。";
         let opt = Main.getPlayer().getChoose(Event.FRE_WHAT_LEARN);
+        let ability = ABILITY.TRUST;
         switch(opt) {
           case 0:
             word += "熊掌可好吃了";
+            ability = ABILITY.ATTACK
             break;
           case 1:
             word += "鹿尾大补啊";
+            ability = ABILITY.INTELIGENCE
             break;
           case 2:
             word += "大吉大利，今晚吃鸡";
+            ability = ABILITY.LOYAL
             break;
           case Player.CHOOSE_NOT_FOUND:
             sequence.next();
             return;
         }
+        Main.getPlayer().abilities[ability]++;
         that.addDialogue(new Dialogue(
           "荆轲",
           new Text(word),
@@ -154,6 +159,18 @@ export default class Act1 extends SimpleScene {
     placeAndPeopleView.margin.left = 10;
     placeAndPeopleView.margin.right = 10;
     placeAndPeopleView.margin.top = 40 + this.canvasHeight/6;
+    let me = new ImageView("res/created/me.png");
+    me.forceWidth = 30;
+    me.forceHeight = 30;
+    me.margin.right = 10;
+    me.margin.top = 10 + this.canvasHeight/6;
+    me.layoutParam.xcfg = Align.END;
+    me.onclickInternal = (event) => {
+      this.showPlayerDescription(Main.getPlayer());
+      return true;
+    }
+    me.visible = false;
+    this.addView(me);
     this.addView(placeAndPeopleView);
     this.forceRepaint();
 
@@ -224,6 +241,7 @@ export default class Act1 extends SimpleScene {
       onStart() {
         palace.pointerPosition = PointerPosition.LEFT;
         placeAndPeopleView.updatePlace(mainPlace);
+        me.visible = true;
         let peopleEffect = new BgText("green", "white");
         that.addDialogue(new Dialogue(
           "荆轲",

@@ -3,7 +3,9 @@ import { AnimatorSetBuilder } from "../animator/animator_set";
 import { MeanWhileBuilder } from "../animator/meanwhile";
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import { textAlpha } from "../animator/text-affect";
+import PlayerDescriptionView from "../compose/player_description_view";
 import Dialogue from "../data/dialogue";
+import { Player } from "../data/player";
 import { ClickEvent } from "../misc/event";
 import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
@@ -19,6 +21,7 @@ export default abstract class SimpleScene implements Scene {
   private sceneTitle: TextView;
   private dialogueView: DialogueView;
   private optionView: OptionView;
+  private descriptionView: PlayerDescriptionView;
 
   canvasWidth: number;
   canvasHeight: number;
@@ -67,6 +70,9 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.layoutParam.xcfg = Align.CENTER;
     this.dialogueView.layoutParam.ycfg = Align.END;
     this.dialogueView.bgColor = "#f5bb10";
+
+    this.descriptionView = new PlayerDescriptionView();
+    this.descriptionView.visible = false;
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
@@ -76,6 +82,8 @@ export default abstract class SimpleScene implements Scene {
     this.optionView.layout(this.canvasWidth, this.canvasHeight);
     this.dialogueView.measure(ctx, this.canvasWidth, this.canvasHeight);
     this.dialogueView.layout(this.canvasWidth, this.canvasHeight);
+    this.descriptionView.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.descriptionView.layout(this.canvasWidth, this.canvasHeight);
 
     let captionFadeIn = textAlpha(true, 2000, this.sceneCaption);
     let titleFadeIn = textAlpha(true, 2500, this.sceneTitle);
@@ -109,9 +117,13 @@ export default abstract class SimpleScene implements Scene {
     this.mainPanel.drawToCanvas(ctx);
     this.dialogueView.drawToCanvas(ctx);
     this.optionView.drawToCanvas(ctx);
+    this.descriptionView.drawToCanvas(ctx);
   }
 
   onclick(event: ClickEvent) {
+    if (this.descriptionView.onclick(event)) {
+      return;
+    }
     if (this.optionView.onclick(event)) {
       return;
     }
@@ -149,5 +161,10 @@ export default abstract class SimpleScene implements Scene {
 
   setOnDialogueFinish (fn: ()=>void) {
     this.dialogueView.onDialogueFinished = fn;
+  }
+
+  showPlayerDescription(player: Player) {
+    this.descriptionView.setPlayer(player);
+    this.descriptionView.visible = true;
   }
 }

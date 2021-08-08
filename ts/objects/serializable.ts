@@ -1,7 +1,13 @@
 
+import { BindableData } from "../data/bindable_data";
 import Parcel from "./parcel"
 
 export abstract class Serializable {
+  abstract toParcel(): Parcel;
+  abstract fromParcel(p: Parcel);
+}
+
+export abstract class BindableAndSerializable extends BindableData implements Serializable {
   abstract toParcel(): Parcel;
   abstract fromParcel(p: Parcel);
 }
