@@ -9,12 +9,14 @@ import Scene1 from "./game/scene1";
 import SimpleScene from "./scene/simple_scene";
 import Dialogue from "./data/dialogue";
 import { Player } from "./data/player";
+import EventHandler from "./misc/event_handler";
 
 export default class Main {
   aniId: number;
   bindLoop: any;
   ctx: CanvasRenderingContext2D;
   canvas: HTMLCanvasElement;
+  eventHandler: EventHandler;
 
   last: number;
 
@@ -48,7 +50,13 @@ export default class Main {
     this.aniId = window.requestAnimationFrame(
       this.bindLoop
     );
-    canvas.onclick = this.onclick.bind(this);
+
+    this.eventHandler = new EventHandler();
+    this.eventHandler.bind(canvas);
+    this.eventHandler.bindOnClickHandler((event: ClickEvent) => {
+      return SceneManager.getInstance().currentScene.onclick(event);
+    }
+    );
   }
 
   gameLoop() {
@@ -76,10 +84,6 @@ export default class Main {
     this.ctx.fillStyle = 'white';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
     this.ctx.restore();
-  }
-
-  onclick(event: PointerEvent) {
-    SceneManager.getInstance().currentScene.onclick(ClickEvent.from(event))
   }
 
   static getPlayer() : Player {
