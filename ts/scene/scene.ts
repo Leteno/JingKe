@@ -1,4 +1,4 @@
-import { ClickEvent } from "../misc/event";
+import { ClickEvent, PressEvent } from "../misc/event";
 import Panel from "../widgets/panel";
 
 export default interface Scene {
@@ -7,4 +7,5 @@ export default interface Scene {
   update(dt: number)
   render(ctx: CanvasRenderingContext2D)
   onclick(event:ClickEvent)
+  onpress(event:PressEvent)
 }

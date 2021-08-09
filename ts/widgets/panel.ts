@@ -1,7 +1,7 @@
 import EasyMath from "../misc/easy-math"
 import Sprite, { MeasureResult } from "./sprite"
 import {Align} from "../misc/layout"
-import { ClickEvent } from "../misc/event"
+import { ClickEvent, PressEvent } from "../misc/event"
 import SimpleView from "./simple_view";
 
 export default class Panel extends SimpleView {
@@ -99,5 +99,25 @@ export default class Panel extends SimpleView {
       }
     }
     return this.onclickInternal(event);
+  }
+
+  onpress(event: PressEvent) {
+    if (!this.visible) return false;
+    let inside = EasyMath.between(this.x, this.x + this.width, event.x)
+      && EasyMath.between(this.y, this.y + this.height, event.y);
+    if (!inside) {
+      return false;
+    }
+    // event cut out
+    let childEvent = PressEvent.alignChildren(event, this);
+    // The last one is in the front of the audience.
+    // We should let it capture first.
+    for (let i = this.children.length - 1; i >= 0; i--) {
+      let view:Sprite = this.children[i];
+      if (view.onpress(childEvent)) {
+        return true;
+      }
+    }
+    return this.onpressInternal(event);
   }
 }

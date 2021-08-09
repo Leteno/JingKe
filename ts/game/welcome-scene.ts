@@ -4,7 +4,7 @@ import Scene from "../scene/scene"
 import {Align, LayoutParams} from "../misc/layout"
 import Panel from "../widgets/panel";
 import TextView, { Text } from "../widgets/textview";
-import { ClickEvent } from "../misc/event";
+import { ClickEvent, PressEvent } from "../misc/event";
 import SceneManager from "../scene/scene_manager";
 
 export default class WelcomeScene implements Scene {
@@ -91,5 +91,8 @@ export default class WelcomeScene implements Scene {
 
   onclick(event: ClickEvent) {
     this.mainPanel.onclick(event);
+  }
+  onpress(event: PressEvent) {
+    this.mainPanel.onpress(event);
   }
 }

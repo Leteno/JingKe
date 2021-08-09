@@ -9,6 +9,7 @@ export class People extends BindableData {
   imageSrc: string;
   pointerPosition: PointerPosition;
   onclickListener: ()=>void
+  onpressListener: ()=>void
 
   constructor() {
     super();
@@ -25,6 +26,7 @@ export class Place extends BindableData{
   places: Array<Place>;
   parent: Place;
   onclickListener: ()=>void;
+  onpressListener: ()=>void;
   onBackListener: ()=>void;
 
   constructor() {
@@ -36,6 +38,7 @@ export class Place extends BindableData{
     this.parent = undefined;
     this.onBackListener = undefined;
     this.onclickListener = undefined;
+    this.onpressListener = undefined;
   }
 }
 
@@ -80,6 +83,12 @@ export class PlaceAndPeopleView extends Panel {
             that.updatePlace(d);
             return true;
           }
+          v.onpressInternal = () => {
+            if (d.onpressListener) {
+              d.onpressListener();
+            }
+            return true;
+          }
         })
         this.placePanel.addView(placeView);
       })
@@ -98,6 +107,12 @@ export class PlaceAndPeopleView extends Panel {
           v.onclickInternal = () => {
             if (d.onclickListener) {
               d.onclickListener();
+            }
+            return true;
+          }
+          v.onpressInternal = () => {
+            if (d.onpressListener) {
+              d.onpressListener();
             }
             return true;
           }

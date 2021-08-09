@@ -1,6 +1,6 @@
 import { boolean } from "yargs";
 import EasyMath from "../misc/easy-math";
-import { ClickEvent } from "../misc/event";
+import { ClickEvent, PressEvent } from "../misc/event";
 import { Align, LayoutParams } from "../misc/layout";
 
 export class MeasureResult {
@@ -110,6 +110,20 @@ export default abstract class Sprite {
   }
 
   onclickInternal(event: ClickEvent): boolean {
+    return false;
+  }
+
+  onpress(event: PressEvent): boolean {
+    if (!this.visible) return false;
+    let inside = EasyMath.between(this.x, this.x + this.width, event.x)
+      && EasyMath.between(this.y, this.y + this.height, event.y);
+    if (!inside) {
+      return false;
+    }
+    return this.onpressInternal(event);
+  }
+
+  onpressInternal(event: PressEvent): boolean {
     return false;
   }
 

@@ -6,7 +6,7 @@ import { textAlpha } from "../animator/text-affect";
 import PlayerDescriptionView from "../compose/player_description_view";
 import Dialogue from "../data/dialogue";
 import { Player } from "../data/player";
-import { ClickEvent } from "../misc/event";
+import { ClickEvent, PressEvent } from "../misc/event";
 import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
 import OptionView, { Option } from "../widgets/option_view";
@@ -131,6 +131,19 @@ export default abstract class SimpleScene implements Scene {
       return;
     }
     this.mainPanel.onclick(event);
+  }
+
+  onpress(event: PressEvent) {
+    if (this.descriptionView.onpress(event)) {
+      return;
+    }
+    if (this.optionView.onpress(event)) {
+      return;
+    }
+    if (this.dialogueView.onpress(event)) {
+      return;
+    }
+    this.mainPanel.onpress(event);
   }
 
   addDialogue(data: Dialogue) {

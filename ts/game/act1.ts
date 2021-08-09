@@ -229,9 +229,18 @@ export default class Act1 extends SimpleScene {
       console.log("fanwuji was clicked");
     }
     juzi.imageSrc = "res/copyleft/people_juzi.png";
+    juzi.onpressListener = () => {
+      console.log("Hi, I am juzi");
+    }
     businessman.imageSrc = "res/copyleft/people_businessman.png";
     businessman.onclickListener = () => {
       console.log("businessman was clicked");
+    }
+    palace.onpressListener = () => {
+      console.log("This is the palace of Prince Dan");
+    }
+    market.onpressListener = () => {
+      console.log("This is the place for poors");
     }
     palace.peoples.push(fanwuji);
     mainPlace.peoples.push(juzi);

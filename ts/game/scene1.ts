@@ -1,5 +1,5 @@
 import Dialogue from "../data/dialogue";
-import { ClickEvent } from "../misc/event";
+import { ClickEvent, PressEvent } from "../misc/event";
 import Scene from "../scene/scene";
 import DialogueView from "../widgets/dialogue_view";
 import Panel from "../widgets/panel";
@@ -66,4 +66,7 @@ export default class Scene1 implements Scene {
     this.mainPanel.onclick(event);
   }
 
+  onpress(event: PressEvent) {
+    this.mainPanel.onpress(event);
+  }
 }

@@ -54,13 +54,11 @@ export default class Main {
     this.eventHandler = new EventHandler();
     this.eventHandler.bind(canvas);
     this.eventHandler.bindOnClickHandler((event: ClickEvent) => {
-      console.log(`got clicked: ${event.x}, ${event.y}`)
       return SceneManager.getInstance().currentScene.onclick(event);
     }
     );
     this.eventHandler.bindOnPressHandler((event: PressEvent) => {
-      console.log(`got pressed: ${event.x}, ${event.y}`);
-      return true;
+      return SceneManager.getInstance().currentScene.onpress(event);
     });
   }
 
