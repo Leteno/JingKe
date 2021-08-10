@@ -1,4 +1,4 @@
-import { Character } from "../misc/character";
+import { Char } from "../misc/char";
 import SimpleView from "./simple_view";
 import { MeasureResult } from "./sprite";
 
@@ -230,7 +230,7 @@ export default class TextView extends SimpleView {
         y += this.lineHeight;
         currentWidth = currentWidth - lastNoneEnglishWidth;
       }
-      if (!Character.isAlphanumberic(chCode)) {
+      if (!Char.isAlphanumberic(chCode)) {
         lastNoneEnglishIndex = i;
         lastNoneEnglishWidth = currentWidth;
       }

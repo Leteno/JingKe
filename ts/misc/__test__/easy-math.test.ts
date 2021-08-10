@@ -1,4 +1,4 @@
-import EasyMath from "./easy-math"
+import EasyMath from "../easy-math"
 
 test("testBetween", () => {
   expect(EasyMath.between(1, 3, 1)).toBe(true);
