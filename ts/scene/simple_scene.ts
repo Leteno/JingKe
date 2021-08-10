@@ -73,6 +73,11 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.bgColor = "#f5bb10";
 
     this.descriptionView = new PlayerDescriptionView();
+    this.descriptionView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    this.descriptionView.layoutParam.xcfg = Align.CENTER;
+    this.descriptionView.layoutParam.ycfg = Align.CENTER;
+    this.descriptionView.margin.left = 40;
+    this.descriptionView.margin.right = 40;
     this.descriptionView.visible = false;
   }
 

@@ -2,35 +2,67 @@ import { ABILITY, Character } from "../data/character";
 import { Player } from "../data/player";
 import { ClickEvent } from "../misc/event";
 import { Align } from "../misc/layout";
+import ImageView from "../widgets/imageview";
 import LinearLayout from "../widgets/linear_layout";
 import Panel from "../widgets/panel";
 import TextView, { Text } from "../widgets/textview";
 
 export default class PlayerDescriptionView extends Panel {
 
+  name: TextView;
+  image: ImageView;
   loyal: TextView;
   attack: TextView;
   inteligence: TextView;
   trust: TextView;
+  special: TextView;
 
   constructor() {
     super();
+    this.padding.top = 20;
+    this.padding.bottom = 20;
+    this.padding.left = 20;
+    this.padding.right = 20;
 
-    this.layoutParam.xcfg = Align.CENTER;
-    this.layoutParam.ycfg = Align.CENTER;
+    let mainFrame = new LinearLayout();
+    this.addView(mainFrame);
+
+    this.name = new TextView();
+    this.name.margin.bottom = 10;
+    this.name.textSize = 28;
+    mainFrame.addView(this.name);
 
     let attributeLayer = new LinearLayout();
-    this.addView(attributeLayer);
+    let label = new TextView(new Text("属性"));
+    attributeLayer.addView(label);
     this.loyal = new TextView();
     this.attack = new TextView();
     this.inteligence = new TextView();
     this.trust = new TextView();
+    this.loyal.textSize = 12;
+    this.attack.textSize = 12;
+    this.inteligence.textSize = 12;
+    this.trust.textSize = 12;
     attributeLayer.addView(this.loyal);
     attributeLayer.addView(this.attack);
     attributeLayer.addView(this.inteligence);
     attributeLayer.addView(this.trust);
+    mainFrame.addView(attributeLayer);
+    attributeLayer.margin.bottom = 20;
 
-    this.bgColor = "#FF00FF"
+    let specialLabel = new TextView(new Text("特技"));
+    mainFrame.addView(specialLabel);
+    specialLabel.margin.bottom = 10;
+    this.special = new TextView();
+    mainFrame.addView(this.special);
+
+    this.image = new ImageView("");
+    this.image.forceWidth = 120;
+    this.image.forceHeight = 120;
+    this.image.layoutParam.xcfg = Align.END;
+    this.addView(this.image);
+
+    this.bgColor = "#FFF99D"
   }
 
   setCharacter(character: Character) {
@@ -49,6 +81,8 @@ export default class PlayerDescriptionView extends Panel {
   }
 
   private onPlayerUpdate(character: Character) {
+    this.name.setText(new Text(character.name));
+    this.image.img.src = character.imageSrc;
     this.loyal.setText(new Text(
       "侠义: " + character.abilities[ABILITY.LOYAL]
     ));
