@@ -48,6 +48,7 @@ export class PlaceAndPeopleView extends Panel {
   peoplePanel: LinearLayout;
   placePanel: LinearLayout;
   place: Place;
+  showDescription: (character: Character) => void;
   constructor() {
     super();
     this.peoplePanel = new LinearLayout();
@@ -115,6 +116,9 @@ export class PlaceAndPeopleView extends Panel {
           v.onpressInternal = () => {
             if (d.onpressListener) {
               d.onpressListener();
+            }
+            if (that.showDescription) {
+              that.showDescription(d.character);
             }
             return true;
           }

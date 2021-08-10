@@ -160,6 +160,7 @@ export default class Act1 extends SimpleScene {
     placeAndPeopleView.margin.left = 10;
     placeAndPeopleView.margin.right = 10;
     placeAndPeopleView.margin.top = 40 + this.canvasHeight/6;
+    placeAndPeopleView.showDescription = this.showCharacterDescription.bind(this);
     let me = new ImageView("res/created/me.png");
     me.forceWidth = 30;
     me.forceHeight = 30;
@@ -230,20 +231,15 @@ export default class Act1 extends SimpleScene {
     fanwuji.onclickListener = ()=>{
       console.log("fanwuji was clicked");
     }
-    fanwuji.onpressListener = () => {
-      that.showCharacterDescription(fanwuji.character);
-    }
     juzi.character.imageSrc = "res/copyleft/people_juzi.png";
     juzi.character.abilities[ABILITY.LOYAL] = 10;
     juzi.onpressListener = () => {
       console.log("Hi, I am juzi");
-      that.showCharacterDescription(juzi.character);
     }
     businessman.character.imageSrc = "res/copyleft/people_businessman.png";
     businessman.character.abilities[ABILITY.INTELIGENCE] = 10;
     businessman.onclickListener = () => {
       console.log("businessman was clicked");
-      that.showCharacterDescription(businessman.character);
     }
     palace.onpressListener = () => {
       console.log("This is the palace of Prince Dan");
