@@ -7,13 +7,13 @@ import {People, Place, PlaceAndPeopleView} from "../place_and_people_view"
 test("", () => {
   let place = new Place();
   let people1 = new People();
-  people1.imageSrc = "image://people1"
+  people1.character.imageSrc = "image://people1"
   place.peoples.push(people1);
   let place1 = new Place();
   place1.imageSrc = "image://place1";
   place.places.push(place1);
   let people2 = new People();
-  people2.imageSrc = "image://people2"
+  people2.character.imageSrc = "image://people2"
   place1.peoples.push(people2);
 
   let view = new PlaceAndPeopleView();
@@ -27,7 +27,7 @@ test("", () => {
   expect((view.placePanel.children[0] as ImageView)
     .img.src).toBe("image://place1");
 
-  people1.imageSrc = "image://excited-hahaha";
+  people1.character.imageSrc = "image://excited-hahaha";
   people1.dirty = true;
   view.drawToCanvas(defaultCtx);
   expect((view.peoplePanel.children[0] as ImageView)
