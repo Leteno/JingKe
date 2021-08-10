@@ -4,6 +4,7 @@ import { MeanWhileBuilder } from "../animator/meanwhile";
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import { textAlpha } from "../animator/text-affect";
 import PlayerDescriptionView from "../compose/player_description_view";
+import { Character } from "../data/character";
 import Dialogue from "../data/dialogue";
 import { Player } from "../data/player";
 import { ClickEvent, PressEvent } from "../misc/event";
@@ -176,8 +177,8 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.onDialogueFinished = fn;
   }
 
-  showPlayerDescription(player: Player) {
-    this.descriptionView.setPlayer(player);
+  showCharacterDescription(player: Character) {
+    this.descriptionView.setCharacter(player);
     this.descriptionView.visible = true;
   }
 }

@@ -1,4 +1,5 @@
-import { ABILITY, Player } from "../data/player";
+import { ABILITY, Character } from "../data/character";
+import { Player } from "../data/player";
 import { ClickEvent } from "../misc/event";
 import { Align } from "../misc/layout";
 import LinearLayout from "../widgets/linear_layout";
@@ -32,8 +33,8 @@ export default class PlayerDescriptionView extends Panel {
     this.bgColor = "#FF00FF"
   }
 
-  setPlayer(player: Player) {
-    this.bindData(player, (v:PlayerDescriptionView, p: Player) => {
+  setCharacter(character: Character) {
+    this.bindData(character, (v:PlayerDescriptionView, p: Character) => {
       v.onPlayerUpdate(p);
     });
   }
@@ -47,18 +48,18 @@ export default class PlayerDescriptionView extends Panel {
     return false;
   }
 
-  private onPlayerUpdate(player: Player) {
+  private onPlayerUpdate(character: Character) {
     this.loyal.setText(new Text(
-      "侠义: " + player.abilities[ABILITY.LOYAL]
+      "侠义: " + character.abilities[ABILITY.LOYAL]
     ));
     this.attack.setText(new Text(
-      "勇武: " + player.abilities[ABILITY.ATTACK]
+      "勇武: " + character.abilities[ABILITY.ATTACK]
     ));
     this.inteligence.setText(new Text(
-      "谋略: " + player.abilities[ABILITY.INTELIGENCE]
+      "谋略: " + character.abilities[ABILITY.INTELIGENCE]
     ));
     this.trust.setText(new Text(
-      "信誉: " + player.abilities[ABILITY.TRUST]
+      "信誉: " + character.abilities[ABILITY.TRUST]
     ));
   }
 }

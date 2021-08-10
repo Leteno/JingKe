@@ -10,11 +10,12 @@ import TextView, { Text } from "../widgets/textview";
 import {Option, OptionCallback} from "../widgets/option_view"
 import { Sequence } from "../schedule/sequence";
 import Main from "../main";
-import { ABILITY, Event, Player } from "../data/player";
+import { Event, Player } from "../data/player";
 import BirdViewImage from "../widgets/birdview_image";
 import LinearLayout from "../widgets/linear_layout";
 import { BgText } from "../widgets/richtext";
 import { People, Place, PlaceAndPeopleView } from "../compose/place_and_people_view";
+import { ABILITY } from "../data/character";
 
 export default class Act1 extends SimpleScene {
 
@@ -122,7 +123,7 @@ export default class Act1 extends SimpleScene {
             sequence.next();
             return;
         }
-        Main.getPlayer().abilities[ability]++;
+        Main.getPlayer().character.abilities[ability]++;
         that.addDialogue(new Dialogue(
           "荆轲",
           new Text(word),
@@ -166,7 +167,7 @@ export default class Act1 extends SimpleScene {
     me.margin.top = 10 + this.canvasHeight/6;
     me.layoutParam.xcfg = Align.END;
     me.onclickInternal = (event) => {
-      this.showPlayerDescription(Main.getPlayer());
+      this.showCharacterDescription(Main.getPlayer().character);
       return true;
     }
     me.visible = false;
