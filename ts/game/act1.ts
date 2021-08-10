@@ -221,35 +221,17 @@ export default class Act1 extends SimpleScene {
     let mainPlace = new Place();
     let palace = new Place();
     let market = new Place();
-    let fanwuji = new People();
-    let juzi = new People();
-    let businessman = new People();
     palace.imageSrc = "res/copyleft/place_yan_palace.png";
     market.imageSrc = "res/copyleft/place_market.png";
-    fanwuji.character.imageSrc = "res/copyleft/people_fanwuji.png";
-    fanwuji.character.abilities[ABILITY.ATTACK] = 10;
-    fanwuji.onclickListener = ()=>{
-      console.log("fanwuji was clicked");
-    }
-    juzi.character.imageSrc = "res/copyleft/people_juzi.png";
-    juzi.character.abilities[ABILITY.LOYAL] = 10;
-    juzi.onpressListener = () => {
-      console.log("Hi, I am juzi");
-    }
-    businessman.character.imageSrc = "res/copyleft/people_businessman.png";
-    businessman.character.abilities[ABILITY.INTELIGENCE] = 10;
-    businessman.onclickListener = () => {
-      console.log("businessman was clicked");
-    }
     palace.onpressListener = () => {
       console.log("This is the palace of Prince Dan");
     }
     market.onpressListener = () => {
       console.log("This is the place for poors");
     }
-    palace.peoples.push(fanwuji);
-    mainPlace.peoples.push(juzi);
-    market.peoples.push(businessman);
+    palace.peoples.push(Main.getActors().fanwuji);
+    mainPlace.peoples.push(Main.getActors().juzi);
+    market.peoples.push(Main.getActors().businessman);
     mainPlace.places.push(palace, market);
     sequence.addIntoSequence({
       onStart() {

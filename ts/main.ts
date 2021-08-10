@@ -10,6 +10,7 @@ import SimpleScene from "./scene/simple_scene";
 import Dialogue from "./data/dialogue";
 import { Player } from "./data/player";
 import EventHandler from "./misc/event_handler";
+import { Actors } from "./game/data/actors";
 
 export default class Main {
   aniId: number;
@@ -21,6 +22,7 @@ export default class Main {
   last: number;
 
   static player: Player;
+  static actors: Actors;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -95,5 +97,13 @@ export default class Main {
       // Read from disk.
     }
     return this.player;
+  }
+
+  static getActors(): Actors {
+    if (this.actors == null) {
+      this.actors = new Actors();
+      // Read from disk.
+    }
+    return this.actors;
   }
 }
