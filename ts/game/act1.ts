@@ -225,17 +225,25 @@ export default class Act1 extends SimpleScene {
     let businessman = new People();
     palace.imageSrc = "res/copyleft/place_yan_palace.png";
     market.imageSrc = "res/copyleft/place_market.png";
-    fanwuji.imageSrc = "res/copyleft/people_fanwuji.png";
+    fanwuji.character.imageSrc = "res/copyleft/people_fanwuji.png";
+    fanwuji.character.abilities[ABILITY.ATTACK] = 10;
     fanwuji.onclickListener = ()=>{
       console.log("fanwuji was clicked");
     }
-    juzi.imageSrc = "res/copyleft/people_juzi.png";
+    fanwuji.onpressListener = () => {
+      that.showCharacterDescription(fanwuji.character);
+    }
+    juzi.character.imageSrc = "res/copyleft/people_juzi.png";
+    juzi.character.abilities[ABILITY.LOYAL] = 10;
     juzi.onpressListener = () => {
       console.log("Hi, I am juzi");
+      that.showCharacterDescription(juzi.character);
     }
-    businessman.imageSrc = "res/copyleft/people_businessman.png";
+    businessman.character.imageSrc = "res/copyleft/people_businessman.png";
+    businessman.character.abilities[ABILITY.INTELIGENCE] = 10;
     businessman.onclickListener = () => {
       console.log("businessman was clicked");
+      that.showCharacterDescription(businessman.character);
     }
     palace.onpressListener = () => {
       console.log("This is the palace of Prince Dan");

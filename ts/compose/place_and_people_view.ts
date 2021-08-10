@@ -1,4 +1,5 @@
 import { BindableData } from "../data/bindable_data";
+import { Character } from "../data/character";
 import { Align, LayoutType } from "../misc/layout";
 import ImageView, { PointerPosition } from "../widgets/imageview";
 import LinearLayout from "../widgets/linear_layout";
@@ -6,8 +7,8 @@ import Panel from "../widgets/panel";
 
 export class People extends BindableData {
   showNoteSign: boolean;
-  imageSrc: string;
   pointerPosition: PointerPosition;
+  character: Character;
   onclickListener: ()=>void
   onpressListener: ()=>void
 
@@ -15,6 +16,7 @@ export class People extends BindableData {
     super();
     this.showNoteSign = false;
     this.pointerPosition = PointerPosition.NONE;
+    this.character = new Character();
   }
 }
 
@@ -96,12 +98,12 @@ export class PlaceAndPeopleView extends Panel {
 
     if (place && place.peoples) {
       place.peoples.forEach(p => {
-        let peopleView = new ImageView(p.imageSrc);
+        let peopleView = new ImageView(p.character.imageSrc);
         peopleView.forceWidth = 80;
         peopleView.forceHeight = 80;
         peopleView.margin.bottom = 10;
         peopleView.bindData(p, (v: ImageView, d:People)=> {
-          v.img.src = d.imageSrc;
+          v.img.src = d.character.imageSrc;
           v.showNoteSign = d.showNoteSign;
           v.pointerPosition = d.pointerPosition;
           v.onclickInternal = () => {

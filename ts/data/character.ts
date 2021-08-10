@@ -10,6 +10,7 @@ export enum ABILITY {
 
 export class Character extends BindableData {
   name: string;
+  imageSrc: string;
   abilities: Array<number>;
   specials: Array<string>;
 
