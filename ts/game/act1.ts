@@ -16,6 +16,7 @@ import LinearLayout from "../widgets/linear_layout";
 import { BgText } from "../widgets/richtext";
 import { People, Place, PlaceAndPeopleView } from "../compose/place_and_people_view";
 import { ABILITY } from "../data/character";
+import { Act1Flows } from "./data/act1_flows";
 
 export default class Act1 extends SimpleScene {
 
@@ -231,6 +232,11 @@ export default class Act1 extends SimpleScene {
     }
     palace.peoples.push(Main.getActors().fanwuji);
     mainPlace.peoples.push(Main.getActors().juzi);
+    let juziFlow = Act1Flows.getInstance().greetingFromJuzi;
+    juziFlow.bind(this);
+    Main.getActors().juzi.onclickListener = () => {
+      juziFlow.startFlow();
+    }
     market.peoples.push(Main.getActors().businessman);
     mainPlace.places.push(palace, market);
     sequence.addIntoSequence({
