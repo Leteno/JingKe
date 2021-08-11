@@ -1,5 +1,6 @@
 import { number, string } from "yargs";
 import TextView, {DrawFunc, Text, TextHelper} from "../textview"
+import { defaultCtx } from "./default_value.test";
 
 test("testCalculate", () => {
   let ctx = {
@@ -162,4 +163,40 @@ test("pattern", () => {
   expect(mockDrawFunc.mock.calls[0][2]).toBe(0);
   expect(mockDrawFunc.mock.calls[0][3]).toBe(25);
   expect(mockDrawFunc.mock.calls[0][4]).toBe(24);
+})
+
+test("\n", () => {
+  let mockFillText = jest.fn((text:string, x: number, y:number, maxWidth?:number|undefined) => {
+  });
+  defaultCtx.fillText = mockFillText;
+
+  let textView = new TextView(
+    new Text("Hello World, Mr.Zheng")
+  );
+  textView.measure(defaultCtx, 500, 500);
+
+  textView.drawToCanvas(defaultCtx);
+  expect(mockFillText.mock.calls.length)
+    .toBe(1);
+  expect(mockFillText.mock.calls[0][0])
+    .toBe("Hello World, Mr.Zheng");
+
+  mockFillText = jest.fn((text:string, x: number, y:number, maxWidth?:number|undefined) => {
+  });
+  defaultCtx.fillText = mockFillText;
+  textView.setText(new Text(
+    "Hello\n World,\n\n M\nr.Zheng"));
+  textView.drawToCanvas(defaultCtx);
+  expect(mockFillText.mock.calls.length)
+    .toBe(5);
+  expect(mockFillText.mock.calls[0][0])
+    .toBe("Hello");
+  expect(mockFillText.mock.calls[1][0])
+    .toBe(" World,");
+  expect(mockFillText.mock.calls[2][0])
+    .toBe("");
+  expect(mockFillText.mock.calls[3][0])
+    .toBe(" M");
+  expect(mockFillText.mock.calls[4][0])
+    .toBe("r.Zheng");
 })

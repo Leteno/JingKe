@@ -177,6 +177,23 @@ export default class TextView extends SimpleView {
         currentWidth = 0;
         start = i + 1;
         continue;
+      } else if (ch == '\n') {
+        let drawLine = new DrawLine();
+        drawLine.text = this.text.content.substr(
+          start, i - start
+        ) // i not include.
+        drawLine.width = currentWidth;
+        drawLine.height = this.lineHeight;
+        drawLine.endIndex = i - 1;
+        drawLine.startIndex = start;
+        drawLine.x = x;
+        drawLine.y = y;
+        this.drawLines.push(drawLine);
+
+        x = x + currentWidth;
+        currentWidth = 0;
+        start = i + 1;
+        continue;
       }
 
       // Normal case
