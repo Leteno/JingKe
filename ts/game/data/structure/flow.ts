@@ -19,6 +19,10 @@ export class Flow {
     this.hideDialogue = scene.hideDialogue.bind(scene);
   }
 
+  reset() {
+    this.sequence.reset();
+  }
+
   constructor() {
     this.sequence = new Sequence();
     this.addDialogue = undefined;

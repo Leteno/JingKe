@@ -30,4 +30,8 @@ export class Sequence {
     this.currentIndex++;
     this.startOne();
   }
+
+  reset() {
+    this.currentIndex = 0;
+  }
 }

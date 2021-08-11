@@ -235,6 +235,7 @@ export default class Act1 extends SimpleScene {
     let juziFlow = Act1Flows.getInstance().greetingFromJuzi;
     juziFlow.bind(this);
     Main.getActors().juzi.onclickListener = () => {
+      juziFlow.reset();
       juziFlow.startFlow();
     }
     market.peoples.push(Main.getActors().businessman);
