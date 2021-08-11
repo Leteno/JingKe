@@ -8,16 +8,26 @@ export enum ABILITY {
   TRUST = 3, // 信誉
 }
 
+export class Special {
+  name: string;
+  description: string;
+
+  constructor(name: string, description: string) {
+    this.name = name;
+    this.description = description;
+  }
+}
+
 export class Character extends BindableData {
   name: string;
   imageSrc: string;
   abilities: Array<number>;
-  specials: Array<string>;
+  specials: Array<Special>;
 
   constructor() {
     super();
     this.abilities = new Array<number>();
-    this.specials = new Array<string>();
+    this.specials = new Array<Special>();
 
     // Abilities
     this.abilities[ABILITY.ATTACK] = 0;

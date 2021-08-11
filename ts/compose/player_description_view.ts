@@ -1,3 +1,4 @@
+import { string } from "yargs";
 import { ABILITY, Character } from "../data/character";
 import { Player } from "../data/player";
 import { ClickEvent } from "../misc/event";
@@ -5,6 +6,7 @@ import { Align } from "../misc/layout";
 import ImageView from "../widgets/imageview";
 import LinearLayout from "../widgets/linear_layout";
 import Panel from "../widgets/panel";
+import { BgText } from "../widgets/richtext";
 import TextView, { Text } from "../widgets/textview";
 
 export default class PlayerDescriptionView extends Panel {
@@ -54,6 +56,7 @@ export default class PlayerDescriptionView extends Panel {
     mainFrame.addView(specialLabel);
     specialLabel.margin.bottom = 10;
     this.special = new TextView();
+    this.special.textSize = 12;
     mainFrame.addView(this.special);
 
     this.image = new ImageView("");
@@ -95,5 +98,12 @@ export default class PlayerDescriptionView extends Panel {
     this.trust.setText(new Text(
       "信誉: " + character.abilities[ABILITY.TRUST]
     ));
+    let descriptionText = "";
+    character.specials.forEach(special => {
+      descriptionText += `\f${special.name}\r ${special.description}\n`;
+    })
+    let description = new Text(descriptionText);
+    description.setDefaultEffect(new BgText("white", "black"));
+    this.special.setText(description);
   }
 }
