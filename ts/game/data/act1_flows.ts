@@ -2,6 +2,7 @@ import Dialogue from "../../data/dialogue";
 import { Text } from "../../widgets/textview";
 import { Flow } from "./structure/flow";
 import { Option, OptionCallback } from "../../widgets/option_view"
+import { YES_NO } from "../../data/option";
 
 export class Act1Flows {
   greetingFromJuzi: Flow;
@@ -31,11 +32,6 @@ export class Act1Flows {
     })
     greetingFromJuzi.sequence.addIntoSequence({
       onStart() {
-        // TODO make it public
-        enum YES_NO {
-          YES,
-          NO
-        }
         let callback: OptionCallback = {
           onOptionClicked(op: Option): boolean {
             switch(op.id) {
