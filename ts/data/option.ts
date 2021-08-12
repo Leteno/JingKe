@@ -5,6 +5,7 @@
 // 原先存下来的数据依旧可用，只是过去不可能
 // 有值 OP3
 
+export let UNKNOWN = -1;
 export enum YES_NO {
   UNKNOWN = -1,
   YES = 0,

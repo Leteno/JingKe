@@ -10,7 +10,7 @@ import { Player } from "../data/player";
 import { ClickEvent, PressEvent } from "../misc/event";
 import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
-import OptionView, { Option } from "../widgets/option_view";
+import OptionView, { Option, OptionCallback } from "../widgets/option_view";
 import Panel from "../widgets/panel";
 import Sprite from "../widgets/sprite";
 import TextView, { Text } from "../widgets/textview";
@@ -116,6 +116,7 @@ export default abstract class SimpleScene implements Scene {
     this.animators.forEach(animator => {
       animator.update(dt);
     });
+    this.optionView.update(dt);
     this.dialogueView.updateTime(dt);
   }
 
@@ -160,10 +161,19 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.visible = false;
   }
 
-  showOptionView(title: Text, options: Array<Option>) {
-    this.optionView.show(
-      title, options
-    );
+  showOptionView(
+    title: Text, options: Array<Option>,
+    callback: OptionCallback,
+    timing?: number) {
+    if (timing == undefined) {
+      this.optionView.show(
+        title, options, callback
+      );
+    } else {
+      this.optionView.show(
+        title, options, callback, timing
+      );
+    }
   }
 
   addAnimator(animator: Animator<number>) {

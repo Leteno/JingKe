@@ -33,8 +33,8 @@ export class Act1Flows {
     greetingFromJuzi.sequence.addIntoSequence({
       onStart() {
         let callback: OptionCallback = {
-          onOptionClicked(op: Option): boolean {
-            switch(op.id) {
+          onOptionClicked(op: number): boolean {
+            switch(op) {
               case YES_NO.YES:
                 greetingFromJuzi.addDialogue(new Dialogue(
                   "莫翟", new Text("是这样吗？那就好，那就好.")
@@ -58,18 +58,17 @@ export class Act1Flows {
         let op1 = new Option(
           YES_NO.YES,
           new Text("是的，我是这样子认为的"),
-          callback
         );
         let op2 = new Option(
           YES_NO.NO,
           new Text("不是，征战永无止境"),
-          callback
         );
         let ops = new Array<Option>()
         ops.push(op1, op2)
         greetingFromJuzi.showOptionView(
           new Text("你觉得我们有生之年会看到和平吗？"),
-          ops
+          ops,
+          callback
         )
       }
     })

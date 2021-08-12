@@ -17,6 +17,7 @@ import { BgText } from "../widgets/richtext";
 import { People, Place, PlaceAndPeopleView } from "../compose/place_and_people_view";
 import { ABILITY } from "../data/character";
 import { Act1Flows } from "./data/act1_flows";
+import { UNKNOWN } from "../data/option";
 
 export default class Act1 extends SimpleScene {
 
@@ -70,36 +71,42 @@ export default class Act1 extends SimpleScene {
     sequence.addIntoSequence({
       onStart() {
         let options = new Array<Option>();
-        {
-          enum OPT {
-            BEAR = 0,
-            DEER = 1,
-            CHICKEN = 2,
-          }
-          let callback:OptionCallback = {
-            onOptionClicked(opt: Option): boolean {
-              switch(opt.id) {
-                case OPT.BEAR:
-                  console.log("You have learned how to cook bear");
-                  break;
-                case OPT.DEER:
-                  console.log("You have learned how to cook deer");
-                  break;
-                case OPT.CHICKEN:
-                  console.log("You have learned how to cook chicken");
-                  break;
-              }
-              Main.getPlayer().saveChoose(Event.FRE_WHAT_LEARN, opt.id);
-              sequence.next();
-              return true;
-            }
-          }
-          let opt1 = new Option(OPT.BEAR, new Text("蒸熊掌"), callback);
-          let opt2 = new Option(OPT.DEER, new Text("蒸鹿尾"), callback);
-          let opt3 = new Option(OPT.CHICKEN, new Text("烧花鸡"), callback);
-          options.push(opt1, opt2, opt3);
+        enum OPT {
+          BEAR = 0,
+          DEER = 1,
+          CHICKEN = 2,
         }
-        that.showOptionView(new Text("我学了"), options);
+        let callback:OptionCallback = {
+          onOptionClicked(id: number): boolean {
+            switch(id) {
+              case OPT.BEAR:
+                console.log("You have learned how to cook bear");
+                break;
+              case OPT.DEER:
+                console.log("You have learned how to cook deer");
+                break;
+              case OPT.CHICKEN:
+                console.log("You have learned how to cook chicken");
+                break;
+              case UNKNOWN:
+                console.log("Timeout");
+                break;
+            }
+            Main.getPlayer().saveChoose(Event.FRE_WHAT_LEARN, id);
+            sequence.next();
+            return true;
+          }
+        }
+        let opt1 = new Option(OPT.BEAR, new Text("蒸熊掌"));
+        let opt2 = new Option(OPT.DEER, new Text("蒸鹿尾"));
+        let opt3 = new Option(OPT.CHICKEN, new Text("烧花鸡"));
+        options.push(opt1, opt2, opt3);
+        that.showOptionView(
+          new Text("我学了"),
+          options,
+          callback,
+          15
+        );
       }
     });
     sequence.addIntoSequence({
@@ -120,9 +127,10 @@ export default class Act1 extends SimpleScene {
             word += "大吉大利，今晚吃鸡";
             ability = ABILITY.LOYAL
             break;
+          case UNKNOWN:
           case Player.CHOOSE_NOT_FOUND:
-            sequence.next();
-            return;
+            word += "应该是偷懒了";
+            break;
         }
         Main.getPlayer().character.abilities[ability]++;
         that.addDialogue(new Dialogue(
@@ -287,18 +295,18 @@ export default class Act1 extends SimpleScene {
     let that = this;
     let options = new Array<Option>();
     let optionCallback = {
-      onOptionClicked(op: Option):boolean {
+      onOptionClicked(op: number):boolean {
         that.addDialogue(new Dialogue("另一个我", new Text("这些都是可以的，关键在行动，关键在坚持")));
         return true;
       }
     }
-    let opt1 = new Option(1, new Text("要有很多很多的钱"), optionCallback);
-    let opt2 = new Option(2, new Text("成为一名科学家"), optionCallback);
-    let opt3 = new Option(3, new Text("写出令自己满意的作品，最好能流传"), optionCallback);
+    let opt1 = new Option(1, new Text("要有很多很多的钱"));
+    let opt2 = new Option(2, new Text("成为一名科学家"));
+    let opt3 = new Option(3, new Text("写出令自己满意的作品，最好能流传"));
     options.push(opt1);
     options.push(opt2);
     options.push(opt3);
 
-    this.showOptionView(new Text("你有什么理想吗？"), options);
+    this.showOptionView(new Text("你有什么理想吗？"), options, optionCallback);
   }
 }

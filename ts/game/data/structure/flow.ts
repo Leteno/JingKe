@@ -2,13 +2,13 @@ import Dialogue from "../../../data/dialogue";
 import Assertion from "../../../misc/assertion";
 import SimpleScene from "../../../scene/simple_scene";
 import { Sequence } from "../../../schedule/sequence";
-import { Option } from "../../../widgets/option_view";
+import { Option, OptionCallback } from "../../../widgets/option_view";
 import { Text } from "../../../widgets/textview"
 
 export class Flow {
   sequence: Sequence;
   addDialogue: (data: Dialogue) => void;
-  showOptionView: (title: Text, options: Array<Option>) => void;
+  showOptionView: (title: Text, options: Array<Option>, callback: OptionCallback, timing?: number) => void;
   setOnDialogueFinished: (fn: () =>void) => void;
   hideDialogue: () => void;
 

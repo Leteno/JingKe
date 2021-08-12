@@ -139,16 +139,6 @@ export default class HelloWorldScene implements Scene {
 
   showSimpleOptions() {
     let that = this;
-    let denyCallback: OptionCallback = {
-      onOptionClicked(option:Option) {
-        that.dialogueView.addDialogue(
-          new Dialogue("郑虾米", new Text("谢谢，我不能接受")));
-        that.dialogueView.addDialogue(
-          new Dialogue("蒋小嘉", new Text("我误会你了"), false /* showAtLeft */)
-        );
-        return true;
-      }
-    };
     let options = new Array<Option>();
     enum OPT {
       DENY = 0,
@@ -159,47 +149,52 @@ export default class HelloWorldScene implements Scene {
       OPT.DENY,
       new Text("哈哈 我辈岂是蓬蒿人 \f正气\r\f+1\r")
         .updatePatternDrawFunc("正气", new BgText("green", "white"))
-        .updatePatternDrawFunc("+1", new BgText(undefined, "white")),
-      denyCallback);
-    options.push(optDeny);
-    let acceptCallback: OptionCallback = {
-      onOptionClicked(option:Option) {
-        that.dialogueView.addDialogue(
-          new Dialogue("郑虾米", new Text("谢谢，好啊好啊好啊")));
-        that.dialogueView.addDialogue(
-          new Dialogue("蒋小嘉", new Text("哈哈哈哈哈"), false /* showAtLeft */)
-        );
-        return true;
-      }
-    }
+        .updatePatternDrawFunc("+1", new BgText(undefined, "white"))
+    );
     let optAccept = new Option(
       OPT.ACCEPT,
       new Text("哎呀 俯首甘为孺子牛 \f金钱\r\f+500\r")
         .updatePatternDrawFunc("金钱", new BgText("yellow", "black"))
         .updatePatternDrawFunc("+500", new BgText(undefined, "white")),
-      acceptCallback);
-    options.push(optAccept);
-    let fightCallback: OptionCallback = {
-      onOptionClicked(option:Option) {
-        that.dialogueView.addDialogue(
-          new Dialogue("郑虾米", new Text("你不能侮辱我的人格，我要跟你决斗")));
-        that.dialogueView.addDialogue(
-          new Dialogue("蒋小嘉", new Text("啊啊啊啊"), false /* showAtLeft */)
-        );
-        return true;
-      }
-    }
+    );
     let optFight = new Option(
       OPT.FIGHT,
       new Text("你敢羞辱我，打你一顿. \f武力\r\f+1\r \f暴躁\r\f+1\r")
         .updatePatternDrawFunc("武力", new BgText("green", "white"))
         .updatePatternDrawFunc("暴躁", new BgText("black", "white"))
-        .updatePatternDrawFunc("+1", new BgText(undefined, "white")),
-      fightCallback
+        .updatePatternDrawFunc("+1", new BgText(undefined, "white"))
     );
-    options.push(optFight);
+    options.push(optDeny, optAccept, optFight);
+    let callback: OptionCallback = {
+      onOptionClicked(option:number) {
+        switch(option) {
+          case OPT.ACCEPT:
+            that.dialogueView.addDialogue(
+              new Dialogue("郑虾米", new Text("谢谢，好啊好啊好啊")));
+            that.dialogueView.addDialogue(
+              new Dialogue("蒋小嘉", new Text("哈哈哈哈哈"), false /* showAtLeft */)
+            );
+            break;
+          case OPT.DENY:
+            that.dialogueView.addDialogue(
+              new Dialogue("郑虾米", new Text("谢谢，我不能接受")));
+            that.dialogueView.addDialogue(
+              new Dialogue("蒋小嘉", new Text("我误会你了"), false /* showAtLeft */)
+            );
+            break;
+          case OPT.FIGHT:
+            that.dialogueView.addDialogue(
+              new Dialogue("郑虾米", new Text("你不能侮辱我的人格，我要跟你决斗")));
+            that.dialogueView.addDialogue(
+              new Dialogue("蒋小嘉", new Text("啊啊啊啊"), false /* showAtLeft */)
+            );
+            break;
+        }
+        return true;
+      }
+    };
     let title = "接受贿赂吗？";
-    this.optionView.show(new Text(title), options);
+    this.optionView.show(new Text(title), options, callback);
   }
 
   update(dt: number) {
