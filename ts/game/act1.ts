@@ -280,14 +280,32 @@ export default class Act1 extends SimpleScene {
         ));
         that.setOnDialogueFinish(() => {
           market.pointerPosition = PointerPosition.NONE;
-          palace.showNoteSign = true;
           market.dirty = true;
+          sequence.next();
+        })
+      }
+    });
+    sequence.addIntoSequence({
+      onStart() {
+        let juzi = Main.getActors().juzi;
+        juzi.pointerPosition = PointerPosition.RIGHT;
+        juzi.dirty = true;
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          new Text("右边的人物，长按可以看这个人的描述，点击可以与之互动"),
+          false
+        ));
+
+        that.setOnDialogueFinish(() => {
+          juzi.pointerPosition = PointerPosition.NONE;
+          juzi.dirty = true;
+          palace.showNoteSign = true;
           palace.dirty = true;
           that.showSimpleOptions();
           sequence.next();
         })
       }
-    });
+    })
     sequence.startOne();
   }
 

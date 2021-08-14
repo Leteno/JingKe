@@ -34,13 +34,20 @@ export default class ImageView extends SimpleView {
       ImageView.pointer.src = "res/created/pointer.png"
     }
     let pointerSize = 30;
-    let dx = -pointerSize/2 - 8;
     let dy = (view.height-pointerSize)/2;
     ctx.save();
+    if (pointerPosition == PointerPosition.RIGHT) {
+      let dx = view.x + view.width + pointerSize;
+      ctx.translate(dx, dy);
+      ctx.scale(-1, 1);
+    } else {
+      let dx = -pointerSize/2 - 8;
+      ctx.translate(dx, dy);
+    }
     ctx.drawImage(
       ImageView.pointer,
-      dx,
-      dy,
+      0,
+      0,
       pointerSize,
       pointerSize
     )
