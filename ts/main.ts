@@ -86,7 +86,7 @@ export default class Main {
 
   clearScreen() {
     this.ctx.save();
-    this.ctx.fillStyle = 'white';
+    this.ctx.fillStyle = 'black';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
     this.ctx.restore();
   }

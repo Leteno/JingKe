@@ -186,8 +186,11 @@ export default abstract class SimpleView extends Sprite {
     }
 
     if (this.border) {
+      let borderColor = this.border.color ?
+        this.border.color:
+        "white";
       ctx.save();
-      ctx.strokeStyle = "black";
+      ctx.strokeStyle = borderColor;
       ctx.strokeRect(
         0, 0,
         this.width,

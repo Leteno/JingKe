@@ -74,7 +74,7 @@ export default class TextView extends SimpleView {
   constructor(text:Text= new Text("Hello world")) {
     super();
     this.text = text;
-    this.textColor = "black";
+    this.textColor = "white";
     this.textSize = 24;
     this.showTextLength = text.content.length;
     this.drawLines = new Array<DrawLine>();
@@ -89,7 +89,7 @@ export default class TextView extends SimpleView {
   }
 
   setTransparent() {
-    this.textColor = "#FFFFFF";
+    this.textColor = "#000000";
   }
 
   applyStyle(ctx: CanvasRenderingContext2D) {

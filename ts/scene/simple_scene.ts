@@ -59,8 +59,8 @@ export default abstract class SimpleScene implements Scene {
     this.sceneCaption.margin.top = -50;
 
     this.animators = new Array<Animator<number>>();
-    this.sceneCaption.textColor = "#FFFFFF";
-    this.sceneTitle.textColor = "#FFFFFF";
+    this.sceneCaption.setTransparent();
+    this.sceneTitle.setTransparent();
 
     this.dialogueView = new DialogueView();
     this.dialogueView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
@@ -70,7 +70,7 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.margin.bottom = 20;
     this.dialogueView.layoutParam.xcfg = Align.CENTER;
     this.dialogueView.layoutParam.ycfg = Align.END;
-    this.dialogueView.bgColor = "#f5bb10";
+    this.dialogueView.bgColor = "#FFF99D";
 
     this.descriptionView = new PlayerDescriptionView();
     this.descriptionView.layoutParam.xLayout = LayoutType.MATCH_PARENT;

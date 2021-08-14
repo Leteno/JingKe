@@ -9,6 +9,7 @@ export class MeasureResult {
 }
 
 export class Border {
+  color: string;
 }
 
 class _Gap {

@@ -41,13 +41,15 @@ export default class OptionView extends LinearLayout {
     this.padding.right = 20;
 
     this.titleView = new TextView();
+    this.titleView.textColor = "black";
     this.titleView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
 
     this.timingView = new TextView();
+    this.timingView.textColor = "#0078d7";
     this.timingView.visible = false;
     this.timingView.layoutParam.xcfg = Align.END;
 
-    this.bgColor = "#aabbcc";
+    this.bgColor = "#f0f0f0";
     this.visible = false;
   }
 
@@ -113,8 +115,10 @@ export default class OptionView extends LinearLayout {
     }).bind(this);
     textView.padding.left = textView.padding.right =
       textView.padding.top = textView.padding.bottom = 5;
+    textView.textColor = "black";
+    textView.bgColor = "#e1e1e1";
     textView.border = new Border();
-    textView.bgColor = "#ccbbaa";
+    textView.border.color = "#adadad";
     return textView;
   }
 }

@@ -32,10 +32,12 @@ export default class PlayerDescriptionView extends Panel {
     this.name = new TextView();
     this.name.margin.bottom = 10;
     this.name.textSize = 28;
+    this.name.textColor = "black"
     mainFrame.addView(this.name);
 
     let attributeLayer = new LinearLayout();
     let label = new TextView(new Text("属性"));
+    label.textColor = "black";
     attributeLayer.addView(label);
     this.loyal = new TextView();
     this.attack = new TextView();
@@ -45,6 +47,10 @@ export default class PlayerDescriptionView extends Panel {
     this.attack.textSize = 12;
     this.inteligence.textSize = 12;
     this.trust.textSize = 12;
+    this.loyal.textColor = "black";
+    this.attack.textColor = "black";
+    this.inteligence.textColor = "black";
+    this.trust.textColor = "black";
     attributeLayer.addView(this.loyal);
     attributeLayer.addView(this.attack);
     attributeLayer.addView(this.inteligence);
@@ -53,10 +59,12 @@ export default class PlayerDescriptionView extends Panel {
     attributeLayer.margin.bottom = 20;
 
     let specialLabel = new TextView(new Text("特技"));
+    specialLabel.textColor = "black";
     mainFrame.addView(specialLabel);
     specialLabel.margin.bottom = 10;
     this.special = new TextView();
     this.special.textSize = 12;
+    this.special.textColor = "black";
     mainFrame.addView(this.special);
 
     this.image = new ImageView("");

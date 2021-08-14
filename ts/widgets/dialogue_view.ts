@@ -32,6 +32,9 @@ export default class DialogueView extends Panel {
     this.nameViewLeft = new TextView(new Text("郑大侠"));
     this.nameViewRight = new TextView(new Text("嘉女士"));
     this.contentView = new TextView(new Text("你好，冒险者"));
+    this.nameViewLeft.textColor = "black";
+    this.nameViewRight.textColor = "black";
+    this.contentView.textColor = "black";
     this.addView(this.nameViewLeft);
     this.addView(this.nameViewRight);
     this.addView(this.contentView);
