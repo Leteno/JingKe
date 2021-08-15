@@ -77,6 +77,7 @@ export class PageList extends LinearLayout {
     for (let i = 0; i < listInfo.pages.length; i++) {
       let info = listInfo.pages[i];
       let title = new TextView(new Text(info.title));
+      title.margin.right = 10;
       title.onclickInternal = (ignore) => {
         listInfo.currentIndex = i;
         listInfo.dirty = true;
