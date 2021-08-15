@@ -66,7 +66,6 @@ export default class TextView extends SimpleView {
   textColor: string;
   textSize: number;
   lineHeight: number;
-  oneCharWidth: number;
   drawLines: Array<DrawLine>;
 
   showTextLength: number;
@@ -107,9 +106,6 @@ export default class TextView extends SimpleView {
     maxHeightForCalculation: number): MeasureResult {
     ctx.save();
     this.applyStyle(ctx);
-
-    this.oneCharWidth = TextHelper.getInstance()
-      .calculateOnCharWidth(ctx, this.textSize);
 
     let chineseFontWidth = TextHelper.getInstance()
       .calculateChineseCharWidth(ctx, this.textSize);
