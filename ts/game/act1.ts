@@ -177,7 +177,7 @@ export default class Act1 extends SimpleScene {
     me.margin.top = 10 + this.canvasHeight/6;
     me.layoutParam.xcfg = Align.END;
     me.onclickInternal = (event) => {
-      this.showCharacterDescription(Main.getPlayer().character);
+      this.showUserPanel();
       return true;
     }
     me.visible = false;

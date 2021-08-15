@@ -3,10 +3,13 @@ import { AnimatorSetBuilder } from "../animator/animator_set";
 import { MeanWhileBuilder } from "../animator/meanwhile";
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import { textAlpha } from "../animator/text-affect";
+import { PageList } from "../compose/page_list";
 import PlayerDescriptionView from "../compose/player_description_view";
+import UserPanel from "../compose/UserPanel";
 import { Character } from "../data/character";
 import Dialogue from "../data/dialogue";
 import { Player } from "../data/player";
+import Main from "../main";
 import { ClickEvent, PressEvent } from "../misc/event";
 import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
@@ -23,6 +26,7 @@ export default abstract class SimpleScene implements Scene {
   private dialogueView: DialogueView;
   private optionView: OptionView;
   private descriptionView: PlayerDescriptionView;
+  private userPanel: UserPanel;
 
   canvasWidth: number;
   canvasHeight: number;
@@ -79,6 +83,9 @@ export default abstract class SimpleScene implements Scene {
     this.descriptionView.margin.left = 40;
     this.descriptionView.margin.right = 40;
     this.descriptionView.visible = false;
+
+    this.userPanel = new UserPanel();
+    this.userPanel.visible = false;
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
@@ -90,6 +97,8 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.layout(this.canvasWidth, this.canvasHeight);
     this.descriptionView.measure(ctx, this.canvasWidth, this.canvasHeight);
     this.descriptionView.layout(this.canvasWidth, this.canvasHeight);
+    this.userPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.userPanel.layout(this.canvasWidth, this.canvasHeight);
 
     let captionFadeIn = textAlpha(true, 2000, this.sceneCaption);
     let titleFadeIn = textAlpha(true, 2500, this.sceneTitle);
@@ -125,9 +134,13 @@ export default abstract class SimpleScene implements Scene {
     this.dialogueView.drawToCanvas(ctx);
     this.optionView.drawToCanvas(ctx);
     this.descriptionView.drawToCanvas(ctx);
+    this.userPanel.drawToCanvas(ctx);
   }
 
   onclick(event: ClickEvent) {
+    if (this.userPanel.onclick(event)) {
+      return;
+    }
     if (this.descriptionView.onclick(event)) {
       return;
     }
@@ -141,6 +154,9 @@ export default abstract class SimpleScene implements Scene {
   }
 
   onpress(event: PressEvent) {
+    if (this.userPanel.onpress(event)) {
+      return;
+    }
     if (this.descriptionView.onpress(event)) {
       return;
     }
@@ -195,5 +211,9 @@ export default abstract class SimpleScene implements Scene {
   showCharacterDescription(player: Character) {
     this.descriptionView.setCharacter(player);
     this.descriptionView.visible = true;
+  }
+
+  showUserPanel() {
+    this.userPanel.visible = true;
   }
 }

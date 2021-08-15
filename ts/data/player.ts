@@ -20,6 +20,7 @@ export class Player extends BindableAndSerializable {
     super();
     this.character = new Character();
     this.character.name = "荆棘";
+    this.character.imageSrc = "res/copyleft/people_gainie.png";
     this.version = 1;
     this.chooses = new Map<number, number>();
   }
