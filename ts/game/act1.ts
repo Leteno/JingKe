@@ -315,6 +315,9 @@ export default class Act1 extends SimpleScene {
     let optionCallback = {
       onOptionClicked(op: number):boolean {
         that.addDialogue(new Dialogue("另一个我", new Text("这些都是可以的，关键在行动，关键在坚持")));
+        that.setOnDialogueFinish(() => {
+          that.hideDialogue();
+        })
         return true;
       }
     }
