@@ -97,5 +97,7 @@ export class PageList extends LinearLayout {
     pageList.contentPanel.removeAllViews();
     pageList.contentPanel.addView(currentPage);
     pageList.contentPanel.setIsDirty(true);
+
+    pageList.setIsDirty(true);
   }
 }
