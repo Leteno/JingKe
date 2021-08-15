@@ -21,8 +21,6 @@ export default class UserPanel extends PageList {
     this.descriptionView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.descriptionView.layoutParam.xcfg = Align.CENTER;
     this.descriptionView.layoutParam.ycfg = Align.CENTER;
-    this.descriptionView.margin.left = 40;
-    this.descriptionView.margin.right = 40;
     this.addPage("状态", this.descriptionView);
     let otherPage = new TextView(new Text("Hello world"));
     this.addPage("其他", otherPage);
@@ -32,6 +30,7 @@ export default class UserPanel extends PageList {
       v.setCharacter(d);
     });
 
-    this.bgColor = "#ff0000";
+    this.descriptionView.bgColor = undefined;
+    this.bgColor = "#e6e6e6";
   }
 }
