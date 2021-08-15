@@ -19,7 +19,7 @@ class DrawLine {
     text: string) => void;
 
 
-  constructor(isPattern: boolean=false) {
+  constructor(isPattern: boolean=false, underline?: boolean) {
     this.isPattern = isPattern;
     if (!isPattern) {
       this.draw = function(ctx: CanvasRenderingContext2D,
@@ -27,6 +27,9 @@ class DrawLine {
         width: number, height: number,
         text: string) {
         ctx.fillText(text, x, y);
+        if (underline) {
+          ctx.fillRect(x, y + height, width, 2);
+        }
       }
     }
   }
@@ -67,6 +70,7 @@ export default class TextView extends SimpleView {
   textSize: number;
   lineHeight: number;
   drawLines: Array<DrawLine>;
+  underline: boolean;
 
   showTextLength: number;
 
@@ -75,6 +79,7 @@ export default class TextView extends SimpleView {
     this.text = text;
     this.textColor = "white";
     this.textSize = 24;
+    this.underline = false;
     this.showTextLength = text.content.length;
     this.drawLines = new Array<DrawLine>();
 
@@ -155,7 +160,7 @@ export default class TextView extends SimpleView {
         start = i + 1;
         continue;
       } else if (ch == '\r') {
-        let drawLine = new DrawLine(true);
+        let drawLine = new DrawLine(true, this.underline);
         drawLine.text = this.text.content.substr(
           patStart, i - patStart
         ) // i not include.
@@ -174,7 +179,7 @@ export default class TextView extends SimpleView {
         start = i + 1;
         continue;
       } else if (ch == '\n') {
-        let drawLine = new DrawLine();
+        let drawLine = new DrawLine(false, this.underline);
         drawLine.text = this.text.content.substr(
           start, i - start
         ) // i not include.
@@ -208,7 +213,7 @@ export default class TextView extends SimpleView {
             // already start at 0
             let warning = "(Pattern length is above maxWidth)";
             console.warn(warning);
-            let drawLine = new DrawLine();
+            let drawLine = new DrawLine(false, this.underline);
             drawLine.x = x;
             drawLine.y = y;
             drawLine.startIndex = 0;
@@ -225,7 +230,7 @@ export default class TextView extends SimpleView {
           }
           continue;
         }
-        let drawLine = new DrawLine();
+        let drawLine = new DrawLine(false, this.underline);
         drawLine.x = x;
         drawLine.y = y;
         drawLine.startIndex = start;
@@ -253,7 +258,7 @@ export default class TextView extends SimpleView {
       // We should have one pattern, however, didn't find the end.
       let warning = "(Expect end for pattern)";
       console.warn(warning);
-      let drawLine = new DrawLine();
+      let drawLine = new DrawLine(false, this.underline);
       drawLine.x = x;
       drawLine.y = y;
       drawLine.startIndex = 0;
@@ -265,7 +270,7 @@ export default class TextView extends SimpleView {
 
       actualHeight += this.lineHeight;
     } else {
-      let drawLine = new DrawLine();
+      let drawLine = new DrawLine(false, this.underline);
       drawLine.x = x;
       drawLine.y = y;
       drawLine.startIndex = start;

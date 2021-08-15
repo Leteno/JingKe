@@ -84,6 +84,7 @@ export class PageList extends LinearLayout {
         return true;
       }
       if (i == listInfo.currentIndex) {
+        title.underline = true;
         title.textColor = listInfo.textSelectedColor;
       } else {
         title.textColor = listInfo.textUnselectedColor;
