@@ -54,6 +54,16 @@ export default class Panel extends SimpleView {
     this.children.push(view);
   }
 
+  indexOf(view: Sprite) {
+    let result = -1;
+    for (let i = 0; i < this.children.length; i++) {
+      if (this.children[i] == view) {
+        result = i;
+        break;
+      }
+    }
+    return result;
+  }
 
   removeView(view: Sprite) {
     let index = this.children.findIndex((v) => v == view);
