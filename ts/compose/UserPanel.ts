@@ -33,4 +33,12 @@ export default class UserPanel extends PageList {
     this.descriptionView.bgColor = undefined;
     this.bgColor = "#e6e6e6";
   }
+
+  onTouchOutside() {
+    if (!this.visible) {
+      return false;
+    }
+    this.visible = false;
+    return true;
+  }
 }
