@@ -133,10 +133,24 @@ export default class DialogueView extends Panel {
   }
 
   onclickInternal(event: ClickEvent) {
+    this.performNext();
+    return true;
+  }
+
+  onTouchOutside() {
+    if (this.visible) {
+      // Please answer dialogue view before you move on.
+      this.performNext();
+      return true;
+    }
+    return false;
+  }
+
+  performNext() {
     if (this.animators.length > 0 &&
-        this.animators.findIndex((animator) => {
-          return !animator.isStop();
-        }) != -1) {
+      this.animators.findIndex((animator) => {
+        return !animator.isStop();
+      }) != -1) {
       // click to skip the animation.
       this.animators.forEach((animator) => {
         animator.update(animator.totalTime);
@@ -154,7 +168,6 @@ export default class DialogueView extends Panel {
         }
       }
     }
-    return true;
   }
 
   // Call when no more dialogue follow up
