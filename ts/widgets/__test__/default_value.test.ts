@@ -14,6 +14,8 @@ export let defaultCtx = {
     img:HTMLImageElement,
     dx: number, dy: number,
     dw: number, dh: number) {},
+  fillRect(x: number, y:number, w: number, h: number) {},
+  fillText(text:string, x: number, y:number) {},
 } as CanvasRenderingContext2D;
 
 test("", ()=> {})
