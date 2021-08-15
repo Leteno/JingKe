@@ -12,6 +12,7 @@ import OptionView, {Option, OptionCallback} from "../widgets/option_view";
 import { BgText } from "../widgets/richtext";
 import BirdViewImage from "../widgets/birdview_image";
 import { AnimatorSetBuilder } from "../animator/animator_set";
+import { ScrollView } from "../widgets/scrollview";
 
 export default class HelloWorldScene implements Scene {
   mainPanel: Panel;
@@ -67,16 +68,18 @@ export default class HelloWorldScene implements Scene {
       .build();
     this.animators.push(scanningImage);
 
+    let scrollView = new ScrollView();
+    this.mainPanel.addView(scrollView);
     let text = new TextView(new Text("你好，过去(不对齐)"));
     text.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     text.layoutParam.xLayout = LayoutType.MATCH_PARENT;
-    this.mainPanel.addView(text);
+    scrollView.addView(text);
     text.bgColor = "#cccccc";
 
     let text2 = new TextView(new Text("你好，过去(对齐)"));
     text2.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     text2.margin.top = 40;
-    this.mainPanel.addView(text2);
+    scrollView.addView(text2);
     text2.bgColor = "#eeeeee";
 
     let text3 = new TextView(
@@ -86,7 +89,7 @@ export default class HelloWorldScene implements Scene {
     );
     text3.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     text3.margin.top = -100;
-    this.mainPanel.addView(text3);
+    scrollView.addView(text3);
     text3.bgColor = "#bbbbbb";
 
     let imageView = new ImageView("res/artichoke_PNG30.png");
@@ -108,7 +111,15 @@ export default class HelloWorldScene implements Scene {
     longText.debug = true;
     longText.padding.top = longText.padding.bottom =
       longText.padding.left = longText.padding.right = 16;
-    this.mainPanel.addView(longText);
+    scrollView.addView(longText);
+
+    let animatorScroll = new NumberLinearAnimator(
+      0, 100, 3000
+    );
+    animatorScroll.onValChange= (val: number) => {
+      scrollView.offsetY = val;
+    }
+    this.animators.push(animatorScroll);
 
     this.dialogueView = new DialogueView();
     this.dialogueView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
