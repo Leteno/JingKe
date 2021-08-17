@@ -135,6 +135,7 @@ export default class HelloWorldScene implements Scene {
     this.dialogueView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.dialogueView.forceHeight = canvas.height / 4;
     this.mainPanel.addView(this.dialogueView);
+    this.dialogueView.bgColor = "#FFF99D";
     this.dialogueView.addDialogue(new Dialogue(
       "郑虾米",
       new Text("这是一段很长的话，但是如果你想看完，Ok, Fine. 我也没有任何意见，只是觉得你或许可以做一点更有意义的事情")
