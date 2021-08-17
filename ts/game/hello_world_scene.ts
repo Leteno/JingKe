@@ -69,6 +69,7 @@ export default class HelloWorldScene implements Scene {
     this.animators.push(scanningImage);
 
     let scrollView = new ScrollView();
+    scrollView.forceHeight = 200;
     this.mainPanel.addView(scrollView);
     let text = new TextView(new Text("你好，过去(不对齐)"));
     text.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
@@ -113,13 +114,22 @@ export default class HelloWorldScene implements Scene {
       longText.padding.left = longText.padding.right = 16;
     scrollView.addView(longText);
 
-    let animatorScroll = new NumberLinearAnimator(
-      0, 100, 3000
-    );
-    animatorScroll.onValChange= (val: number) => {
-      scrollView.offsetY = val;
+    let up = new TextView(new Text("Up"));
+    let down = new TextView(new Text("Down"));
+    up.onclickInternal = (event) => {
+      scrollView.scrollBy(0, -10);
+      return true;
     }
-    this.animators.push(animatorScroll);
+    down.onclickInternal = (event) => {
+      scrollView.scrollBy(0, 10);
+      return true;
+    }
+    up.layoutParam.xcfg = Align.START;
+    up.layoutParam.ycfg = Align.CENTER;
+    down.layoutParam.xcfg = Align.END;
+    down.layoutParam.ycfg = Align.CENTER;
+    this.mainPanel.addView(up);
+    this.mainPanel.addView(down);
 
     this.dialogueView = new DialogueView();
     this.dialogueView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
@@ -200,6 +210,9 @@ export default class HelloWorldScene implements Scene {
               new Dialogue("蒋小嘉", new Text("啊啊啊啊"), false /* showAtLeft */)
             );
             break;
+        }
+        that.dialogueView.onDialogueFinished = () => {
+          that.dialogueView.visible = false;
         }
         return true;
       }
