@@ -1,5 +1,6 @@
 
 import { waitForMs } from "../concurency";
+import {DragEvent} from "../event"
 import EventHandler from "../event_handler"
 
 test("click", () => {
@@ -81,4 +82,46 @@ test("click canceled by big move", () => {
     .toBe(0);
   expect(onClick.mock.calls.length)
     .toBe(0);
+})
+
+test("drag", () => {
+  let eventHandler = new EventHandler();
+  let onDrag = jest.fn();
+  eventHandler.bindOnDragHandler(onDrag);
+
+  eventHandler.onpointerdown(30, 30);
+  eventHandler.onpointermove(50, 50);
+  expect(onDrag.mock.calls.length).toBe(1);
+  expect(onDrag.mock.calls[0][0]).toEqual(
+    new DragEvent(30, 30, 20, 20)
+  );
+
+  eventHandler.onpointermove(20, 20);
+  expect(onDrag.mock.calls.length).toBe(2);
+  expect(onDrag.mock.calls[1][0]).toEqual(
+    new DragEvent(30, 30, -10, -10)
+  );
+})
+
+test("drag several", () => {
+  let eventHandler = new EventHandler();
+  let onDrag = jest.fn();
+  eventHandler.bindOnDragHandler(onDrag);
+
+  eventHandler.onpointerdown(30, 30);
+  eventHandler.onpointermove(50, 50);
+  eventHandler.onpointerup(50, 50);
+
+  eventHandler.onpointerdown(60, 60);
+  eventHandler.onpointermove(50, 50);
+  expect(onDrag.mock.calls.length).toBe(2);
+  expect(onDrag.mock.calls[1][0]).toEqual(
+    new DragEvent(60, 60, -10, -10)
+  );
+
+  eventHandler.onpointermove(120, 130);
+  expect(onDrag.mock.calls.length).toBe(3);
+  expect(onDrag.mock.calls[2][0]).toEqual(
+    new DragEvent(60, 60, 60, 70)
+  );
 })

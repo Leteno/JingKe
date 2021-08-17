@@ -54,3 +54,30 @@ export class PressEvent implements SimpleEvent {
     return ret;
   }
 }
+
+export class DragEvent {
+  // To know which view is responsible for it.
+  startX: number;
+  startY: number;
+  // dragOffset
+  dragX: number;
+  dragY: number;
+
+  constructor(startX: number, startY: number,
+    dragX: number, dragY: number) {
+    this.startX = startX;
+    this.startY = startY;
+    this.dragX = dragX;
+    this.dragY = dragY;
+  }
+
+  static alignChildren(event: DragEvent, view: Sprite): DragEvent {
+    let ret = new DragEvent(
+      event.startX, event.startY,
+      event.dragX, event.dragY
+    );
+    ret.startX -= view.x + view.padding.left;
+    ret.startY -= view.y + view.padding.top;
+    return ret;
+  }
+}

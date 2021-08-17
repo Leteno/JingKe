@@ -1,10 +1,11 @@
-import { ClickEvent, PressEvent } from "./event";
+import { ClickEvent, PressEvent, DragEvent } from "./event";
 
 export default class EventHandler {
   static LONGPRESS_TIME = 500;
   static CONTINUE_PRESS_TIME = 50;
   private onclickHandler: (event:ClickEvent) => boolean;
   private onpressHandler: (event:PressEvent) => boolean;
+  private ondragHandler: (event:DragEvent) => boolean;
 
   private startTime: number;
   private pointDownX: number;
@@ -62,6 +63,10 @@ export default class EventHandler {
     this.onpressHandler = fn;
   }
 
+  bindOnDragHandler(fn: (event:DragEvent)=>boolean) {
+    this.ondragHandler = fn;
+  }
+
   onpointerdown(x: number, y: number) {
     this.stopTimeout();
     this.startTime = new Date().getTime();
@@ -107,6 +112,12 @@ export default class EventHandler {
       this.pointDownX, this.pointDownY)) {
       this.stopTimeout();
     }
+    let dragX = x - this.pointDownX;
+    let dragY = y - this.pointDownY;
+    this.sendDragEvent(
+      this.pointDownX,
+      this.pointDownY,
+      dragX, dragY);
   }
 
   private stopTimeout() {
@@ -133,6 +144,14 @@ export default class EventHandler {
       this.onpressHandler(new PressEvent(
         Math.floor(x), Math.floor(y)
       ))
+    }
+  }
+
+  private sendDragEvent(startX: number, startY: number, dragX: number, dragY: number) {
+    if (this.ondragHandler) {
+      this.ondragHandler(new DragEvent(
+        startX, startY, dragX, dragY
+      ));
     }
   }
 
