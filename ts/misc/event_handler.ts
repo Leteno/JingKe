@@ -1,6 +1,4 @@
 import { ClickEvent, PressEvent } from "./event";
-import { timestamp } from "./time";
-
 
 export default class EventHandler {
   static LONGPRESS_TIME = 500;
@@ -46,13 +44,13 @@ export default class EventHandler {
 
   onpointerdown(x: number, y: number) {
     this.stopTimeout();
-    this.startTime = timestamp();
+    this.startTime = new Date().getTime();
     this.pointDownX = x;
     this.pointDownY = y;
     this.timeoutId = window.setTimeout(
       (() => {
         let fn = () => {
-          let overlap = timestamp() - this.startTime;
+          let overlap = new Date().getTime() - this.startTime;
           this.sendPressEvent(x, y, overlap);
         }
         this.intervalId = window.setInterval(
@@ -72,7 +70,7 @@ export default class EventHandler {
         x, y, this.pointDownX, this.pointDownY)) {
       return;
     }
-    let overlap = timestamp() - this.startTime;
+    let overlap = new Date().getTime() - this.startTime;
     if (overlap >= EventHandler.LONGPRESS_TIME) {
       this.sendPressEvent(x, y, overlap);
     } else {
