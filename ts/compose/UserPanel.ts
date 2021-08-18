@@ -1,10 +1,12 @@
 import { Character } from "../data/character";
+import { Prossession } from "../data/prossession";
 import Main from "../main";
 import { Align, LayoutType } from "../misc/layout";
 import TextView from "../widgets/textview";
 import {Text} from "../widgets/textview";
 import { PageList } from "./page_list";
 import PlayerDescriptionView from "./player_description_view";
+import { UserProssessionView } from "./user_prossession_view";
 
 export default class UserPanel extends PageList {
 
@@ -22,8 +24,20 @@ export default class UserPanel extends PageList {
     this.descriptionView.layoutParam.xcfg = Align.CENTER;
     this.descriptionView.layoutParam.ycfg = Align.CENTER;
     this.addPage("状态", this.descriptionView);
-    let otherPage = new TextView(new Text("Hello world"));
-    this.addPage("其他", otherPage);
+    let prossessionPage = new UserProssessionView();
+    prossessionPage.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    let p1 = new Prossession();
+    p1.name = "六味补气丹";
+    p1.count = 1;
+    p1.functional = "治疗肾虚，你懂的";
+    let p2 = new Prossession();
+    p2.name = "大力金刚丸";
+    p1.count = 999;
+    p1.functional = "听说吃了会很大力";
+    for (let i = 0; i < 100; i++)
+      prossessionPage.model.items.push(p1, p2);
+    prossessionPage.model.dirty = true;
+    this.addPage("物品", prossessionPage);
 
     this.descriptionView.bindData(Main.getPlayer().character,
       (v: PlayerDescriptionView, d: Character) => {
