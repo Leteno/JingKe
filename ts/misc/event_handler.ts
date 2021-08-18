@@ -4,6 +4,7 @@ import { timestamp } from "./time";
 
 export default class EventHandler {
   static LONGPRESS_TIME = 1000;
+  static CONTINUE_PRESS_TIME = 50;
   private onclickHandler: (event:ClickEvent) => boolean;
   private onpressHandler: (event:PressEvent) => boolean;
 
@@ -11,6 +12,7 @@ export default class EventHandler {
   private pointDownX: number;
   private pointDownY: number;
   private timeoutId: number;
+  private intervalId: number;
 
   constructor() {
     this.onclickHandler = undefined;
@@ -47,10 +49,19 @@ export default class EventHandler {
     this.startTime = timestamp();
     this.pointDownX = x;
     this.pointDownY = y;
-    this.timeoutId = window.setInterval(
+    this.timeoutId = window.setTimeout(
       (() => {
-        let overlap = timestamp() - this.startTime;
-        this.sendPressEvent(x, y, overlap);
+        let fn = () => {
+          let overlap = timestamp() - this.startTime;
+          this.sendPressEvent(x, y, overlap);
+        }
+        this.intervalId = window.setInterval(
+          () => {
+            fn();
+          },
+          EventHandler.CONTINUE_PRESS_TIME
+        );
+        fn();
       }).bind(this),
       EventHandler.LONGPRESS_TIME
     )
@@ -80,6 +91,10 @@ export default class EventHandler {
     if (this.timeoutId > 0) {
       window.clearTimeout(this.timeoutId);
       this.timeoutId = -1;
+    }
+    if (this.intervalId > 0) {
+      window.clearInterval(this.intervalId);
+      this.intervalId = -1;
     }
   }
 

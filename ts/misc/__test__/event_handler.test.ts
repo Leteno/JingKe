@@ -22,7 +22,7 @@ test("press", async () => {
 
   eventHandler.onpointerdown(30, 30);
 
-  await waitForMs(1100);
+  await waitForMs(1000);
   expect(onPress.mock.calls.length)
     .toBe(1);
   expect(onClick.mock.calls.length)
@@ -38,9 +38,9 @@ test("press long time", async() => {
 
   eventHandler.onpointerdown(30, 30);
 
-  await waitForMs(4100);
+  await waitForMs(1060);
   expect(onPress.mock.calls.length)
-    .toBe(4);
+    .toBe(2);
   expect(onClick.mock.calls.length)
     .toBe(0);
 })
