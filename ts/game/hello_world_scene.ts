@@ -120,10 +120,12 @@ export default class HelloWorldScene implements Scene {
       scrollView.scrollBy(0, -10);
       return true;
     }
+    up.onpressInternal = up.onclickInternal;
     down.onclickInternal = (event) => {
       scrollView.scrollBy(0, 10);
       return true;
     }
+    down.onpressInternal = down.onclickInternal;
     up.layoutParam.xcfg = Align.START;
     up.layoutParam.ycfg = Align.CENTER;
     down.layoutParam.xcfg = Align.END;
