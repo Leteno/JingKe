@@ -3,7 +3,7 @@ import { timestamp } from "./time";
 
 
 export default class EventHandler {
-  static LONGPRESS_TIME = 1000;
+  static LONGPRESS_TIME = 500;
   static CONTINUE_PRESS_TIME = 50;
   private onclickHandler: (event:ClickEvent) => boolean;
   private onpressHandler: (event:PressEvent) => boolean;
