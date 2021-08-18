@@ -8,7 +8,8 @@ export default class EventHandler {
   private onpressHandler: (event:PressEvent) => boolean;
 
   private startTime: number;
-  private startEvent: PointerEvent;
+  private pointDownX: number;
+  private pointDownY: number;
   private timeoutId: number;
 
   private hasSendLongPressEvent: boolean;
@@ -20,9 +21,19 @@ export default class EventHandler {
   }
 
   bind(widget: HTMLElement) {
-    widget.onpointerdown = this.onpointerdown.bind(this);
-    widget.onpointerup = this.onpointerup.bind(this);
-    widget.onpointermove = this.onpointermove.bind(this);
+    let that: EventHandler = this;
+    widget.onpointerdown = ((event) => {
+      that.onpointerdown(event.x, event.y);
+      event.preventDefault();
+    });
+    widget.onpointerup = ((event) => {
+      that.onpointerup(event.x, event.y);
+      event.preventDefault();
+    });
+    widget.onpointermove = ((event) => {
+      that.onpointermove(event.x, event.y);
+      event.preventDefault();
+    });
   }
 
   bindOnClickHandler(fn: (event:ClickEvent)=>boolean) {
@@ -33,44 +44,45 @@ export default class EventHandler {
     this.onpressHandler = fn;
   }
 
-  onpointerdown(event: PointerEvent) {
+  onpointerdown(x: number, y: number) {
     this.stopTimeout();
     this.startTime = timestamp();
-    this.startEvent = event;
+    this.pointDownX = x;
+    this.pointDownY = y;
     this.hasSendLongPressEvent = false;
     this.timeoutId = window.setTimeout(
       (() => {
         let overlap = timestamp() - this.startTime;
         if (!this.hasSendLongPressEvent) {
-          this.sendPressEvent(event.x, event.y, overlap);
+          this.sendPressEvent(x, y, overlap);
           this.hasSendLongPressEvent = true;
         }
       }).bind(this),
       EventHandler.LONGPRESS_TIME
     )
-    event.preventDefault();
   }
-  onpointerup(event: PointerEvent) {
+  onpointerup(x: number, y: number) {
     this.stopTimeout();
-    if (EventHandler.positionChanged(event, this.startEvent)) {
+    if (EventHandler.positionChanged(
+        x, y, this.pointDownX, this.pointDownY)) {
       return;
     }
     let overlap = timestamp() - this.startTime;
     if (overlap >= EventHandler.LONGPRESS_TIME) {
       if (!this.hasSendLongPressEvent) {
-        this.sendPressEvent(event.x, event.y, overlap);
+        this.sendPressEvent(x, y, overlap);
         this.hasSendLongPressEvent = true;
       }
     } else {
-      this.sendClickEvent(event.x, event.y);
+      this.sendClickEvent(x, y);
     }
-    event.preventDefault();
   }
-  onpointermove(event: PointerEvent) {
-    if (this.startEvent && EventHandler.positionChanged(event, this.startEvent)) {
+  onpointermove(x: number, y: number) {
+    if (EventHandler.positionChanged(
+      x, y,
+      this.pointDownX, this.pointDownY)) {
       this.stopTimeout();
     }
-    event.preventDefault();
   }
 
   private stopTimeout() {
@@ -96,9 +108,11 @@ export default class EventHandler {
     }
   }
 
-  static positionChanged(event1: PointerEvent, event2: PointerEvent):boolean {
+  static positionChanged(
+    x1: number, y1: number,
+    x2: number, y2: number):boolean {
     let error = 10;
-    return Math.abs(event1.x - event2.x) >= error ||
-      Math.abs(event1.y - event2.y) >= error;
+    return Math.abs(x1 - x2) >= error ||
+      Math.abs(y1 - y2) >= error;
   }
 }
