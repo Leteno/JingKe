@@ -12,8 +12,6 @@ export default class EventHandler {
   private pointDownY: number;
   private timeoutId: number;
 
-  private hasSendLongPressEvent: boolean;
-
   constructor() {
     this.onclickHandler = undefined;
     this.onpressHandler = undefined;
@@ -49,14 +47,10 @@ export default class EventHandler {
     this.startTime = timestamp();
     this.pointDownX = x;
     this.pointDownY = y;
-    this.hasSendLongPressEvent = false;
-    this.timeoutId = window.setTimeout(
+    this.timeoutId = window.setInterval(
       (() => {
         let overlap = timestamp() - this.startTime;
-        if (!this.hasSendLongPressEvent) {
-          this.sendPressEvent(x, y, overlap);
-          this.hasSendLongPressEvent = true;
-        }
+        this.sendPressEvent(x, y, overlap);
       }).bind(this),
       EventHandler.LONGPRESS_TIME
     )
@@ -69,10 +63,7 @@ export default class EventHandler {
     }
     let overlap = timestamp() - this.startTime;
     if (overlap >= EventHandler.LONGPRESS_TIME) {
-      if (!this.hasSendLongPressEvent) {
-        this.sendPressEvent(x, y, overlap);
-        this.hasSendLongPressEvent = true;
-      }
+      this.sendPressEvent(x, y, overlap);
     } else {
       this.sendClickEvent(x, y);
     }

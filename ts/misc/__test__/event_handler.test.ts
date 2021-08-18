@@ -22,9 +22,25 @@ test("press", async () => {
 
   eventHandler.onpointerdown(30, 30);
 
-  await waitForMs(2000);
+  await waitForMs(1100);
   expect(onPress.mock.calls.length)
     .toBe(1);
+  expect(onClick.mock.calls.length)
+    .toBe(0);
+})
+
+test("press long time", async() => {
+  let eventHandler = new EventHandler();
+  let onClick = jest.fn();
+  let onPress = jest.fn();
+  eventHandler.bindOnClickHandler(onClick);
+  eventHandler.bindOnPressHandler(onPress);
+
+  eventHandler.onpointerdown(30, 30);
+
+  await waitForMs(4100);
+  expect(onPress.mock.calls.length)
+    .toBe(4);
   expect(onClick.mock.calls.length)
     .toBe(0);
 })
