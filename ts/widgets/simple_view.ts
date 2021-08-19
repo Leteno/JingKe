@@ -153,14 +153,14 @@ export default abstract class SimpleView extends Sprite {
 
   drawToCanvas(ctx: CanvasRenderingContext2D) {
     if (!this.visible) return;
+    if (this.bindedData && this.onBind && this.bindedData.dirty) {
+      this.onBind(this, this.bindedData);
+      this.bindedData.dirty = false;
+    }
     if (this.layoutCache.isDirty()) {
       this.layoutCache.reMeasure(this, ctx);
       this.layoutCache.reLayout(this);
       this.layoutCache.setIsDirty(false);
-    }
-    if (this.bindedData && this.onBind && this.bindedData.dirty) {
-      this.onBind(this, this.bindedData);
-      this.bindedData.dirty = false;
     }
     ctx.save();
     ctx.translate(this.x, this.y);

@@ -1,6 +1,7 @@
 import { BindableData } from "../data/bindable_data";
 import { Prossession } from "../data/prossession";
 import { Align, LayoutType } from "../misc/layout";
+import ImageView from "../widgets/imageview";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
 import Panel from "../widgets/panel"
 import { ScrollView } from "../widgets/scrollview";
@@ -21,6 +22,7 @@ export class UserProssessionView extends Panel {
 
   readonly model: ProssessionModel;
 
+  private scrollView: ScrollView;
   private prossessionListView: LinearLayout;
   private descriptionView: TextView;
 
@@ -35,9 +37,34 @@ export class UserProssessionView extends Panel {
       Orientation.VERTICAL;
     let scrollView = new ScrollView();
     scrollView.layoutParam.xcfg = Align.END;
+    scrollView.margin.right = 20;
     scrollView.layoutParam.yLayout = LayoutType.MATCH_PARENT;
     scrollView.addView(this.prossessionListView);
+    this.scrollView = scrollView;
     this.addView(scrollView);
+
+    let upBtn = new ImageView("res/created/up.png");
+    let downBtn = new ImageView("res/created/down.png");
+    upBtn.forceWidth = upBtn.forceHeight = 20;
+    upBtn.layoutParam.xcfg = Align.END;
+    upBtn.layoutParam.ycfg = Align.CENTER;
+    upBtn.margin.top = -20;
+    downBtn.forceWidth = downBtn.forceHeight = 20;
+    downBtn.layoutParam.xcfg = Align.END;
+    downBtn.layoutParam.ycfg = Align.CENTER;
+    downBtn.margin.top = 20;
+    upBtn.onclickInternal = upBtn.onpressInternal =
+      (event) => {
+      scrollView.scrollBy(0, 10);
+      return true;
+    };
+    downBtn.onclickInternal = downBtn.onpressInternal =
+      (event) => {
+      scrollView.scrollBy(0, -10);
+      return true;
+    };
+    this.addView(upBtn);
+    this.addView(downBtn);
 
     this.descriptionView = new TextView();
     this.descriptionView.margin.right =
@@ -67,7 +94,6 @@ export class UserProssessionView extends Panel {
         return true;
       }
       view.prossessionListView.addView(tv);
-      view.prossessionListView.setIsDirty(true);
     }
     if (model.selectIndex < 0 || model.selectIndex >= model.items.length) {
       view.descriptionView.setText(new Text(""));
@@ -79,6 +105,8 @@ export class UserProssessionView extends Panel {
         + "功效: " + item.functional 
       ));
     }
+    view.prossessionListView.setIsDirty(true);
+    view.scrollView.setIsDirty(true);
     view.descriptionView.setIsDirty(true);
     view.setIsDirty(true);
   }
