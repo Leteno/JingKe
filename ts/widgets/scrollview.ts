@@ -45,11 +45,17 @@ export class ScrollView extends Panel {
     
   scrollBy(x: number, y: number) {
     let newOffsetX = x + this.offsetX;
-    if (newOffsetX < 0) {
-      newOffsetX = 0;
-    } else if (newOffsetX + this.width > this.childrenMaxWidth) {
-      if (this.width < this.childrenMaxWidth) {
-        newOffsetX = this.childrenMaxWidth - this.width;
+    if (this.width > this.childrenMaxWidth) {
+      if (newOffsetX < 0) {
+        newOffsetX = 0;
+      } else {
+        newOffsetX = Math.min(newOffsetX,
+          this.width - this.childrenMaxWidth);
+      }
+    } else {
+      if (newOffsetX < 0) {
+        newOffsetX = Math.max(newOffsetX,
+          this.width - this.childrenMaxWidth);
       } else {
         newOffsetX = 0;
       }
@@ -57,11 +63,17 @@ export class ScrollView extends Panel {
     this.offsetX = newOffsetX;
 
     let newOffsetY = y + this.offsetY;
-    if (newOffsetY < 0) {
-      newOffsetY = 0;
-    } else if (newOffsetY + this.height > this.childrenMaxHeight) {
-      if (this.height < this.childrenMaxHeight) {
-        newOffsetY = this.childrenMaxHeight - this.height;
+    if (this.height > this.childrenMaxHeight) {
+      if (newOffsetY < 0) {
+        newOffsetY = 0;
+      } else {
+        newOffsetY = Math.min(newOffsetY,
+          this.height - this.childrenMaxHeight);
+      }
+    } else {
+      if (newOffsetY < 0) {
+        newOffsetY = Math.max(newOffsetY,
+          this.height - this.childrenMaxHeight);
       } else {
         newOffsetY = 0;
       }
