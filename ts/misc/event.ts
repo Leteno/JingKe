@@ -1,6 +1,11 @@
 import Sprite from "../widgets/sprite";
 
-export class ClickEvent {
+export interface SimpleEvent {
+  x: number;
+  y: number;
+}
+
+export class ClickEvent implements SimpleEvent {
   x: number;
   y: number;
 
@@ -25,7 +30,7 @@ export class ClickEvent {
   }
 }
 
-export class PressEvent {
+export class PressEvent implements SimpleEvent {
   x: number;
   y: number;
 

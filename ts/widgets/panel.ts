@@ -1,7 +1,7 @@
 import EasyMath from "../misc/easy-math"
 import Sprite, { MeasureResult } from "./sprite"
 import {Align, Specify} from "../misc/layout"
-import { ClickEvent, PressEvent } from "../misc/event"
+import { ClickEvent, PressEvent, SimpleEvent } from "../misc/event"
 import SimpleView from "./simple_view";
 
 export default class Panel extends SimpleView {
@@ -101,6 +101,7 @@ export default class Panel extends SimpleView {
     }
     // event cut out
     let childEvent = ClickEvent.alignChildren(event, this);
+    this.specialModifyOnEvent(childEvent);
     // The last one is in the front of the audience.
     // We should let it capture first.
     for (let i = this.children.length - 1; i >= 0; i--) {
@@ -121,6 +122,7 @@ export default class Panel extends SimpleView {
     }
     // event cut out
     let childEvent = PressEvent.alignChildren(event, this);
+    this.specialModifyOnEvent(childEvent);
     // The last one is in the front of the audience.
     // We should let it capture first.
     for (let i = this.children.length - 1; i >= 0; i--) {
@@ -130,5 +132,8 @@ export default class Panel extends SimpleView {
       }
     }
     return this.onpressInternal(event);
+  }
+
+  specialModifyOnEvent(event: SimpleEvent) {
   }
 }

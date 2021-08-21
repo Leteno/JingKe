@@ -1,4 +1,9 @@
+import { ClickEvent, PressEvent } from "../../misc/event";
+import { Specify } from "../../misc/layout";
+import LinearLayout from "../linear_layout";
 import {ScrollView} from "../scrollview"
+import { defaultCtx } from "./default_value.test";
+import TestSprite from "./test_sprite.test";
 
 test("scrollBy", () => {
   let scrollView = new ScrollView();
@@ -72,4 +77,82 @@ test("scrollBy small parent with big child", () => {
   scrollView.scrollBy(-200, -200);
   expect(scrollView.offsetX).toBe(-100);
   expect(scrollView.offsetY).toBe(-200);
+})
+
+test("click", () => {
+  let content = new LinearLayout();
+  let v1 = new TestSprite(100, 100);
+  let v2 = new TestSprite(100, 100);
+  let v3 = new TestSprite(100, 100);
+  content.addView(v1);
+  content.addView(v2);
+  content.addView(v3);
+
+  let scrollView = new ScrollView();
+  scrollView.forceHeight = 160;
+  scrollView.addView(content);
+
+  scrollView.measure(defaultCtx, 500, 500, Specify.NONE);
+  scrollView.layout(500, 500);
+
+  scrollView.onclick(new ClickEvent(20, 150));
+  expect((v1.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(0);
+  expect((v2.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(1)
+  expect((v2.onclickInternal as jest.Mock).mock.calls[0][0])
+    .toEqual({"x": 20, "y": 150})
+  expect((v3.onclickInternal as jest.Mock).length)
+    .toBe(0)
+
+  scrollView.offsetX = -51;
+  scrollView.offsetY = -100;
+  scrollView.onclick(new ClickEvent(20, 150));
+  expect((v1.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(0)
+  expect((v2.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(1)
+  expect((v3.onclickInternal as jest.Mock).mock.calls.length)
+    .toBe(1)
+  expect((v3.onclickInternal as jest.Mock).mock.calls[0][0])
+    .toEqual({"x": 71, "y": 250})
+})
+
+test("press", () => {
+  let content = new LinearLayout();
+  let v1 = new TestSprite(100, 100);
+  let v2 = new TestSprite(100, 100);
+  let v3 = new TestSprite(100, 100);
+  content.addView(v1);
+  content.addView(v2);
+  content.addView(v3);
+
+  let scrollView = new ScrollView();
+  scrollView.forceHeight = 160;
+  scrollView.addView(content);
+
+  scrollView.measure(defaultCtx, 500, 500, Specify.NONE);
+  scrollView.layout(500, 500);
+
+  scrollView.onpress(new PressEvent(20, 150));
+  expect((v1.onpressInternal as jest.Mock).mock.calls.length)
+    .toBe(0);
+  expect((v2.onpressInternal as jest.Mock).mock.calls.length)
+    .toBe(1)
+  expect((v2.onpressInternal as jest.Mock).mock.calls[0][0])
+    .toEqual({"x": 20, "y": 150})
+  expect((v3.onpressInternal as jest.Mock).length)
+    .toBe(0)
+
+  scrollView.offsetX = -51;
+  scrollView.offsetY = -100;
+  scrollView.onpress(new PressEvent(20, 150));
+  expect((v1.onpressInternal as jest.Mock).mock.calls.length)
+    .toBe(0)
+  expect((v2.onpressInternal as jest.Mock).mock.calls.length)
+    .toBe(1)
+  expect((v3.onpressInternal as jest.Mock).mock.calls.length)
+    .toBe(1)
+  expect((v3.onpressInternal as jest.Mock).mock.calls[0][0])
+    .toEqual({"x": 71, "y": 250})
 })

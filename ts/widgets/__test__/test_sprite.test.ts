@@ -7,6 +7,8 @@ export default class TestSprite extends SimpleView {
     super();
     this.width = this.forceWidth = width;
     this.height = this.forceHeight = height;
+    this.onclickInternal = jest.fn();
+    this.onpressInternal = jest.fn();
   }
 
   calculateActualSize(ctx: CanvasRenderingContext2D, maxWidthForCalculation: number, maxHeightForCalculation: number): MeasureResult {

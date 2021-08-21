@@ -1,3 +1,4 @@
+import { SimpleEvent } from "../misc/event";
 import Panel from "./panel";
 import { MeasureResult } from "./sprite";
 
@@ -79,5 +80,10 @@ export class ScrollView extends Panel {
       }
     }
     this.offsetY = newOffsetY;
+  }
+
+  specialModifyOnEvent(event: SimpleEvent) {
+    event.x -= this.offsetX;
+    event.y -= this.offsetY;
   }
 }
