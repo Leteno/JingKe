@@ -39,6 +39,7 @@ export class PageList extends LinearLayout {
     this.titlePanel.orientation = Orientation.HORIZONTAL;
     this.titlePanel.margin.bottom = 20;
     this.contentPanel = new Panel();
+    this.contentPanel.layoutParam.weight = 1;
     this.addView(this.titlePanel);
     this.addView(this.contentPanel);
 
