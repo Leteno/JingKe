@@ -1,7 +1,7 @@
 import Animator from "../animator/animator"
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import Scene from "../scene/scene"
-import {Align, LayoutParams} from "../misc/layout"
+import {Align, LayoutParams, Specify} from "../misc/layout"
 import Panel from "../widgets/panel";
 import TextView, { Text } from "../widgets/textview";
 import { ClickEvent, PressEvent } from "../misc/event";
@@ -59,7 +59,7 @@ export default class WelcomeScene implements Scene {
       return true;
     }
 
-    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
     this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
 
 

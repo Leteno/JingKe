@@ -1,5 +1,6 @@
 import Dialogue from "../data/dialogue";
 import { ClickEvent, PressEvent } from "../misc/event";
+import { Specify } from "../misc/layout";
 import Scene from "../scene/scene";
 import DialogueView from "../widgets/dialogue_view";
 import Panel from "../widgets/panel";
@@ -51,7 +52,7 @@ export default class Scene1 implements Scene {
       new Text("那年我 16 岁，而叔父还在燕都太子做门客，我去投奔叔父....")
     ));
 
-    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
     this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
   }
   update(dt: number) {

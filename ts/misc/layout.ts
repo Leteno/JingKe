@@ -8,11 +8,18 @@ export enum LayoutType {
   WRAP_CONTNET,
 }
 
+export enum Specify {
+  NONE = 0,
+  X = 1,
+  Y = 2,
+}
+
 export class LayoutParams {
   xcfg: Align;
   ycfg: Align;
   xLayout: LayoutType;
   yLayout: LayoutType;
+  weight: number;
   constructor(xcfg: Align, ycfg: Align,
     xType: LayoutType=LayoutType.WRAP_CONTNET,
     yType: LayoutType=LayoutType.WRAP_CONTNET) {
@@ -20,6 +27,7 @@ export class LayoutParams {
     this.ycfg = ycfg;
     this.xLayout = xType;
     this.yLayout = yType;
+    this.weight = 0;
   }
 
   static normal(): LayoutParams {

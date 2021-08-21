@@ -11,7 +11,7 @@ import Dialogue from "../data/dialogue";
 import { Player } from "../data/player";
 import Main from "../main";
 import { ClickEvent, PressEvent } from "../misc/event";
-import { Align, LayoutParams, LayoutType } from "../misc/layout";
+import { Align, LayoutParams, LayoutType, Specify } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
 import OptionView, { Option, OptionCallback } from "../widgets/option_view";
 import Panel from "../widgets/panel";
@@ -90,15 +90,15 @@ export default abstract class SimpleScene implements Scene {
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
-    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
     this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
-    this.optionView.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.optionView.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
     this.optionView.layout(this.canvasWidth, this.canvasHeight);
-    this.dialogueView.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.dialogueView.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
     this.dialogueView.layout(this.canvasWidth, this.canvasHeight);
-    this.descriptionView.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.descriptionView.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
     this.descriptionView.layout(this.canvasWidth, this.canvasHeight);
-    this.userPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.userPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
     this.userPanel.layout(this.canvasWidth, this.canvasHeight);
 
     let captionFadeIn = textAlpha(true, 2000, this.sceneCaption);

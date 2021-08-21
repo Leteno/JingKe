@@ -1,4 +1,5 @@
 
+import { Specify } from "../../misc/layout";
 import Panel from "../panel"
 import { MeasureResult } from "../sprite";
 import TestSprite from "./test_sprite.test"
@@ -17,20 +18,20 @@ test("measure param changed", () => {
   });
 
   let ctx = {} as CanvasRenderingContext2D;
-  layout.measure(ctx, 200, 200);
+  layout.measure(ctx, 200, 200, Specify.NONE);
   expect((v1.calculateActualSize as jest.Mock)
     .mock.calls.length).toBe(1);
   expect((v2.calculateActualSize as jest.Mock)
     .mock.calls.length).toBe(1);
 
-  layout.measure(ctx, 200, 200);
+  layout.measure(ctx, 200, 200, Specify.NONE);
   // no change.
   expect((v1.calculateActualSize as jest.Mock)
     .mock.calls.length).toBe(1);
   expect((v2.calculateActualSize as jest.Mock)
     .mock.calls.length).toBe(1);
 
-  layout.measure(ctx, 201, 200);
+  layout.measure(ctx, 201, 200, Specify.NONE);
   // should change.
   expect((v1.calculateActualSize as jest.Mock)
     .mock.calls.length).toBe(2);
@@ -56,13 +57,13 @@ test("measure dirty", () => {
     restore: () => {},
     translate: (x:number, y:number) => {},
   } as CanvasRenderingContext2D;
-  layout.measure(ctx, 200, 200);
+  layout.measure(ctx, 200, 200, Specify.NONE);
   expect((v1.calculateActualSize as jest.Mock)
     .mock.calls.length).toBe(1);
   expect((v2.calculateActualSize as jest.Mock)
     .mock.calls.length).toBe(1);
 
-  layout.measure(ctx, 200, 200);
+  layout.measure(ctx, 200, 200, Specify.NONE);
   // shouldn't change.
   expect((v1.calculateActualSize as jest.Mock)
     .mock.calls.length).toBe(1);
@@ -76,7 +77,7 @@ test("measure dirty", () => {
     .mock.calls.length).toBe(1);
 
   v1.setIsDirty(true);
-  layout.measure(ctx, 200, 200);
+  layout.measure(ctx, 200, 200, Specify.NONE);
   // shouldn't change, I wish it would.
   // However, we add the logic in onDraw
   expect((v1.calculateActualSize as jest.Mock)
@@ -97,7 +98,7 @@ test("measure dirty", () => {
   expect((v2.calculateActualSize as jest.Mock)
     .mock.calls.length).toBe(1);
 
-  layout.measure(ctx, 200, 200);
+  layout.measure(ctx, 200, 200, Specify.NONE);
   // shouldn't change.
   expect((v1.calculateActualSize as jest.Mock)
     .mock.calls.length).toBe(2);
@@ -119,14 +120,14 @@ test("layout params change", () => {
   v1.onLayout = jest.fn<void, any[]>();
   v2.onLayout = jest.fn<void, any[]>();
 
-  layout.measure(ctx, 200, 200);
+  layout.measure(ctx, 200, 200, Specify.NONE);
   layout.layout(200, 200);
   expect((v1.onLayout as jest.Mock)
     .mock.calls.length).toBe(1);
   expect((v2.onLayout as jest.Mock)
     .mock.calls.length).toBe(1);
 
-  layout.measure(ctx, 200, 200);
+  layout.measure(ctx, 200, 200, Specify.NONE);
   layout.layout(200, 200);
   // no change.
   expect((v1.onLayout as jest.Mock)
@@ -134,7 +135,7 @@ test("layout params change", () => {
   expect((v2.onLayout as jest.Mock)
     .mock.calls.length).toBe(1);
 
-  layout.measure(ctx, 201, 200);
+  layout.measure(ctx, 201, 200, Specify.NONE);
   layout.layout(201, 200);
   // should change.
   expect((v1.onLayout as jest.Mock)
@@ -157,7 +158,7 @@ test("onLayout isDirty", () => {
   v1.onLayout = jest.fn<void, any[]>();
   v2.onLayout = jest.fn<void, any[]>();
 
-  layout.measure(ctx, 200, 200);
+  layout.measure(ctx, 200, 200, Specify.NONE);
   layout.layout(200, 200);
   expect((v1.onLayout as jest.Mock)
     .mock.calls.length).toBe(1);

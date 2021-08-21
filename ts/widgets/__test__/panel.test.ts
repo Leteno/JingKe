@@ -1,4 +1,4 @@
-import { Align, LayoutParams, LayoutType } from "../../misc/layout";
+import { Align, LayoutParams, LayoutType, Specify } from "../../misc/layout";
 import Panel from "../panel"
 import SimpleView from "../simple_view";
 import Sprite, { MeasureResult } from "../sprite"
@@ -69,7 +69,7 @@ test('drawChildren', () => {
     translate: function(x: number, y: number){},
   } as CanvasRenderingContext2D;
   ctx.translate = mockTranslation;
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
   panel.layout(500, 500);
   panel.drawToCanvas(ctx);
   expect(mockDrawFunc1).toBeCalled();
@@ -104,7 +104,7 @@ test("onMeasure", () => {
   s1.onLayout = onLayoutFn;
   panel.addView(s1);
 
-  panel.measure(ctx, 100, 100);
+  panel.measure(ctx, 100, 100, Specify.NONE);
   expect(calculateActualSizeFn.mock.calls.length).toBe(1)
   panel.layout(100, 100);
   expect(onLayoutFn.mock.calls.length).toBe(1)
@@ -123,7 +123,7 @@ test("measureAndLayout", ()=> {
   s2.margin.left = 45; s2.margin.top = 46;
   panel.addView(s1);
   panel.addView(s2);
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
 
   expect(panel.width).toBe(75);
   expect(panel.height).toBe(86);
@@ -146,7 +146,7 @@ test("measureAndLayout", ()=> {
   panel.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
   panel.setIsDirty(true);
   father.addView(panel)
-  father.measure(ctx, 500, 500);
+  father.measure(ctx, 500, 500, Specify.NONE);
   father.layout(500, 500);
 
   expect(father.width).toBe(99);
@@ -178,7 +178,7 @@ test("calculateActualSize", () => {
       }
   });
   let ctx = {} as CanvasRenderingContext2D;
-  testView.measure(ctx, 200, 200);
+  testView.measure(ctx, 200, 200, Specify.NONE);
   expect(testView.width).toBe(100);
   expect(testView.height).toBe(100);
 })
@@ -189,21 +189,21 @@ test("Match Parent with margin (x)", () => {
   panel.margin.left = 20;
 
   let ctx = {} as CanvasRenderingContext2D;
-  panel.measure(ctx, 200, 200);
+  panel.measure(ctx, 200, 200, Specify.NONE);
   panel.layout(200, 200);
   expect(panel.width).toBe(180);
   expect(panel.x).toBe(20);
 
   panel.layoutParam.xcfg = Align.CENTER;
   panel.setIsDirty(true);
-  panel.measure(ctx, 200, 200);
+  panel.measure(ctx, 200, 200, Specify.NONE);
   panel.layout(200, 200);
   expect(panel.width).toBe(160);
   expect(panel.x).toBe(40);
 
   panel.margin.right = 20;
   panel.setIsDirty(true);
-  panel.measure(ctx, 200, 200);
+  panel.measure(ctx, 200, 200, Specify.NONE);
   panel.layout(200, 200);
   expect(panel.width).toBe(160);
   expect(panel.x).toBe(20);
@@ -215,21 +215,21 @@ test("Match Parent with margin (y)", () => {
   panel.margin.bottom = 20;
 
   let ctx = {} as CanvasRenderingContext2D;
-  panel.measure(ctx, 200, 200);
+  panel.measure(ctx, 200, 200, Specify.NONE);
   panel.layout(200, 200);
   expect(panel.height).toBe(180);
   expect(panel.y).toBe(0);
 
   panel.layoutParam.ycfg = Align.CENTER;
   panel.setIsDirty(true);
-  panel.measure(ctx, 200, 200);
+  panel.measure(ctx, 200, 200, Specify.NONE);
   panel.layout(200, 200);
   expect(panel.height).toBe(160);
   expect(panel.y).toBe(0);
 
   panel.margin.top = 20;
   panel.setIsDirty(true);
-  panel.measure(ctx, 200, 200);
+  panel.measure(ctx, 200, 200, Specify.NONE);
   panel.layout(200, 200);
   expect(panel.height).toBe(160);
   expect(panel.y).toBe(20);

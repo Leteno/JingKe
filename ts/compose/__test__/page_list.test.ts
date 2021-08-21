@@ -3,6 +3,7 @@ import TextView, { Text } from "../../widgets/textview";
 import {PageList} from "../page_list"
 import {defaultCtx} from "../../widgets/__test__/default_value.test"
 import { ClickEvent } from "../../misc/event";
+import { Specify } from "../../misc/layout";
 
 test("common", () => {
   let pageList = new PageList();
@@ -12,7 +13,7 @@ test("common", () => {
   pageList.addPage("tx1", tx1);
   pageList.addPage("tx2", tx2);
 
-  pageList.measure(defaultCtx, 500, 500);
+  pageList.measure(defaultCtx, 500, 500, Specify.NONE);
   pageList.layout(500, 500);
   pageList.drawToCanvas(defaultCtx);
 
@@ -63,7 +64,7 @@ test("click on Title, page will switch", () => {
   pageList.addPage("tx1", tx1);
   pageList.addPage("tx2", tx2);
 
-  pageList.measure(defaultCtx, 500, 500);
+  pageList.measure(defaultCtx, 500, 500, Specify.NONE);
   pageList.layout(500, 500);
   pageList.drawToCanvas(defaultCtx);
 

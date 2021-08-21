@@ -1,3 +1,4 @@
+import { Specify } from "../misc/layout";
 import Sprite, { MeasureResult } from "./sprite";
 
 class MeasureParams {
@@ -83,7 +84,8 @@ export default class LayoutCache {
     view.measure(
       ctx,
       this.measureParams.maxWidth,
-      this.measureParams.maxHeight
+      this.measureParams.maxHeight,
+      Specify.NONE
     );
   }
 

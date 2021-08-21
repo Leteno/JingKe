@@ -1,5 +1,7 @@
+import { Specify } from "../misc/layout";
 import Panel from "./panel";
-import { MeasureResult } from "./sprite";
+import SimpleView from "./simple_view";
+import Sprite, { MeasureResult } from "./sprite";
 export enum Orientation {
   HORIZONTAL,
   VERTICAL
@@ -40,22 +42,53 @@ export default class LinearLayout extends Panel {
       let childWidthAtMost = 0;
       let currentHeight = 0;
   
-      this.children.forEach(view => {
+      let totalWeight = 0;
+      let weightViews = new Array<Sprite>();
+      for (let i = 0; i < this.children.length; i++) {
+        let view = this.children[i];
+        if (view.layoutParam.weight > 0) {
+          weightViews.push(view);
+          totalWeight += view.layoutParam.weight;
+          continue;
+        }
         let size = view.measure(
           ctx,
           maxWidthForCalculation,
-          maxHeightForCalculation
+          maxHeightForCalculation,
+          Specify.NONE
         );
         childWidthAtMost = Math.max(
           size.calcWidth,
           childWidthAtMost
         );
         currentHeight += size.calcHeight;
-      });
-  
+      };
+
+      let restOfHeight = maxHeightForCalculation - currentHeight;
+      if (weightViews.length <= 0 || restOfHeight <= 0) {
+        // Haven't used weight or don't have enough space.
+        return {
+          calcWidth: childWidthAtMost,
+          calcHeight: currentHeight,
+        }
+      }
+
+      weightViews.forEach(view => {
+        let h = view.layoutParam.weight * restOfHeight / totalWeight;
+        let size = view.measure(
+          ctx,
+          maxWidthForCalculation,
+          h,
+          Specify.Y
+        );
+        childWidthAtMost = Math.max(
+          size.calcWidth,
+          childWidthAtMost
+        );
+      })
       return {
         calcWidth: childWidthAtMost,
-        calcHeight: currentHeight,
+        calcHeight: maxHeightForCalculation,
       }
   }
 
@@ -65,22 +98,54 @@ export default class LinearLayout extends Panel {
     maxHeightForCalculation: number) {
       let childHeightAtMost = 0;
       let currentWidth = 0;
-  
-      this.children.forEach(view => {
+
+      let totalWeight = 0;
+      let weightViews = new Array<Sprite>();
+      for (let i = 0; i < this.children.length; i++) {
+        let view = this.children[i];
+        if (view.layoutParam.weight > 0) {
+          weightViews.push(view);
+          totalWeight += view.layoutParam.weight;
+          continue;
+        }
         let size = view.measure(
           ctx,
           maxWidthForCalculation,
-          maxHeightForCalculation
+          maxHeightForCalculation,
+          Specify.NONE
         );
         childHeightAtMost = Math.max(
           size.calcHeight,
           childHeightAtMost
         );
         currentWidth += size.calcWidth;
-      });
-  
+      };
+
+      let restOfWidth = maxWidthForCalculation - currentWidth;
+      if (weightViews.length <= 0 || restOfWidth <= 0) {
+        // Haven't used weight or don't have enough space.
+        return {
+          calcWidth: currentWidth,
+          calcHeight: childHeightAtMost,
+        }
+      }
+
+      // We need to calculate weight
+      weightViews.forEach(view => {
+        let w = view.layoutParam.weight * restOfWidth / totalWeight;
+        let size = view.measure(
+          ctx,
+          w,
+          maxHeightForCalculation,
+          Specify.X
+        );
+        childHeightAtMost = Math.max(
+          size.calcHeight,
+          childHeightAtMost
+        );
+      })
       return {
-        calcWidth: currentWidth,
+        calcWidth: maxWidthForCalculation,
         calcHeight: childHeightAtMost,
       }
   }

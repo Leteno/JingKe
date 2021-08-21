@@ -1,7 +1,7 @@
 import { boolean } from "yargs";
 import EasyMath from "../misc/easy-math";
 import { ClickEvent, PressEvent } from "../misc/event";
-import { Align, LayoutParams } from "../misc/layout";
+import { Align, LayoutParams, Specify } from "../misc/layout";
 
 export class MeasureResult {
   calcWidth: number;
@@ -75,7 +75,8 @@ export default abstract class Sprite {
    */
   abstract measure(ctx: CanvasRenderingContext2D,
       maxWidth: number,
-      maxHeight: number): MeasureResult;
+      maxHeight: number,
+      specify: Specify): MeasureResult;
 
   /**
    * This will calculate view.x, view.y

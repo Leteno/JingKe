@@ -1,5 +1,5 @@
 import { ClickEvent, PressEvent } from "../misc/event";
-import { Align, LayoutParams, LayoutType } from "../misc/layout";
+import { Align, LayoutParams, LayoutType, Specify } from "../misc/layout";
 import Animator from "../animator/animator"
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import Scene from "../scene/scene";
@@ -157,7 +157,7 @@ export default class HelloWorldScene implements Scene {
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
-    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight);
+    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.X | Specify.Y);
     this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
   }
 

@@ -1,6 +1,6 @@
 import EasyMath from "../misc/easy-math"
 import Sprite, { MeasureResult } from "./sprite"
-import {Align} from "../misc/layout"
+import {Align, Specify} from "../misc/layout"
 import { ClickEvent, PressEvent } from "../misc/event"
 import SimpleView from "./simple_view";
 
@@ -25,7 +25,8 @@ export default class Panel extends SimpleView {
       let size = view.measure(
         ctx,
         maxWidthForCalculation,
-        maxHeightForCalculation
+        maxHeightForCalculation,
+        Specify.NONE
       );
       childWidthAtMost = Math.max(
         size.calcWidth, childWidthAtMost)

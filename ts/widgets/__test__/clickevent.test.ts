@@ -1,6 +1,6 @@
 
 import { ClickEvent } from "../../misc/event";
-import { Align, LayoutParams, LayoutType } from "../../misc/layout";
+import { Align, LayoutParams, LayoutType, Specify } from "../../misc/layout";
 import Panel from "../panel"
 import SimpleView from "../simple_view";
 import Sprite from "../sprite";
@@ -82,7 +82,7 @@ test("testCenterChild", () => {
   s.onclickInternal = spriteOnClick;
   panel.addView(s);
 
-  panel.measure({} as CanvasRenderingContext2D, 400, 400)
+  panel.measure({} as CanvasRenderingContext2D, 400, 400, Specify.NONE)
   panel.layout(400, 400);
 
   // Click on panel
@@ -137,7 +137,7 @@ test("padding", () => {
   });
 
   let ctx = {} as CanvasRenderingContext2D;
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
   panel.onclick(new ClickEvent(0, 0));
   expect((panel.onclickInternal as jest.Mock).mock.calls.length)
     .toBe(0);
@@ -152,7 +152,7 @@ test("padding", () => {
 
   // After add padding
   panel.padding.left = panel.padding.top = 40;
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
 
   panel.onclick(new ClickEvent(0, 0));
   expect((panel.onclickInternal as jest.Mock).mock.calls.length)
@@ -188,7 +188,7 @@ test("onTouchOutside", () => {
 
   v2.margin.top = 20;
 
-  mainPanel.measure(defaultCtx, 100, 100);
+  mainPanel.measure(defaultCtx, 100, 100, Specify.NONE);
   mainPanel.layout(100, 100);
 
   let clickOutside = new ClickEvent(20, 20);

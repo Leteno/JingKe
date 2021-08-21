@@ -1,4 +1,5 @@
 import { number, string } from "yargs";
+import { Specify } from "../../misc/layout";
 import TextView, {DrawFunc, Text, TextHelper} from "../textview"
 import { defaultCtx } from "./default_value.test";
 
@@ -58,7 +59,7 @@ test("english", () => {
 
   // 22 chars, 220 width
   let textView = new TextView(new Text("大家好，我系渣渣豪，是兄弟，就来 helloworld 砍我把"));
-  textView.measure(ctx, 100, 400);
+  textView.measure(ctx, 100, 400, Specify.NONE);
   textView.drawToCanvas(ctx);
 
   expect(mockFillText.mock.calls.length).toBe(3);
@@ -86,7 +87,7 @@ test("animation", () => {
 
   // 22 chars, 220 width
   let textView = new TextView(new Text("大家好，我系渣渣豪，是兄弟，就来某地方砍我把"));
-  textView.measure(ctx, 100, 400);
+  textView.measure(ctx, 100, 400, Specify.NONE);
   textView.drawToCanvas(ctx);
   expect(mockFillText.mock.calls.length).toBe(3);
   expect(mockFillText.mock.calls[0][0]).toBe("大家好，我系渣渣豪，");
@@ -143,7 +144,7 @@ test("pattern", () => {
       } as DrawFunc
     )
   );
-  textView.measure(ctx, 500, 500);
+  textView.measure(ctx, 500, 500, Specify.NONE);
 
   textView.drawToCanvas(ctx);
 
@@ -173,7 +174,7 @@ test("\n", () => {
   let textView = new TextView(
     new Text("Hello World, Mr.Zheng")
   );
-  textView.measure(defaultCtx, 500, 500);
+  textView.measure(defaultCtx, 500, 500, Specify.NONE);
 
   textView.drawToCanvas(defaultCtx);
   expect(mockFillText.mock.calls.length)

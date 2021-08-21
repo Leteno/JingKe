@@ -1,4 +1,4 @@
-import { Align, LayoutType } from "../../misc/layout";
+import { Align, LayoutType, Specify } from "../../misc/layout";
 import Panel from "../panel"
 import TestSprite from "./test_sprite.test";
 
@@ -8,7 +8,7 @@ test("measurePanel", () => {
   panel.addView(s1);
   let ctx = {} as CanvasRenderingContext2D;
 
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
   expect(panel.width).toBe(100);
   expect(panel.height).toBe(200);
 
@@ -16,7 +16,7 @@ test("measurePanel", () => {
   s1.margin.top = 40;
   panel.setIsDirty(true);
   s1.setIsDirty(true);
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
   expect(panel.width).toBe(120);
   expect(panel.height).toBe(240);
 
@@ -25,7 +25,7 @@ test("measurePanel", () => {
   s2.margin.top = 10;
   panel.addView(s2);
   panel.setIsDirty(true);
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
   expect(panel.width).toBe(400);
   expect(panel.height).toBe(240);
 })
@@ -42,7 +42,7 @@ test("MATCH_PARENT", () => {
   panel.addView(s2);
   let ctx = {} as CanvasRenderingContext2D;
 
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
   expect(panel.width).toBe(360);
   expect(panel.height).toBe(240);
   expect(s1.width).toBe(100);
@@ -51,7 +51,7 @@ test("MATCH_PARENT", () => {
   s1.layoutParam.xLayout = LayoutType.MATCH_PARENT;
   s1.setIsDirty(true);
   panel.setIsDirty(true);
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
   expect(panel.width).toBe(500);
   expect(panel.height).toBe(240);
   expect(s1.width).toBe(450);
@@ -60,21 +60,21 @@ test("MATCH_PARENT", () => {
   s2.layoutParam.yLayout = LayoutType.MATCH_PARENT;
   s2.setIsDirty(true);
   panel.setIsDirty(true);
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
   expect(panel.width).toBe(500);
   expect(panel.height).toBe(500);
   expect(s1.width).toBe(450);
   expect(s2.height).toBe(420);
 
   s1.layoutParam.xcfg = Align.CENTER;
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
   expect(panel.width).toBe(500);
   expect(panel.height).toBe(500);
   expect(s1.width).toBe(400);
   expect(s2.height).toBe(420);
 
   s2.layoutParam.ycfg = Align.CENTER;
-  panel.measure(ctx, 500, 500);
+  panel.measure(ctx, 500, 500, Specify.NONE);
   expect(panel.width).toBe(500);
   expect(panel.height).toBe(500);
   expect(s1.width).toBe(400);

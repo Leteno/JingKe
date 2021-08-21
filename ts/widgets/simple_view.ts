@@ -1,5 +1,5 @@
 import { BindableData } from "../data/bindable_data";
-import { Align, LayoutType } from "../misc/layout";
+import { Align, LayoutType, Specify } from "../misc/layout";
 import LayoutCache from "./layout_cache";
 import Sprite, { MeasureResult } from "./sprite";
 
@@ -16,7 +16,11 @@ export default abstract class SimpleView extends Sprite {
     this.layoutCache = new LayoutCache();
   }
 
-  measure(ctx: CanvasRenderingContext2D, maxWidth: number, maxHeight: number): MeasureResult {
+  measure(
+    ctx: CanvasRenderingContext2D,
+    maxWidth: number, maxHeight: number,
+    specify: Specify
+  ): MeasureResult {
     if (!this.layoutCache.measureParamsChanged(maxWidth, maxHeight) &&
         !this.layoutCache.isDirty()) {
       return this.layoutCache.getMeasureResult();
@@ -28,12 +32,14 @@ export default abstract class SimpleView extends Sprite {
 
     let width = 0;
     let height = 0;
-    if (this.layoutParam.xLayout == LayoutType.MATCH_PARENT) {
+    if (this.layoutParam.xLayout == LayoutType.MATCH_PARENT ||
+      (specify & Specify.X)) {
       width = maxWidth;
     } else if (this.forceWidth > 0) {
       width = Math.min(this.forceWidth, maxWidth);
     }
-    if (this.layoutParam.yLayout == LayoutType.MATCH_PARENT) {
+    if (this.layoutParam.yLayout == LayoutType.MATCH_PARENT ||
+      (specify & Specify.Y)) {
       height = maxHeight;
     } else if (this.forceHeight > 0) {
       height = Math.min(this.forceHeight, maxHeight);
