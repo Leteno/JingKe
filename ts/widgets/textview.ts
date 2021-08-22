@@ -191,8 +191,12 @@ export default class TextView extends SimpleView {
         drawLine.y = y;
         this.drawLines.push(drawLine);
 
-        x = x + currentWidth;
+        actualHeight += this.lineHeight;
+        x = 0;
+        y += this.lineHeight;
         currentWidth = 0;
+        lastNoneEnglishIndex = i+1;
+        lastNoneEnglishWidth = 0;
         start = i + 1;
         continue;
       }

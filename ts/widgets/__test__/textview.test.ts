@@ -166,7 +166,7 @@ test("pattern", () => {
   expect(mockDrawFunc.mock.calls[0][4]).toBe(24);
 })
 
-test("\n", () => {
+test("English \\n", () => {
   let mockFillText = jest.fn((text:string, x: number, y:number, maxWidth?:number|undefined) => {
   });
   defaultCtx.fillText = mockFillText;
@@ -200,4 +200,29 @@ test("\n", () => {
     .toBe(" M");
   expect(mockFillText.mock.calls[4][0])
     .toBe("r.Zheng");
+})
+
+test("Chinese \\n", () => {
+  let mockFillText = jest.fn((text:string, x: number, y:number, maxWidth?:number|undefined) => {
+  });
+  defaultCtx.fillText = mockFillText;
+  let text = new Text(
+    "名字：六味补气丸\n" +
+    "数目：999\n"+
+    "功效: 听说吃了会很大力");
+  let textView = new TextView(text);
+  textView.measure(defaultCtx, 70, 500, Specify.NONE);
+  textView.drawToCanvas(defaultCtx);
+  expect(mockFillText.mock.calls.length)
+    .toBe(5);
+  expect(mockFillText.mock.calls[0][0])
+    .toBe("名字：六味补气");
+  expect(mockFillText.mock.calls[1][0])
+    .toBe("丸");
+  expect(mockFillText.mock.calls[2][0])
+    .toBe("数目：999");
+  expect(mockFillText.mock.calls[3][0])
+    .toBe("功效: 听说吃了");
+  expect(mockFillText.mock.calls[4][0])
+    .toBe("会很大力");
 })
