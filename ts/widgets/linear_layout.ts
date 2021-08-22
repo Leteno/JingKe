@@ -10,9 +10,9 @@ export enum Orientation {
 export default class LinearLayout extends Panel {
   orientation: Orientation;
 
-  constructor() {
+  constructor(orientation: Orientation = Orientation.VERTICAL) {
     super();
-    this.orientation = Orientation.VERTICAL;
+    this.orientation = orientation;
   }
 
   // Child views are layout potrait.
