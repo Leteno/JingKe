@@ -25,7 +25,7 @@ export class ScrollView extends Panel {
   drawToCanvasInternal(ctx: CanvasRenderingContext2D) {
     ctx.save();
     let region = new Path2D();
-    region.rect(this.x, this.y, this.width, this.height);
+    region.rect(0, 0, this.width, this.height);
     ctx.clip(region);
     ctx.translate(this.offsetX, this.offsetY);
     super.drawToCanvasInternal(ctx);
