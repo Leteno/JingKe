@@ -256,10 +256,12 @@ export default class Act1 extends SimpleScene {
       p1.name = "六味补气丸";
       p1.count = 10;
       p1.functional = "益气活血，祛痰化瘀";
+      p1.image = "res/created/medition.png";
       let p2 = new Prossession();
       p2.name = "秦国军旗";
       p2.count = 1;
       p2.functional = "赳赳大秦，一往无前";
+      p2.image = "res/created/flag_of_qin.png";
       model.goodsList.push(p1, p2);
       that.showGoodsPanel(model);
     }

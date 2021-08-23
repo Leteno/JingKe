@@ -132,18 +132,26 @@ export default class GoodsPanel extends LinearLayout {
     view.goodsList.removeAllViews();
     for (let i = 0; i < model.goodsList.length; i++) {
       let goods = model.goodsList[i];
+      let row = new LinearLayout(Orientation.HORIZONTAL);
+      row.border = new Border();
+      row.border.color = "#d3d3d3";
+      row.layoutParam.xLayout = LayoutType.MATCH_PARENT;
       let tv = new TextView(new Text(goods.name));
-      tv.border = new Border();
-      tv.border.color = "#d3d3d3";
       tv.textColor = "#000000";
       tv.textSize = 16;
-      tv.layoutParam.xLayout = LayoutType.MATCH_PARENT;
-      tv.onclickInternal = () => {
+      tv.layoutParam.ycfg = Align.CENTER;
+      tv.layoutParam.weight = 1;
+      row.addView(tv);
+      let img = new ImageView(goods.image);
+      img.forceWidth = img.forceHeight = 30;
+      img.margin.left = 20;
+      row.addView(img);
+      row.onclickInternal = () => {
         model.currentIndex = i;
         model.dirty = true;
         return true;
       }
-      view.goodsList.addView(tv);
+      view.goodsList.addView(row);
     }
     if (model.currentIndex < 0) {
       view.description.visible = false;
