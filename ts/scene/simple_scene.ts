@@ -3,6 +3,7 @@ import { AnimatorSetBuilder } from "../animator/animator_set";
 import { MeanWhileBuilder } from "../animator/meanwhile";
 import NumberLinearAnimator from "../animator/number-linear-animator";
 import { textAlpha } from "../animator/text-affect";
+import GoodsPanel, { GoodsPanelModel } from "../compose/goods_panel";
 import { PageList } from "../compose/page_list";
 import PlayerDescriptionView from "../compose/player_description_view";
 import UserPanel from "../compose/UserPanel";
@@ -27,6 +28,7 @@ export default abstract class SimpleScene implements Scene {
   private optionView: OptionView;
   private descriptionView: PlayerDescriptionView;
   private userPanel: UserPanel;
+  private goodsPanel: GoodsPanel;
 
   canvasWidth: number;
   canvasHeight: number;
@@ -87,6 +89,10 @@ export default abstract class SimpleScene implements Scene {
     this.userPanel = new UserPanel();
     this.userPanel.forceHeight = canvas.height / 3;
     this.userPanel.visible = false;
+
+    this.goodsPanel = new GoodsPanel();
+    this.goodsPanel.forceHeight = canvas.height / 3;
+    this.goodsPanel.visible = false;
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
@@ -100,6 +106,8 @@ export default abstract class SimpleScene implements Scene {
     this.descriptionView.layout(this.canvasWidth, this.canvasHeight);
     this.userPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
     this.userPanel.layout(this.canvasWidth, this.canvasHeight);
+    this.goodsPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
+    this.goodsPanel.layout(this.canvasWidth, this.canvasHeight);
 
     let captionFadeIn = textAlpha(true, 2000, this.sceneCaption);
     let titleFadeIn = textAlpha(true, 2500, this.sceneTitle);
@@ -136,9 +144,13 @@ export default abstract class SimpleScene implements Scene {
     this.optionView.drawToCanvas(ctx);
     this.descriptionView.drawToCanvas(ctx);
     this.userPanel.drawToCanvas(ctx);
+    this.goodsPanel.drawToCanvas(ctx);
   }
 
   onclick(event: ClickEvent) {
+    if (this.goodsPanel.onclick(event)) {
+      return;
+    }
     if (this.userPanel.onclick(event)) {
       return;
     }
@@ -155,6 +167,9 @@ export default abstract class SimpleScene implements Scene {
   }
 
   onpress(event: PressEvent) {
+    if (this.goodsPanel.onpress(event)) {
+      return;
+    }
     if (this.userPanel.onpress(event)) {
       return;
     }
@@ -216,5 +231,10 @@ export default abstract class SimpleScene implements Scene {
 
   showUserPanel() {
     this.userPanel.visible = true;
+  }
+
+  showGoodsPanel(model: GoodsPanelModel) {
+    this.goodsPanel.bindModel(model);
+    this.goodsPanel.visible = true;
   }
 }
