@@ -19,13 +19,31 @@ export class GoodsPanelModel extends BindableData {
   }
 }
 
+class PurchaseModel extends BindableData {
+  count: number;
+  minCount: number;
+  maxCount: number;
+  cost: number;
+  constructor() {
+    super();
+    this.count = 1;
+    this.cost = 0;
+    this.maxCount = 1;
+    this.minCount = 0;
+  }
+}
+
 class DescriptionView extends LinearLayout {
   title: TextView;
   content: TextView;
   left: TextView;
+  costLabel: TextView;
+  purchaseModel: PurchaseModel;
+
   constructor() {
     super();
     this.orientation = Orientation.VERTICAL;
+    this.purchaseModel = new PurchaseModel();
 
     this.title = new TextView();
     this.title.layoutParam.xLayout = LayoutType.MATCH_PARENT;
@@ -39,10 +57,63 @@ class DescriptionView extends LinearLayout {
     this.left.textColor = "#000000";
     this.left.textSize = 12;
     this.left.layoutParam.xcfg = Align.END;
+    this.left.margin.bottom = 10;
 
     this.addView(this.title);
     this.addView(this.content);
     this.addView(this.left);
+
+    let numberLayer = new LinearLayout();
+    numberLayer.orientation = Orientation.HORIZONTAL;
+    numberLayer.layoutParam.xcfg = Align.END;
+    numberLayer.margin.bottom = 10;
+    let plusBtn = new ImageView("res/created/plus.png");
+    plusBtn.forceWidth = plusBtn.forceHeight = 20;
+    let numberLabel = new TextView(new Text("1"));
+    let minusBtn = new ImageView("res/created/minus.png");
+    minusBtn.forceWidth = minusBtn.forceHeight = 20;
+    numberLabel.margin.left = numberLabel.margin.right
+      = 10;
+    numberLayer.addView(minusBtn);
+    numberLayer.addView(numberLabel);
+    numberLayer.addView(plusBtn);
+    this.addView(numberLayer);
+
+    this.costLabel = new TextView(new Text("需 X 金"));
+    this.costLabel.layoutParam.xcfg = Align.END;
+    this.costLabel.margin.bottom = 10;
+    this.addView(this.costLabel);
+
+    numberLabel.bindData(
+      this.purchaseModel,
+      (() => {
+        numberLabel.setText(new Text("" + this.purchaseModel.count));
+        this.costLabel.setText(new Text(
+          `需 ${this.purchaseModel.count * this.purchaseModel.cost} 金`
+        ))
+      }).bind(this)
+    );
+    plusBtn.onclickInternal = (() => {
+      if (this.purchaseModel.count < this.purchaseModel.maxCount) {
+        this.purchaseModel.count++;
+        this.purchaseModel.dirty = true;
+      }
+      return true;
+    }).bind(this);
+    plusBtn.onpressInternal = plusBtn.onclickInternal;
+    minusBtn.onclickInternal = (() => {
+      if (this.purchaseModel.count > this.purchaseModel.minCount) {
+        this.purchaseModel.count--;
+        this.purchaseModel.dirty = true;
+      }
+      return true;
+    }).bind(this);
+    minusBtn.onpressInternal = minusBtn.onclickInternal;
+
+    let purchaseBtn = new TextView(new Text("购买"));
+    purchaseBtn.layoutParam.xcfg = Align.END;
+    purchaseBtn.bgColor = "#d3d3d3";
+    this.addView(purchaseBtn);
   }
 
   bind(goods: Prossession) {
@@ -59,6 +130,10 @@ class DescriptionView extends LinearLayout {
     view.left.setText(new Text(
       "剩余: " + goods.count
     ));
+    view.purchaseModel.count = 1;
+    view.purchaseModel.cost = goods.cost;
+    view.purchaseModel.maxCount = goods.count;
+    view.purchaseModel.dirty = true;
   }
 }
 
