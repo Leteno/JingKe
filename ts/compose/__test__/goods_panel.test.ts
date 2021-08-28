@@ -2,6 +2,7 @@
 import { Prossession } from "../../data/prossession";
 import { ClickEvent, PressEvent } from "../../misc/event";
 import { Specify } from "../../misc/layout";
+import Panel from "../../widgets/panel";
 import TextView from "../../widgets/textview";
 import { defaultCtx } from "../../widgets/__test__/default_value.test";
 import GoodsPanel, { GoodsPanelModel } from "../goods_panel"
@@ -21,6 +22,13 @@ function buildModelForTest(): GoodsPanelModel {
   return model;
 }
 
+function getGoodsListTextView(
+  panel: GoodsPanel, index: number): TextView {
+  expect(index).toBeLessThan(panel.goodsList.children.length);
+  expect(index).toBeGreaterThanOrEqual(0);
+  return (panel.goodsList.children[index] as Panel).children[0] as TextView;
+}
+
 test("simple case", () => {
   let goodsPanel = new GoodsPanel();
 
@@ -31,9 +39,9 @@ test("simple case", () => {
     .toBe(false);
   expect(goodsPanel.goodsList.children.length)
     .toBe(200);
-  expect((goodsPanel.goodsList.children[0] as TextView)
+  expect(getGoodsListTextView(goodsPanel, 0)
     .text.content).toBe("六味补气丸");
-  expect((goodsPanel.goodsList.children[1] as TextView)
+  expect(getGoodsListTextView(goodsPanel, 1)
     .text.content).toBe("秦国军旗");
 
   goodsPanel.description.bind(model.goodsList[1]);
