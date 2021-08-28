@@ -29,11 +29,11 @@ export default class UserPanel extends PageList {
     let p1 = new Prossession();
     p1.name = "六味补气丹";
     p1.count = 1;
-    p1.functional = "治疗肾虚，你懂的";
+    p1.functional_text = "治疗肾虚，你懂的";
     let p2 = new Prossession();
     p2.name = "大力金刚丸";
     p1.count = 999;
-    p1.functional = "听说吃了会很大力";
+    p1.functional_text = "听说吃了会很大力";
     for (let i = 0; i < 100; i++)
       prossessionPage.model.items.push(p1, p2);
     prossessionPage.model.dirty = true;

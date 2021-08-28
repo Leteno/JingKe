@@ -102,7 +102,7 @@ export class UserProssessionView extends Panel {
       view.descriptionView.setText(new Text(
         "名字: " + item.name + "\n"
         + "数目: " + item.count + "\n"
-        + "功效: " + item.functional 
+        + "功效: " + item.functional_text
       ));
     }
     view.prossessionListView.setIsDirty(true);

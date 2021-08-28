@@ -5,5 +5,5 @@ export class Prossession extends BindableData {
   cost: number;
   count: number;
   image: string;
-  functional: string;
+  functional_text: string;
 }

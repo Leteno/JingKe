@@ -12,11 +12,11 @@ function buildModelForTest(): GoodsPanelModel {
   let p1 = new Prossession();
   p1.name = "六味补气丸";
   p1.count = 10;
-  p1.functional = "益气活血，祛痰化瘀";
+  p1.functional_text = "益气活血，祛痰化瘀";
   let p2 = new Prossession();
   p2.name = "秦国军旗";
   p2.count = 1;
-  p2.functional = "赳赳大秦，一往无前";
+  p2.functional_text = "赳赳大秦，一往无前";
   for (let i = 0; i < 100; i++)
     model.goodsList.push(p1, p2);
   return model;

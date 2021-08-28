@@ -125,7 +125,7 @@ class DescriptionView extends LinearLayout {
       goods.name
     ));
     view.content.setText(new Text(
-      goods.functional
+      goods.functional_text
     ));
     view.left.setText(new Text(
       "剩余: " + goods.count
