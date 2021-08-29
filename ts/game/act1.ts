@@ -9,7 +9,6 @@ import ImageView, { PointerPosition } from "../widgets/imageview";
 import TextView, { Text } from "../widgets/textview";
 import {Option, OptionCallback} from "../widgets/option_view"
 import { Sequence } from "../schedule/sequence";
-import Main from "../main";
 import { Event, Player } from "../data/player";
 import BirdViewImage from "../widgets/birdview_image";
 import LinearLayout from "../widgets/linear_layout";
@@ -20,6 +19,7 @@ import { Act1Flows } from "./data/act1_flows";
 import { UNKNOWN } from "../data/option";
 import { GoodsPanelModel } from "../compose/goods_panel";
 import { Prossession } from "../data/prossession";
+import { Actors } from "./data/actors";
 
 export default class Act1 extends SimpleScene {
 
@@ -94,7 +94,7 @@ export default class Act1 extends SimpleScene {
                 console.log("Timeout");
                 break;
             }
-            Main.getPlayer().saveChoose(Event.FRE_WHAT_LEARN, id);
+            Player.getInstance().saveChoose(Event.FRE_WHAT_LEARN, id);
             sequence.next();
             return true;
           }
@@ -114,7 +114,7 @@ export default class Act1 extends SimpleScene {
     sequence.addIntoSequence({
       onStart() {
         let word = "不错不错。";
-        let opt = Main.getPlayer().getChoose(Event.FRE_WHAT_LEARN);
+        let opt = Player.getInstance().getChoose(Event.FRE_WHAT_LEARN);
         let ability = ABILITY.TRUST;
         switch(opt) {
           case 0:
@@ -134,7 +134,7 @@ export default class Act1 extends SimpleScene {
             word += "应该是偷懒了";
             break;
         }
-        Main.getPlayer().character.abilities[ability]++;
+        Player.getInstance().character.abilities[ability]++;
         that.addDialogue(new Dialogue(
           "荆轲",
           new Text(word),
@@ -240,17 +240,17 @@ export default class Act1 extends SimpleScene {
     market.onpressListener = () => {
       console.log("This is the place for poors");
     }
-    palace.peoples.push(Main.getActors().fanwuji);
-    mainPlace.peoples.push(Main.getActors().juzi);
+    palace.peoples.push(Actors.getInstance().fanwuji);
+    mainPlace.peoples.push(Actors.getInstance().juzi);
     let juziFlow = Act1Flows.getInstance().greetingFromJuzi;
     juziFlow.bind(this);
-    Main.getActors().juzi.onclickListener = () => {
+    Actors.getInstance().juzi.onclickListener = () => {
       juziFlow.reset();
       juziFlow.startFlow();
     }
-    market.peoples.push(Main.getActors().businessman);
+    market.peoples.push(Actors.getInstance().businessman);
     mainPlace.places.push(palace, market);
-    Main.getActors().businessman.onclickListener = () => {
+    Actors.getInstance().businessman.onclickListener = () => {
       let model = new GoodsPanelModel();
       let p1 = new Prossession();
       p1.name = "六味补气丸";
@@ -306,7 +306,7 @@ export default class Act1 extends SimpleScene {
     });
     sequence.addIntoSequence({
       onStart() {
-        let juzi = Main.getActors().juzi;
+        let juzi = Actors.getInstance().juzi;
         juzi.pointerPosition = PointerPosition.RIGHT;
         juzi.dirty = true;
         that.addDialogue(new Dialogue(

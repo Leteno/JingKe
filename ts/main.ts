@@ -21,9 +21,6 @@ export default class Main {
 
   last: number;
 
-  static player: Player;
-  static actors: Actors;
-
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
 
@@ -62,6 +59,10 @@ export default class Main {
     this.eventHandler.bindOnPressHandler((event: PressEvent) => {
       return SceneManager.getInstance().currentScene.onpress(event);
     });
+
+    // pre-init Player Actors here.
+    Player.getInstance();
+    Actors.getInstance();
   }
 
   gameLoop() {
@@ -89,21 +90,5 @@ export default class Main {
     this.ctx.fillStyle = 'black';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
     this.ctx.restore();
-  }
-
-  static getPlayer() : Player {
-    if (this.player == null) {
-      this.player = new Player();
-      // Read from disk.
-    }
-    return this.player;
-  }
-
-  static getActors(): Actors {
-    if (this.actors == null) {
-      this.actors = new Actors();
-      // Read from disk.
-    }
-    return this.actors;
   }
 }

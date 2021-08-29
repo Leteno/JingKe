@@ -7,7 +7,9 @@ export class Actors {
   fanwuji: People;
   juzi: People;
 
-  constructor() {
+  private static instance: Actors;
+
+  private constructor() {
     let fanwuji = new People();
     fanwuji.character.name = "樊于期";
     fanwuji.character.imageSrc = "res/copyleft/people_fanwuji.png";
@@ -35,5 +37,13 @@ export class Actors {
       Specials.getInstance().kouruoxuanhe
     );
     this.businessman = businessman;
+  }
+
+  static getInstance(): Actors {
+    if (this.instance == null) {
+      // init here.
+      this.instance = new Actors();
+    }
+    return this.instance;
   }
 }

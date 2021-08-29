@@ -1,4 +1,5 @@
 import { Character } from "../data/character";
+import { Player } from "../data/player";
 import { Prossession } from "../data/prossession";
 import Main from "../main";
 import { Align, LayoutType } from "../misc/layout";
@@ -39,7 +40,7 @@ export default class UserPanel extends PageList {
     prossessionPage.model.dirty = true;
     this.addPage("物品", prossessionPage);
 
-    this.descriptionView.bindData(Main.getPlayer().character,
+    this.descriptionView.bindData(Player.getInstance().character,
       (v: PlayerDescriptionView, d: Character) => {
       v.setCharacter(d);
     });

@@ -13,16 +13,25 @@ export class Player extends BindableAndSerializable {
   version: number;
   chooses: Map<number, number>;
   character: Character;
+  private static instance: Player;
 
   static CHOOSE_NOT_FOUND:number = -1;
 
-  constructor() {
+  private constructor() {
     super();
     this.character = new Character();
     this.character.name = "荆棘";
     this.character.imageSrc = "res/copyleft/people_gainie.png";
     this.version = 1;
     this.chooses = new Map<number, number>();
+  }
+
+  static getInstance():Player {
+    if (this.instance == null) {
+      // init here.
+      this.instance = new Player();
+    }
+    return this.instance;
   }
 
   saveChoose(event: Event, choose: number) {
