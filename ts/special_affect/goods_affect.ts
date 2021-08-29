@@ -16,8 +16,8 @@ class GAEmpty extends GoodsAffect {
 
 class GACostDiscount extends GoodsAffect {
   costDiscount: number;
-  constructor(costDiscount: number) {
-    super();
+  constructor(name: string, description: string, costDiscount: number) {
+    super(name, description);
     this.costDiscount = costDiscount;
   }
   affect(data: Prossession): boolean {
@@ -28,8 +28,8 @@ class GACostDiscount extends GoodsAffect {
 
 class GACountChange extends GoodsAffect {
   countDelta: number;
-  constructor(countDelta: number) {
-    super();
+  constructor(name: string, description: string, countDelta: number) {
+    super(name, description);
     this.countDelta = countDelta;
   }
   affect(data: Prossession): boolean {
@@ -50,12 +50,12 @@ export class GoodsAffectFactory {
   static getGoodsAffect(t: TYPE, ...args:any[]):GoodsAffect {
     switch (t) {
       case TYPE.GACostDiscount:
-        Assertion.expectTrue(args.length == 1);
-        return new GACostDiscount(args[0]);
+        Assertion.expectTrue(args.length == 3);
+        return new GACostDiscount(args[0], args[1], args[2]);
       case TYPE.GACountChange:
-        Assertion.expectTrue(args.length == 1);
-        return new GACountChange(args[0]);
+        Assertion.expectTrue(args.length == 3);
+        return new GACountChange(args[0], args[1], args[2]);
     }
-    return new GAEmpty();
+    return new GAEmpty("", "");
   }
 }

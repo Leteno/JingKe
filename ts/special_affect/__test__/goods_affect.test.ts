@@ -8,7 +8,7 @@ test("one rule", () => {
   x.cost = 10;
 
   let affect1 = GoodsAffectFactory.getGoodsAffect(
-    TYPE.GACostDiscount, 0.1
+    TYPE.GACostDiscount, "", "", 0.1
   );
   affect1.affect(x);
   expect(x.cost).toBe(1);
@@ -19,10 +19,10 @@ test("mix rules", () => {
   x.count = 12;
   x.cost = 10;
   let affect1 = GoodsAffectFactory.getGoodsAffect(
-    TYPE.GACostDiscount, 0.1
+    TYPE.GACostDiscount, "", "", 0.1
   );
   let affect2 = GoodsAffectFactory.getGoodsAffect(
-    TYPE.GACountChange, 1
+    TYPE.GACountChange, "", "", 1
   );
   affect1.affect(x);
   affect2.affect(x);
@@ -35,7 +35,7 @@ test("crazy rules", () => {
   x.count = 12;
   x.cost = 10;
   let affect1 = GoodsAffectFactory.getGoodsAffect(
-    TYPE.GACountChange, -13
+    TYPE.GACountChange, "", "", -13
   );
   affect1.affect(x);
   expect(x.count).toBe(0);
