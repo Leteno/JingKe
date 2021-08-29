@@ -7,7 +7,7 @@ import { SpecialAffect } from "./special_affect";
 export enum Label_Type {
   Brave,
   Xianting,
-  yiboyuntian
+  Yiboyuntian
 }
 
 export class LabelAffect extends SpecialAffect {
@@ -20,7 +20,26 @@ export class LabelAffect extends SpecialAffect {
 
 export class LabelAffectFactory {
   static getLabelAffect(t: Label_Type, ...args:any[]):LabelAffect {
-    Assertion.expectTrue(args.length == 2);
-    return new LabelAffect(args[0], args[1], t);
+    Assertion.expectTrue(args.length == 0);
+    let name: string, desc: string;
+    switch(t) {
+      case Label_Type.Brave:
+        name = "勇敢"
+        desc = "遇到攻击力比自己高的，攻击力+3"
+        break;
+      case Label_Type.Xianting:
+        name = "闲庭"
+        desc = "由于你的步伐过于冷静，正常情况下不会遭遇捕快"
+        break;
+      case Label_Type.Yiboyuntian:
+        name = "义薄云天"
+        desc = "任何义士遇到困难，你都会伸出援手"
+        break;
+      default:
+        console.log("unresolve type: " + t);
+    }
+    Assertion.expectTrue(name != undefined);
+    Assertion.expectTrue(desc != undefined);
+    return new LabelAffect(name, desc, t);
   }
 }
