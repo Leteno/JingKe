@@ -1,5 +1,5 @@
 import { People } from "../../compose/place_and_people_view";
-import { ABILITY, Special } from "../../data/character";
+import { ABILITY } from "../../data/character";
 import { Specials } from "../../data/specials";
 
 export class Actors {

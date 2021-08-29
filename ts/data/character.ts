@@ -1,3 +1,4 @@
+import { SpecialAffect } from "../special_affect/special_affect";
 import { BindableData } from "./bindable_data";
 
 
@@ -8,26 +9,16 @@ export enum ABILITY {
   TRUST = 3, // 信誉
 }
 
-export class Special {
-  name: string;
-  description: string;
-
-  constructor(name: string, description: string) {
-    this.name = name;
-    this.description = description;
-  }
-}
-
 export class Character extends BindableData {
   name: string;
   imageSrc: string;
   abilities: Array<number>;
-  specials: Array<Special>;
+  specials: Array<SpecialAffect>;
 
   constructor() {
     super();
     this.abilities = new Array<number>();
-    this.specials = new Array<Special>();
+    this.specials = new Array<SpecialAffect>();
 
     // Abilities
     this.abilities[ABILITY.ATTACK] = 0;
