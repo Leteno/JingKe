@@ -1,6 +1,8 @@
+import { type } from "os";
 import { Prossession } from "../../data/prossession"
 import { Clone } from "../../misc/clone";
-import {GoodsAffectFactory, TYPE} from "../goods_affect"
+import { getEnumCases } from "../../misc/enum";
+import {GoodsAffect, GoodsAffectFactory, Goods_Type} from "../goods_affect"
 
 test("one rule", () => {
   let x = new Prossession();
@@ -8,8 +10,8 @@ test("one rule", () => {
   x.cost = 10;
 
   let affect1 = GoodsAffectFactory.getGoodsAffect(
-    TYPE.GACostDiscount, "", "", 0.1
-  );
+    Goods_Type.GACostDiscount, "", "", 0.1
+  ) as GoodsAffect;
   affect1.affect(x);
   expect(x.cost).toBe(1);
 })
@@ -19,11 +21,11 @@ test("mix rules", () => {
   x.count = 12;
   x.cost = 10;
   let affect1 = GoodsAffectFactory.getGoodsAffect(
-    TYPE.GACostDiscount, "", "", 0.1
-  );
+    Goods_Type.GACostDiscount, "", "", 0.1
+  ) as GoodsAffect;
   let affect2 = GoodsAffectFactory.getGoodsAffect(
-    TYPE.GACountChange, "", "", 1
-  );
+    Goods_Type.GACountChange, "", "", 1
+  ) as GoodsAffect;
   affect1.affect(x);
   affect2.affect(x);
   expect(x.count).toBe(13);
@@ -35,8 +37,19 @@ test("crazy rules", () => {
   x.count = 12;
   x.cost = 10;
   let affect1 = GoodsAffectFactory.getGoodsAffect(
-    TYPE.GACountChange, "", "", -13
-  );
+    Goods_Type.GACountChange, "", "", -13
+  ) as GoodsAffect;
   affect1.affect(x);
   expect(x.count).toBe(0);
+})
+
+test("all type should be valid", () => {
+  let types = getEnumCases(Goods_Type) as Goods_Type[];
+  for (let i = 0; i < types.length; i++) {
+    let element = types[i];
+    let affect1 = GoodsAffectFactory.getGoodsAffect(
+      element, "", "", 1
+    );
+    expect(affect1).not.toBe(null);
+  }
 })
