@@ -1,5 +1,7 @@
 import { BindableData } from "../data/bindable_data";
+import { Player } from "../data/player";
 import { Prossession } from "../data/prossession";
+import { Clone } from "../misc/clone";
 import { Align, LayoutType } from "../misc/layout";
 import ImageView from "../widgets/imageview";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
@@ -24,6 +26,11 @@ class PurchaseModel extends BindableData {
   minCount: number;
   maxCount: number;
   cost: number;
+  // This should be a copy of the original Prossession.
+  // Model should be same with copy in {count} {cost}
+  // Affected by SpecialAffect, Model may have different
+  // values on them.
+  copy: Prossession;
   constructor() {
     super();
     this.count = 1;
@@ -37,6 +44,7 @@ class DescriptionView extends LinearLayout {
   title: TextView;
   content: TextView;
   left: TextView;
+  numberLabel: TextView;
   costLabel: TextView;
   purchaseModel: PurchaseModel;
 
@@ -69,13 +77,13 @@ class DescriptionView extends LinearLayout {
     numberLayer.margin.bottom = 10;
     let plusBtn = new ImageView("res/created/plus.png");
     plusBtn.forceWidth = plusBtn.forceHeight = 20;
-    let numberLabel = new TextView(new Text("1"));
+    this.numberLabel = new TextView(new Text("1"));
     let minusBtn = new ImageView("res/created/minus.png");
     minusBtn.forceWidth = minusBtn.forceHeight = 20;
-    numberLabel.margin.left = numberLabel.margin.right
+    this.numberLabel.margin.left = this.numberLabel.margin.right
       = 10;
     numberLayer.addView(minusBtn);
-    numberLayer.addView(numberLabel);
+    numberLayer.addView(this.numberLabel);
     numberLayer.addView(plusBtn);
     this.addView(numberLayer);
 
@@ -84,15 +92,6 @@ class DescriptionView extends LinearLayout {
     this.costLabel.margin.bottom = 10;
     this.addView(this.costLabel);
 
-    numberLabel.bindData(
-      this.purchaseModel,
-      (() => {
-        numberLabel.setText(new Text("" + this.purchaseModel.count));
-        this.costLabel.setText(new Text(
-          `需 ${this.purchaseModel.count * this.purchaseModel.cost} 金`
-        ))
-      }).bind(this)
-    );
     plusBtn.onclickInternal = (() => {
       if (this.purchaseModel.count < this.purchaseModel.maxCount) {
         this.purchaseModel.count++;
@@ -114,26 +113,58 @@ class DescriptionView extends LinearLayout {
     purchaseBtn.layoutParam.xcfg = Align.END;
     purchaseBtn.bgColor = "#d3d3d3";
     this.addView(purchaseBtn);
+
+    this.bindData(this.purchaseModel, DescriptionView.bindModel);
   }
 
-  bind(goods: Prossession) {
-    this.bindData(goods, DescriptionView.update);
-  }
-
-  static update(view: DescriptionView, goods: Prossession) {
-    view.title.setText(new Text(
+  update(goods: Prossession) {
+    this.title.setText(new Text(
       goods.name
     ));
-    view.content.setText(new Text(
+    this.content.setText(new Text(
       goods.functional_text
     ));
-    view.left.setText(new Text(
+    this.left.setText(new Text(
       "剩余: " + goods.count
     ));
-    view.purchaseModel.count = 1;
-    view.purchaseModel.cost = goods.cost;
-    view.purchaseModel.maxCount = goods.count;
-    view.purchaseModel.dirty = true;
+
+    let copy = Clone.clone(goods) as Prossession;
+    let tmp = Clone.clone(goods) as Prossession;
+    Player.getInstance().applyGoodsEffect(tmp);
+    this.purchaseModel.count = 1;
+    this.purchaseModel.cost = tmp.cost;
+    this.purchaseModel.maxCount = tmp.count;
+    this.purchaseModel.copy = copy;
+    this.purchaseModel.dirty = true;
+  }
+
+  static bindModel(view: DescriptionView, data: PurchaseModel) {
+    view.numberLabel.setText(new Text("" + view.purchaseModel.count));
+    let currentCost = view.purchaseModel.cost * view.purchaseModel.count;
+    if (!view.purchaseModel.copy) {
+      view.costLabel.setText(new Text(
+        `需 ${currentCost} 金`
+      ));
+      return;
+    }
+    let originalCost = view.purchaseModel.copy.cost * view.purchaseModel.count;
+    if (originalCost == currentCost) {
+      view.costLabel.setText(new Text(
+        `需 ${currentCost} 金`
+      ));
+    } else {
+      // The cost is changed.
+      let gap = currentCost - originalCost;
+      if (gap > 0) {
+        view.costLabel.setText(new Text(
+          `需 ${currentCost}(+${gap}) 金`
+        ));
+      } else {
+        view.costLabel.setText(new Text(
+          `需 ${currentCost}(${gap}) 金`
+        ));
+      }
+    }
   }
 }
 
@@ -231,7 +262,7 @@ export default class GoodsPanel extends LinearLayout {
     if (model.currentIndex < 0) {
       view.description.visible = false;
     } else {
-      view.description.bind(
+      view.description.update(
         model.goodsList[model.currentIndex]);
       view.description.visible = true;
     }

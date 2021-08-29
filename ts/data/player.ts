@@ -1,6 +1,9 @@
 import Parcel from "../objects/parcel";
 import { BindableAndSerializable, Serializable } from "../objects/serializable";
+import { GoodsAffect } from "../special_affect/goods_affect";
 import { Character } from "./character";
+import { Prossession } from "./prossession";
+import { Specials } from "./specials";
 
 export enum Event {
   FRE_BEGIN = 0,
@@ -24,6 +27,7 @@ export class Player extends BindableAndSerializable {
     this.character.imageSrc = "res/copyleft/people_gainie.png";
     this.version = 1;
     this.chooses = new Map<number, number>();
+    this.character.specials.push(Specials.getInstance().kouruoxuanhe);
   }
 
   static getInstance():Player {
@@ -54,5 +58,14 @@ export class Player extends BindableAndSerializable {
   fromParcel(p: Parcel) {
     this.version = p.readInt();
     // TODO support Map.
+  }
+
+  applyGoodsEffect(prossession: Prossession) {
+    let changed: boolean = false;
+    this.character.specials.filter(k => k instanceof GoodsAffect)
+      .forEach(affect => {
+        changed = (affect as GoodsAffect).affect(prossession) || changed;
+      })
+    return changed;
   }
 }

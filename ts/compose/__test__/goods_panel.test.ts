@@ -1,7 +1,9 @@
 
+import { Player } from "../../data/player";
 import { Prossession } from "../../data/prossession";
 import { ClickEvent, PressEvent } from "../../misc/event";
 import { Specify } from "../../misc/layout";
+import { GoodsAffect, GoodsAffectFactory, Goods_Type } from "../../special_affect/goods_affect";
 import Panel from "../../widgets/panel";
 import TextView from "../../widgets/textview";
 import { defaultCtx } from "../../widgets/__test__/default_value.test";
@@ -12,10 +14,12 @@ function buildModelForTest(): GoodsPanelModel {
   let p1 = new Prossession();
   p1.name = "六味补气丸";
   p1.count = 10;
+  p1.cost = 10;
   p1.functional_text = "益气活血，祛痰化瘀";
   let p2 = new Prossession();
   p2.name = "秦国军旗";
   p2.count = 1;
+  p2.cost = 100;
   p2.functional_text = "赳赳大秦，一往无前";
   for (let i = 0; i < 100; i++)
     model.goodsList.push(p1, p2);
@@ -44,7 +48,7 @@ test("simple case", () => {
   expect(getGoodsListTextView(goodsPanel, 1)
     .text.content).toBe("秦国军旗");
 
-  goodsPanel.description.bind(model.goodsList[1]);
+  goodsPanel.description.update(model.goodsList[1]);
   expect(goodsPanel.description.title.text.content)
     .toBe("秦国军旗")
   expect(goodsPanel.description.content.text.content)
@@ -69,7 +73,7 @@ test("click", () => {
   goodsPanel.goodsList.onclick(new ClickEvent(0, 0));
   expect(model.currentIndex).toBe(0);
   expect(model.dirty).toBe(true);
-  goodsPanel.description.bind(model.goodsList[0]);
+  goodsPanel.description.update(model.goodsList[0]);
   expect(goodsPanel.description.title.text.content)
     .toBe("六味补气丸");
   expect(goodsPanel.description.content.text.content)
@@ -103,4 +107,38 @@ test("scroll", () => {
   goodsPanel.goodsDownBtn.onpressInternal(new PressEvent(0, 0));
   expect(goodsPanel.scrollView.offsetY)
     .toBe(0);
+})
+
+test("goods affect", () => {
+  let goodsPanel = new GoodsPanel();
+
+  let model = buildModelForTest();
+
+  goodsPanel.bindModel(model);
+  // So that when changed bindedData, the onBind
+  // will be invoked in drawToCanvas()
+  goodsPanel.description.visible = true;
+
+  Player.getInstance().character.specials = [];
+  goodsPanel.description.update(model.goodsList[1]);
+  goodsPanel.description.drawToCanvas(defaultCtx);
+  expect(goodsPanel.description.costLabel.text.content).toBe("需 100 金");
+
+  Player.getInstance().character.specials.push(
+    GoodsAffectFactory.getGoodsAffect(
+      Goods_Type.GACostDiscount, "", "", 0.7
+    ) as GoodsAffect
+  );
+  goodsPanel.description.update(model.goodsList[1]);
+  goodsPanel.description.drawToCanvas(defaultCtx);
+  expect(goodsPanel.description.costLabel.text.content).toBe("需 70(-30) 金");
+
+  Player.getInstance().character.specials.push(
+    GoodsAffectFactory.getGoodsAffect(
+      Goods_Type.GACostDiscount, "", "", 7
+    ) as GoodsAffect
+  );
+  goodsPanel.description.update(model.goodsList[1]);
+  goodsPanel.description.drawToCanvas(defaultCtx);
+  expect(goodsPanel.description.costLabel.text.content).toBe("需 490(+390) 金");
 })
