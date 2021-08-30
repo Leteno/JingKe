@@ -16,6 +16,7 @@ export class Player extends BindableAndSerializable {
   version: number;
   chooses: Map<number, number>;
   character: Character;
+  money: number;
   private static instance: Player;
 
   static CHOOSE_NOT_FOUND:number = -1;
@@ -27,6 +28,7 @@ export class Player extends BindableAndSerializable {
     this.character.imageSrc = "res/copyleft/people_gainie.png";
     this.version = 1;
     this.chooses = new Map<number, number>();
+    this.money = 20;
     this.character.specials.push(Specials.getInstance().kouruoxuanhe);
   }
 

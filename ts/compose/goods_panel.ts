@@ -1,6 +1,7 @@
 import { BindableData } from "../data/bindable_data";
 import { Player } from "../data/player";
 import { Prossession } from "../data/prossession";
+import Assertion from "../misc/assertion";
 import { Clone } from "../misc/clone";
 import { Align, LayoutType } from "../misc/layout";
 import ImageView from "../widgets/imageview";
@@ -46,6 +47,7 @@ class DescriptionView extends LinearLayout {
   left: TextView;
   numberLabel: TextView;
   costLabel: TextView;
+  purchaseBtn: TextView;
   purchaseModel: PurchaseModel;
 
   constructor() {
@@ -109,10 +111,19 @@ class DescriptionView extends LinearLayout {
     }).bind(this);
     minusBtn.onpressInternal = minusBtn.onclickInternal;
 
-    let purchaseBtn = new TextView(new Text("购买"));
-    purchaseBtn.layoutParam.xcfg = Align.END;
-    purchaseBtn.bgColor = "#d3d3d3";
-    this.addView(purchaseBtn);
+    this.purchaseBtn = new TextView(new Text("购买"));
+    this.purchaseBtn.layoutParam.xcfg = Align.END;
+    this.purchaseBtn.bgColor = "#d3d3d3";
+    this.purchaseBtn.onclickInternal = (() => {
+      let cost = this.purchaseModel.cost * this.purchaseModel.count;
+      Assertion.expectTrue(Player.getInstance().money > cost);
+      Player.getInstance().money -= cost;
+      this.purchaseModel.maxCount -= this.purchaseModel.count;
+      this.purchaseModel.count = 1;
+      this.purchaseModel.dirty = true;
+      return true;
+    }).bind(this);
+    this.addView(this.purchaseBtn);
 
     this.bindData(this.purchaseModel, DescriptionView.bindModel);
   }
@@ -165,6 +176,7 @@ class DescriptionView extends LinearLayout {
         ));
       }
     }
+    view.purchaseBtn.enable = Player.getInstance().money > currentCost;
   }
 }
 
