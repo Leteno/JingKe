@@ -67,6 +67,7 @@ export class Text {
 export default class TextView extends SimpleView {
   text: Text;
   textColor: string;
+  disabledTextColor: string;
   textSize: number;
   lineHeight: number;
   drawLines: Array<DrawLine>;
@@ -78,6 +79,7 @@ export default class TextView extends SimpleView {
     super();
     this.text = text;
     this.textColor = "white";
+    this.disabledTextColor = "#cccccc"
     this.textSize = 24;
     this.underline = false;
     this.showTextLength = text.content.length;
@@ -97,8 +99,12 @@ export default class TextView extends SimpleView {
   }
 
   applyStyle(ctx: CanvasRenderingContext2D) {
-    if (this.textColor) {
-      ctx.fillStyle = this.textColor;
+    let textColor = this.textColor;
+    if (!this.enable && this.disabledTextColor != undefined) {
+      textColor = this.disabledTextColor;
+    }
+    if (textColor) {
+      ctx.fillStyle = textColor;
     }
     if (this.textSize) {
       ctx.font = `${this.textSize}px bold`

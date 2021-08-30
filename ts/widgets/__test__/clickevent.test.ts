@@ -238,3 +238,13 @@ test("onTouchOutside", () => {
   expect((v1.onTouchOutside as jest.Mock)
     .mock.calls.length).toBe(1);
 })
+
+test("view disabled", () => {
+  let v = new TestSprite(10, 10);
+  v.onclick(new ClickEvent(0, 0));
+  expect((v.onclickInternal as jest.Mock).mock.calls.length).toBe(1);
+
+  v.enable = false;
+  v.onclick(new ClickEvent(0, 0));
+  expect((v.onclickInternal as jest.Mock).mock.calls.length).toBe(1);
+})

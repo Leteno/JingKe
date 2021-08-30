@@ -226,3 +226,15 @@ test("Chinese \\n", () => {
   expect(mockFillText.mock.calls[4][0])
     .toBe("会很大力");
 })
+
+test("enable text color", () => {
+  let t = new TextView();
+  t.textColor = "white";
+  t.disabledTextColor = "blue";
+  t.drawToCanvas(defaultCtx);
+  expect(defaultCtx.fillStyle).toBe("white");
+
+  t.enable = false;
+  t.drawToCanvas(defaultCtx);
+  expect(defaultCtx.fillStyle).toBe("blue");
+})

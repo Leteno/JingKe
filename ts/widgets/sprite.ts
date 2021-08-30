@@ -32,7 +32,10 @@ export default abstract class Sprite {
   visible: boolean;
   layoutParam: LayoutParams;
   border: Border;
+
+  enable: boolean;
   bgColor: string;
+  disableBgColor: string;
 
   debug: boolean;
   debugColor: string;
@@ -53,6 +56,8 @@ export default abstract class Sprite {
     this.visible = visible;
     this.debug = false;
     this.debugColor = "blue";
+
+    this.enable = true;
 
     this.forceWidth = -1;
     this.forceHeight = -1;
@@ -99,6 +104,7 @@ export default abstract class Sprite {
   }
 
   onclick(event: ClickEvent): boolean {
+    if (!this.enable) return false;
     if (!this.visible) return false;
     let inside = EasyMath.between(this.x, this.x + this.width, event.x)
       && EasyMath.between(this.y, this.y + this.height, event.y);
@@ -116,6 +122,7 @@ export default abstract class Sprite {
   }
 
   onpress(event: PressEvent): boolean {
+    if (!this.enable) return false;
     if (!this.visible) return false;
     let inside = EasyMath.between(this.x, this.x + this.width, event.x)
       && EasyMath.between(this.y, this.y + this.height, event.y);

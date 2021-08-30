@@ -171,9 +171,13 @@ export default abstract class SimpleView extends Sprite {
     ctx.save();
     ctx.translate(this.x, this.y);
 
-    if (this.bgColor) {
+    let bgColor = this.bgColor;
+    if (!this.enable && this.disableBgColor != undefined) {
+      bgColor = this.disableBgColor;
+    }
+    if (bgColor) {
       ctx.save();
-      ctx.fillStyle = this.bgColor;
+      ctx.fillStyle = bgColor;
       ctx.fillRect(
         0, 0,
         this.width,

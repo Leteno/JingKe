@@ -3,6 +3,7 @@ import { Specify } from "../../misc/layout";
 import SimpleView from "../simple_view";
 import { MeasureResult } from "../sprite";
 import { defaultCtx } from "./default_value.test";
+import TestSprite from "./test_sprite.test";
 
 class TestData extends BindableData {
   name: string;
@@ -74,4 +75,16 @@ test("Specify", () => {
   view.measure(defaultCtx, 500, 500, Specify.X | Specify.Y | Specify.NONE);
   expect(view.width).toBe(500);
   expect(view.height).toBe(500);
+})
+
+test("enable bg color", () => {
+  let t = new TestSprite();
+  t.bgColor = "white";
+  t.disableBgColor = "blue";
+  t.drawToCanvas(defaultCtx);
+  expect(defaultCtx.fillStyle).toBe("white");
+  t.enable = false;
+  t.drawToCanvas(defaultCtx);
+  expect(defaultCtx.fillStyle).toBe("blue");
+
 })
