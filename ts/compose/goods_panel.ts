@@ -27,11 +27,7 @@ class PurchaseModel extends BindableData {
   minCount: number;
   maxCount: number;
   cost: number;
-  // This should be a copy of the original Prossession.
-  // Model should be same with copy in {count} {cost}
-  // Affected by SpecialAffect, Model may have different
-  // values on them.
-  copy: Prossession;
+  original: Prossession;
   constructor() {
     super();
     this.count = 1;
@@ -118,9 +114,10 @@ class DescriptionView extends LinearLayout {
       let cost = this.purchaseModel.cost * this.purchaseModel.count;
       Assertion.expectTrue(Player.getInstance().money > cost);
       Player.getInstance().money -= cost;
-      this.purchaseModel.maxCount -= this.purchaseModel.count;
+      this.purchaseModel.original.count -= this.purchaseModel.count;
       this.purchaseModel.count = 1;
       this.purchaseModel.dirty = true;
+      this.purchaseModel.original.dirty = true;
       return true;
     }).bind(this);
     this.addView(this.purchaseBtn);
@@ -129,36 +126,38 @@ class DescriptionView extends LinearLayout {
   }
 
   update(goods: Prossession) {
-    this.title.setText(new Text(
-      goods.name
-    ));
-    this.content.setText(new Text(
-      goods.functional_text
-    ));
-    this.left.setText(new Text(
-      "剩余: " + goods.count
-    ));
+    this.title.bindData(goods, ((v: DescriptionView, d: Prossession) => {
+      this.title.setText(new Text(
+        d.name
+      ));
+      this.content.setText(new Text(
+        d.functional_text
+      ));
+      this.left.setText(new Text(
+        "剩余: " + d.count
+      ));
+    }).bind(this));
 
+    // 暂时不考虑 goods change 之后，还需要更新 purchaseModel.
     let copy = Clone.clone(goods) as Prossession;
-    let tmp = Clone.clone(goods) as Prossession;
-    Player.getInstance().applyGoodsEffect(tmp);
+    Player.getInstance().applyGoodsEffect(copy);
     this.purchaseModel.count = 1;
-    this.purchaseModel.cost = tmp.cost;
-    this.purchaseModel.maxCount = tmp.count;
-    this.purchaseModel.copy = copy;
+    this.purchaseModel.cost = copy.cost;
+    this.purchaseModel.maxCount = copy.count;
+    this.purchaseModel.original = goods;
     this.purchaseModel.dirty = true;
   }
 
   static bindModel(view: DescriptionView, data: PurchaseModel) {
     view.numberLabel.setText(new Text("" + view.purchaseModel.count));
     let currentCost = view.purchaseModel.cost * view.purchaseModel.count;
-    if (!view.purchaseModel.copy) {
+    if (!view.purchaseModel.original) {
       view.costLabel.setText(new Text(
         `需 ${currentCost} 金`
       ));
       return;
     }
-    let originalCost = view.purchaseModel.copy.cost * view.purchaseModel.count;
+    let originalCost = view.purchaseModel.original.cost * view.purchaseModel.count;
     if (originalCost == currentCost) {
       view.costLabel.setText(new Text(
         `需 ${currentCost} 金`
