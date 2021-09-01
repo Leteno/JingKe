@@ -1,4 +1,6 @@
 
+import DBManager from "../../storage/db_manager";
+import { Character } from "../character";
 import {Event, Player} from "../player"
 
 test("player", () => {
@@ -14,4 +16,23 @@ test("player", () => {
 
   expect(player.getChoose(Event.FRE_WHAT_LOVE))
     .toBe(Player.CHOOSE_NOT_FOUND);
+})
+
+test("save and read", () => {
+  let player = Player.getInstance();
+  player.money = 596;
+  player.character.name = "leteno";
+  player.character.imageSrc = "test://img";
+  player.saveToDb();
+
+  // Ruin the data.
+  player.money += 1024;
+  player.character.name = "change it";
+  player.character.imageSrc = "lalalal";
+
+  player.readFromDb();
+
+  expect(player.money).toBe(596);
+  expect(player.character.name).toBe("leteno");
+  expect(player.character.imageSrc).toBe("test://img");
 })

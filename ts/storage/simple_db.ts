@@ -11,7 +11,9 @@ export class SimpleDb implements DBInteface {
   getData(name: string) {
     let read = localStorage.getItem(this.keyFormat(name));
     let out = new Parcel();
-    out.fromString(read);
+    if (read) {
+      out.fromString(read);
+    }
     return out;
   }
   saveData(name: string, parcel: Parcel) {

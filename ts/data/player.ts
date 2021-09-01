@@ -1,6 +1,7 @@
 import Parcel from "../objects/parcel";
 import { BindableAndSerializable, Serializable } from "../objects/serializable";
 import { GoodsAffect } from "../special_affect/goods_affect";
+import DBManager from "../storage/db_manager";
 import { Character } from "./character";
 import { Prossession } from "./prossession";
 import { Specials } from "./specials";
@@ -40,6 +41,20 @@ export class Player extends BindableAndSerializable {
     return this.instance;
   }
 
+  readFromDb() {
+    let p = DBManager.getInstance().getDb().getData("player");
+    if (p.getLength() > 0) {
+      this.fromParcel(p);
+    }
+  }
+
+  saveToDb() {
+    DBManager.getInstance().getDb().saveData(
+      "player",
+      this.toParcel()
+    );
+  }
+
   saveChoose(event: Event, choose: number) {
     this.chooses.set(event, choose);
   }
@@ -54,11 +69,16 @@ export class Player extends BindableAndSerializable {
   toParcel(): Parcel {
     let p = new Parcel();
     p.writeInt(this.version);
+    p.writeInt(this.money);
+    p.writeParcel(this.character.toParcel());
     // TODO support Map.
     return p;
   }
   fromParcel(p: Parcel) {
     this.version = p.readInt();
+    this.money = p.readInt();
+    this.character = new Character();
+    this.character.fromParcel(p.readParcel());
     // TODO support Map.
   }
 

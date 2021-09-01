@@ -61,7 +61,7 @@ export default class Main {
     });
 
     // pre-init Player Actors here.
-    Player.getInstance();
+    Player.getInstance().readFromDb();
     Actors.getInstance();
   }
 
