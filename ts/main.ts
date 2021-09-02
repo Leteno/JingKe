@@ -32,7 +32,7 @@ export default class Main {
     this.last = timestamp();
 
     SceneManager.init(this.ctx);
-    let welcomeScene = new WelcomeScene(SceneManager.getInstance(), canvas);
+    let welcomeScene = new WelcomeScene(canvas);
     SceneManager.getInstance().push("welcome", welcomeScene);
 
     let helloWorldScene = new HelloWorldScene(canvas);
@@ -44,7 +44,7 @@ export default class Main {
     let act1 = new Act1(canvas);
     SceneManager.getInstance().push("act1", act1);
 
-    SceneManager.getInstance().switchScene("act1");
+    SceneManager.getInstance().switchScene("welcome");
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(
       this.bindLoop
