@@ -7,12 +7,15 @@ import TextView, { Text } from "../widgets/textview";
 import { ClickEvent, PressEvent } from "../misc/event";
 import SceneManager from "../scene/scene_manager";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
+import { Border } from "../widgets/sprite";
+import DBManager from "../storage/db_manager";
 
 export default class WelcomeScene implements Scene {
   mainPanel: Panel;
   animators: Array<Animator<number>>;
   canvasWidth: number;
   canvasHeight: number;
+  gameSelectPopup: GameSelectPopup;
   title: TextView;
   options: LinearLayout;
 
@@ -39,10 +42,10 @@ export default class WelcomeScene implements Scene {
     startBtn.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
     this.options.addView(startBtn);
     startBtn.textSize = 24;
-    startBtn.onclickInternal = (event: ClickEvent) : boolean => {
-      SceneManager.getInstance().switchScene("act1");
+    startBtn.onclickInternal = ((event: ClickEvent) : boolean => {
+      this.gameSelectPopup.show();
       return true;
-    }
+    }).bind(this);
 
     let configBtn = new TextView(new Text("配置"));
     configBtn.layoutParam = new LayoutParams(Align.CENTER, Align.CENTER);
@@ -53,7 +56,12 @@ export default class WelcomeScene implements Scene {
       console.log("configBtn is clicked");
       return true;
     }
+
+    // game
+    this.gameSelectPopup = new GameSelectPopup();
+    this.mainPanel.addView(this.gameSelectPopup);
   }
+
   onStart(ctx: CanvasRenderingContext2D) {
 
     let that:WelcomeScene = this;
@@ -89,5 +97,47 @@ export default class WelcomeScene implements Scene {
   }
   onpress(event: PressEvent) {
     this.mainPanel.onpress(event);
+  }
+}
+
+class GameSelectPopup extends LinearLayout {
+  constructor() {
+    super();
+    this.visible = false;
+
+    this.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    this.margin.left = this.margin.right = 40;
+    this.layoutParam.xcfg = Align.CENTER;
+    this.layoutParam.ycfg = Align.CENTER;
+    this.bgColor = "#f6f6f6";
+
+    let that: GameSelectPopup = this;
+    for (let i = 1; i <= 3; i++) {
+      let text = new TextView();
+      text.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+      text.textColor = "#171717";
+      text.border = new Border();
+      text.border.color = "#e5e5e5";
+      text.setText(new Text(`Slot ${i}`));
+      let dbName = "Slot" + i;
+      text.onclickInternal = () => {
+        that.visible = false;
+        console.log("use " + dbName);
+        DBManager.getInstance().use(dbName);
+        SceneManager.getInstance().switchScene('act1');
+        return true;
+      }
+      this.addView(text);
+    }
+  }
+  show() {
+    this.visible = true;
+  }
+  onTouchOutside(event) {
+    if (this.visible) {
+      this.visible = false;
+      return true;
+    }
+    return super.onTouchOutside(event);
   }
 }
