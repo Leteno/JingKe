@@ -11,6 +11,9 @@ import Dialogue from "./data/dialogue";
 import { Player } from "./data/player";
 import EventHandler from "./misc/event_handler";
 import { Actors } from "./game/data/actors";
+import DBManager from "./storage/db_manager";
+import { DBInteface } from "./storage/db_interface";
+import { GameState } from "./game/game_state";
 
 export default class Main {
   aniId: number;
@@ -60,9 +63,16 @@ export default class Main {
       return SceneManager.getInstance().currentScene.onpress(event);
     });
 
-    // pre-init Player Actors here.
-    Player.getInstance().readFromDb();
-    Actors.getInstance();
+    DBManager.getInstance().setReload((db: DBInteface) => {
+      let p = db.getData("game_state");
+      if (p.getLength() > 0) {
+        // TODO support compatibility on proto upgrade.
+        GameState.instance.fromParcel(p);
+      }
+    });
+    DBManager.getInstance().setSave((db: DBInteface) => {
+      db.saveData("game_state", GameState.instance.toParcel());
+    });
   }
 
   gameLoop() {
