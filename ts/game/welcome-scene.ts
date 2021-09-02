@@ -10,6 +10,7 @@ import LinearLayout, { Orientation } from "../widgets/linear_layout";
 import { Border } from "../widgets/sprite";
 import DBManager from "../storage/db_manager";
 import { GameState } from "./game_state";
+import { StringUtils } from "../misc/string_utils";
 
 export default class WelcomeScene implements Scene {
   mainPanel: Panel;
@@ -125,7 +126,7 @@ class GameSelectPopup extends LinearLayout {
         that.visible = false;
         console.log("use " + dbName);
         DBManager.getInstance().use(dbName);
-        if (GameState.instance.currentSceneName == undefined) {
+        if (StringUtils.isEmpty(GameState.instance.currentSceneName)) {
           GameState.instance.currentSceneName = 'act1';
         }
         SceneManager.getInstance().switchScene(
