@@ -14,6 +14,7 @@ import { Actors } from "./game/data/actors";
 import DBManager from "./storage/db_manager";
 import { DBInteface } from "./storage/db_interface";
 import { GameState } from "./game/game_state";
+import TextEffects from "./game/data/styles/text_effects";
 
 export default class Main {
   aniId: number;
@@ -35,6 +36,8 @@ export default class Main {
     this.last = timestamp();
 
     SceneManager.init(this.ctx);
+    TextEffects.init();
+
     let welcomeScene = new WelcomeScene(canvas);
     SceneManager.getInstance().push("welcome", welcomeScene);
 
