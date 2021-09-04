@@ -143,7 +143,7 @@ export default class TextView extends SimpleView {
       /**
        * Dealing the pattern between \f \r
        */
-      // Check \f \g are pairing.
+      // Check \f \r are pairing.
       if (ch == '\f') {
         patStart = i+1;
         if (currentWidth > 0) {
