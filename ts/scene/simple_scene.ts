@@ -1,5 +1,6 @@
 import Animator from "../animator/animator";
 import GoodsPanel, { GoodsPanelModel } from "../compose/goods_panel";
+import MessageBox from "../compose/message_box";
 import PlayerDescriptionView from "../compose/player_description_view";
 import UserPanel from "../compose/UserPanel";
 import { Character } from "../data/character";
@@ -9,6 +10,7 @@ import { Align, LayoutParams, LayoutType, Specify } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
 import OptionView, { Option, OptionCallback } from "../widgets/option_view";
 import Panel from "../widgets/panel";
+import SimpleView from "../widgets/simple_view";
 import Sprite from "../widgets/sprite";
 import TextView, { Text } from "../widgets/textview";
 import Scene from "./scene";
@@ -20,6 +22,7 @@ export default abstract class SimpleScene implements Scene {
   private descriptionView: PlayerDescriptionView;
   private userPanel: UserPanel;
   private goodsPanel: GoodsPanel;
+  private messageBox: MessageBox;
 
   canvasWidth: number;
   canvasHeight: number;
@@ -69,6 +72,9 @@ export default abstract class SimpleScene implements Scene {
     this.goodsPanel = new GoodsPanel();
     this.goodsPanel.forceHeight = canvas.height / 3;
     this.goodsPanel.visible = false;
+
+    this.messageBox = new MessageBox();
+    this.messageBox.visible = false;
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
@@ -84,6 +90,8 @@ export default abstract class SimpleScene implements Scene {
     this.userPanel.layout(this.canvasWidth, this.canvasHeight);
     this.goodsPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
     this.goodsPanel.layout(this.canvasWidth, this.canvasHeight);
+    this.messageBox.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
+    this.messageBox.layout(this.canvasWidth, this.canvasHeight);
   }
 
   update(dt: number) {
@@ -101,9 +109,13 @@ export default abstract class SimpleScene implements Scene {
     this.descriptionView.drawToCanvas(ctx);
     this.userPanel.drawToCanvas(ctx);
     this.goodsPanel.drawToCanvas(ctx);
+    this.messageBox.drawToCanvas(ctx);
   }
 
   onclick(event: ClickEvent) {
+    if (this.messageBox.onclick(event)) {
+      return;
+    }
     if (this.goodsPanel.onclick(event)) {
       return;
     }
@@ -123,6 +135,9 @@ export default abstract class SimpleScene implements Scene {
   }
 
   onpress(event: PressEvent) {
+    if (this.messageBox.onpress(event)) {
+      return;
+    }
     if (this.goodsPanel.onpress(event)) {
       return;
     }
@@ -192,5 +207,12 @@ export default abstract class SimpleScene implements Scene {
   showGoodsPanel(model: GoodsPanelModel) {
     this.goodsPanel.bindModel(model);
     this.goodsPanel.visible = true;
+  }
+
+  showMessageBox(title: Text, content: Text, fn?: ()=>void) {
+    this.messageBox.show(title, content);
+    if (fn) {
+      this.messageBox.onMessageBoxDismiss = fn;
+    }
   }
 }

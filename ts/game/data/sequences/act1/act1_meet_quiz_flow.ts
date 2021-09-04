@@ -156,8 +156,12 @@ export default class Act1MeetQuizFlow {
           false
         ));
         that.setOnDialogueFinish(() => {
-          console.log("获得任务：调查荆轲的困惑");
-          sequence.next();
+          that.showMessageBox(
+            new Text("获得任务：调查荆轲的困惑"),
+            new Text("调查清楚叔叔的困惑"),
+            () => {
+              sequence.next();
+            });
         })
       }
     });
