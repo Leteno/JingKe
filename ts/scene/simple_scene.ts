@@ -29,6 +29,8 @@ export default abstract class SimpleScene implements Scene {
 
   private animators: Array<Animator<number>>;
 
+  private components: Array<SimpleView>;
+
   constructor(canvas: HTMLCanvasElement) {
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
@@ -75,23 +77,23 @@ export default abstract class SimpleScene implements Scene {
 
     this.messageBox = new MessageBox();
     this.messageBox.visible = false;
+
+    this.components = [
+      this.mainPanel,
+      this.dialogueView,
+      this.descriptionView,
+      this.userPanel,
+      this.goodsPanel,
+      this.optionView,
+      this.messageBox
+    ];
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
-    this.mainPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
-    this.mainPanel.layout(this.canvasWidth, this.canvasHeight);
-    this.optionView.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
-    this.optionView.layout(this.canvasWidth, this.canvasHeight);
-    this.dialogueView.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
-    this.dialogueView.layout(this.canvasWidth, this.canvasHeight);
-    this.descriptionView.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
-    this.descriptionView.layout(this.canvasWidth, this.canvasHeight);
-    this.userPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
-    this.userPanel.layout(this.canvasWidth, this.canvasHeight);
-    this.goodsPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
-    this.goodsPanel.layout(this.canvasWidth, this.canvasHeight);
-    this.messageBox.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
-    this.messageBox.layout(this.canvasWidth, this.canvasHeight);
+    this.components.forEach(component => {
+      component.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
+      component.layout(this.canvasWidth, this.canvasHeight);
+    });
   }
 
   update(dt: number) {
@@ -103,57 +105,25 @@ export default abstract class SimpleScene implements Scene {
   }
 
   render(ctx: CanvasRenderingContext2D) {
-    this.mainPanel.drawToCanvas(ctx);
-    this.dialogueView.drawToCanvas(ctx);
-    this.optionView.drawToCanvas(ctx);
-    this.descriptionView.drawToCanvas(ctx);
-    this.userPanel.drawToCanvas(ctx);
-    this.goodsPanel.drawToCanvas(ctx);
-    this.messageBox.drawToCanvas(ctx);
+    this.components.forEach(component => {
+      component.drawToCanvas(ctx);
+    });
   }
 
   onclick(event: ClickEvent) {
-    if (this.messageBox.onclick(event)) {
-      return;
+    for (let i = this.components.length - 1; i >= 0; i--) {
+      if (this.components[i].onclick(event)) {
+        return;
+      }
     }
-    if (this.goodsPanel.onclick(event)) {
-      return;
-    }
-    if (this.userPanel.onclick(event)) {
-      return;
-    }
-    if (this.descriptionView.onclick(event)) {
-      return;
-    }
-    if (this.optionView.onclick(event)) {
-      return;
-    }
-    if (this.dialogueView.onclick(event)) {
-      return;
-    }
-    this.mainPanel.onclick(event);
   }
 
   onpress(event: PressEvent) {
-    if (this.messageBox.onpress(event)) {
-      return;
+    for (let i = this.components.length - 1; i >= 0; i--) {
+      if (this.components[i].onpress(event)) {
+        return;
+      }
     }
-    if (this.goodsPanel.onpress(event)) {
-      return;
-    }
-    if (this.userPanel.onpress(event)) {
-      return;
-    }
-    if (this.descriptionView.onpress(event)) {
-      return;
-    }
-    if (this.optionView.onpress(event)) {
-      return;
-    }
-    if (this.dialogueView.onpress(event)) {
-      return;
-    }
-    this.mainPanel.onpress(event);
   }
 
   addDialogue(data: Dialogue) {
