@@ -3,9 +3,13 @@ import { Event, Player } from "../../../../data/player";
 import SimpleScene from "../../../../scene/simple_scene";
 import { Sequence } from "../../../../schedule/sequence";
 import {Text} from "../../../../widgets/textview"
-import { UNKNOWN } from "../../../../data/option";
+import { OPTION3, UNKNOWN } from "../../../../data/option";
 import { Option, OptionCallback } from "../../../../widgets/option_view";
 import { ABILITY } from "../../../../data/character";
+import TextEffects from "../../styles/text_effects";
+import { Specials } from "../../../../data/specials";
+import { Actors } from "../../actors";
+import { GameState } from "../../../game_state";
 
 export default class Act1MeetQuizFlow {
   static get(that: SimpleScene) {
@@ -18,9 +22,14 @@ export default class Act1MeetQuizFlow {
         ));
         that.addDialogue(new Dialogue(
           "荆轲",
-          new Text("我这边还好，那么多年不见，你已经这么高了，这段时间在家学了什么呢？"),
+          new Text("我这边还好，那么多年不见，你已经这么高了."),
           false
         ));
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          new Text("这些年你都做了什么呢？"),
+          false
+        ))
         that.setOnDialogueFinish(sequence.next.bind(sequence));
       }
     });
@@ -28,21 +37,36 @@ export default class Act1MeetQuizFlow {
       onStart() {
         let options = new Array<Option>();
         enum OPT {
-          BEAR = 0,
-          DEER = 1,
-          CHICKEN = 2,
+          JIANSHU = 0,
+          SUZI = 1,
+          FANGNIU = 2,
         }
+        let opt1 = new Option(
+          OPT.JIANSHU,
+          new Text("学习剑术(\f勇武\r+3)")
+            .setDefaultEffect(TextEffects.abilityEffect));
+        let opt2 = new Option(
+          OPT.SUZI,
+          new Text("学习苏子的书(\f谋略\r+3)")
+            .setDefaultEffect(TextEffects.abilityEffect));
+        let opt3 = new Option(
+          OPT.FANGNIU,
+          new Text("给爹爹放牛(获得特性\f朴素\r)")
+            .setDefaultEffect(TextEffects.specialEffect));
+        options.push(opt1, opt2, opt3);
         let callback:OptionCallback = {
           onOptionClicked(id: number): boolean {
             switch(id) {
-              case OPT.BEAR:
-                console.log("You have learned how to cook bear");
+              case OPT.JIANSHU:
+                Player.instance.character.abilities[ABILITY.ATTACK] += 3;
                 break;
-              case OPT.DEER:
-                console.log("You have learned how to cook deer");
+              case OPT.SUZI:
+                Player.instance.character.abilities[ABILITY.INTELIGENCE] += 3;
                 break;
-              case OPT.CHICKEN:
-                console.log("You have learned how to cook chicken");
+              case OPT.FANGNIU:
+                Player.instance.character.specials.push(
+                  Specials.instance.simpleAndNaive);
+                Player.instance.character.dirty = true;
                 break;
               case UNKNOWN:
                 console.log("Timeout");
@@ -53,12 +77,8 @@ export default class Act1MeetQuizFlow {
             return true;
           }
         }
-        let opt1 = new Option(OPT.BEAR, new Text("蒸熊掌"));
-        let opt2 = new Option(OPT.DEER, new Text("蒸鹿尾"));
-        let opt3 = new Option(OPT.CHICKEN, new Text("烧花鸡"));
-        options.push(opt1, opt2, opt3);
         that.showOptionView(
-          new Text("我学了"),
+          new Text("那段时间，我"),
           options,
           callback,
           15
@@ -67,47 +87,92 @@ export default class Act1MeetQuizFlow {
     });
     sequence.addIntoSequence({
       onStart() {
-        let word = "不错不错。";
-        let opt = Player.getInstance().getChoose(Event.FRE_WHAT_LEARN);
-        let ability = ABILITY.TRUST;
-        switch(opt) {
-          case 0:
-            word += "熊掌可好吃了";
-            ability = ABILITY.ATTACK
-            break;
-          case 1:
-            word += "鹿尾大补啊";
-            ability = ABILITY.INTELIGENCE
-            break;
-          case 2:
-            word += "大吉大利，今晚吃鸡";
-            ability = ABILITY.LOYAL
-            break;
-          case UNKNOWN:
-          case Player.CHOOSE_NOT_FOUND:
-            word += "应该是偷懒了";
-            break;
-        }
-        Player.getInstance().character.abilities[ability]++;
         that.addDialogue(new Dialogue(
           "荆轲",
-          new Text(word),
-          false
-        ));
-        that.addDialogue(new Dialogue(
-          "荆轲",
-          new Text("快随我入城把"),
+          new Text("挺好的，你未来想做什么吗？"),
           false
         ));
         that.setOnDialogueFinish(() => {
-          sequence.next();
+          let opt1 = new Option(
+            OPTION3.OP1,
+            new Text("努力奋斗，为太子效力(\f太子丹\r的好感 + 80)")
+              .setDefaultEffect(TextEffects.nameEffect));
+          let opt2 = new Option(
+            OPTION3.OP2,
+            new Text("行侠仗义！(获得特技\f义薄云天\r)")
+              .setDefaultEffect(TextEffects.specialEffect));
+          let opt3 = new Option(
+            OPTION3.OP3,
+            new Text("这世道太乱了，我。。。我不知道")
+          );
+          let options = [opt1, opt2, opt3];
+          that.showOptionView(new Text("我未来想做什么？"), options, {
+            onOptionClicked(opt: number) {
+              switch(opt) {
+                case OPTION3.OP1:
+                  Actors.instance.taizidan.friendship += 80;
+                  break;
+                case OPTION3.OP2:
+                  Player.instance.character.specials.push(
+                    Specials.instance.yiboyuntian);
+                  Player.instance.character.dirty = true;
+                  break;
+                case OPTION3.OP3:
+                  GameState.instance.recordState("ConfusedAtWar");
+                  break;
+              }
+              sequence.next();
+              return true;
+            }
+          })
         });
       }
     });
+
     sequence.addIntoSequence({
       onStart() {
-        that.hideDialogue();
-        sequence.next();
+        if (!GameState.instance.hasEnterState("ConfusedAtWar")) {
+          sequence.next();
+          return;
+        }
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          new Text("我以前很想练的一身好武艺，行侠仗义，建功立业，却只能放歌闹市之中，终不得志。"),
+          false
+        ));
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          new Text("幸得田光先生，我得以见重于太子。"),
+          false
+        ));
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          new Text("然而之后各种事情的发生，我也开始有点迷糊了"),
+          false
+        ));
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          new Text("先不聊这了"),
+          false
+        ));
+        that.setOnDialogueFinish(() => {
+          console.log("获得任务：调查荆轲的困惑");
+          sequence.next();
+        })
+      }
+    });
+
+    sequence.addIntoSequence({
+      onStart() {
+        that.addDialogue(new Dialogue(
+          "荆轲",
+          new Text("我们进城把."),
+          false
+        ));
+        that.setOnDialogueFinish(() => {
+          that.hideDialogue();
+          sequence.next();
+        });
       }
     });
     return sequence;

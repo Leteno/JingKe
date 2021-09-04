@@ -6,8 +6,9 @@ export class Actors {
   businessman: People;
   fanwuji: People;
   juzi: People;
+  taizidan: People;
 
-  private static instance: Actors;
+  static instance: Actors = new Actors();
 
   private constructor() {
     let fanwuji = new People();
@@ -37,6 +38,13 @@ export class Actors {
       Specials.getInstance().kouruoxuanhe
     );
     this.businessman = businessman;
+
+    let taizidan = new People();
+    taizidan.character.name = "太子丹";
+    taizidan.character.imageSrc = "res/copyleft/people_taizidan.png";
+    taizidan.character.abilities[ABILITY.ATTACK] = 10;
+    taizidan.character.abilities[ABILITY.INTELIGENCE] = -10;
+    this.taizidan = taizidan;
   }
 
   static getInstance(): Actors {

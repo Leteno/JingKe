@@ -9,6 +9,7 @@ export class People extends BindableData {
   showNoteSign: boolean;
   pointerPosition: PointerPosition;
   character: Character;
+  friendship: number;
   onclickListener: ()=>void
   onpressListener: ()=>void
 
@@ -17,6 +18,7 @@ export class People extends BindableData {
     this.showNoteSign = false;
     this.pointerPosition = PointerPosition.NONE;
     this.character = new Character();
+    this.friendship = 0;
   }
 }
 
