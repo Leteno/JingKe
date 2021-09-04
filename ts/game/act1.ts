@@ -3,18 +3,15 @@ import NumberLinearAnimator from "../animator/number-linear-animator";
 import { textAlpha } from "../animator/text-affect"
 import Timeout from "../animator/timeout";
 import Dialogue from "../data/dialogue";
-import { Align, LayoutParams, LayoutType } from "../misc/layout";
+import { Align} from "../misc/layout";
 import SimpleScene from "../scene/simple_scene"
 import { PointerPosition } from "../widgets/imageview";
 import TextView, { Text } from "../widgets/textview";
-import {Option, OptionCallback} from "../widgets/option_view"
+import {Option} from "../widgets/option_view"
 import { Sequence } from "../schedule/sequence";
-import { Event, Player } from "../data/player";
 import { BgText } from "../widgets/richtext";
 import { Place } from "../compose/place_and_people_view";
-import { ABILITY } from "../data/character";
 import { Act1Flows } from "./data/act1_flows";
-import { UNKNOWN } from "../data/option";
 import { GoodsPanelModel } from "../compose/goods_panel";
 import { Prossession } from "../data/prossession";
 import { Actors } from "./data/actors";
@@ -23,6 +20,7 @@ import { GameState } from "./game_state";
 import DBManager from "../storage/db_manager";
 import { SimpleSceneViews } from "./data/views/simple_scene_views";
 import { Act1Views } from "./data/views/act1_views";
+import Act1MeetQuizFlow from "./data/sequences/act1/act1_meet_quiz_flow";
 
 export default class Act1 extends SimpleScene {
 
@@ -80,108 +78,13 @@ export default class Act1 extends SimpleScene {
 
   addFirstMeetDialogues() {
     let that = this;
-    let sequence = new Sequence();
-    sequence.addIntoSequence({
+    let firstMeetSequence = Act1MeetQuizFlow.get(this);
+    firstMeetSequence.addIntoSequence({
       onStart() {
-        that.addDialogue(new Dialogue(
-          "荆棘",
-          new Text("舅舅，我来看你了，近来可好?")
-        ));
-        that.addDialogue(new Dialogue(
-          "荆轲",
-          new Text("我这边还好，那么多年不见，你已经这么高了，这段时间在家学了什么呢？"),
-          false
-        ));
-        that.setOnDialogueFinish(sequence.next.bind(sequence));
-      }
-    });
-    sequence.addIntoSequence({
-      onStart() {
-        let options = new Array<Option>();
-        enum OPT {
-          BEAR = 0,
-          DEER = 1,
-          CHICKEN = 2,
-        }
-        let callback:OptionCallback = {
-          onOptionClicked(id: number): boolean {
-            switch(id) {
-              case OPT.BEAR:
-                console.log("You have learned how to cook bear");
-                break;
-              case OPT.DEER:
-                console.log("You have learned how to cook deer");
-                break;
-              case OPT.CHICKEN:
-                console.log("You have learned how to cook chicken");
-                break;
-              case UNKNOWN:
-                console.log("Timeout");
-                break;
-            }
-            Player.getInstance().saveChoose(Event.FRE_WHAT_LEARN, id);
-            sequence.next();
-            return true;
-          }
-        }
-        let opt1 = new Option(OPT.BEAR, new Text("蒸熊掌"));
-        let opt2 = new Option(OPT.DEER, new Text("蒸鹿尾"));
-        let opt3 = new Option(OPT.CHICKEN, new Text("烧花鸡"));
-        options.push(opt1, opt2, opt3);
-        that.showOptionView(
-          new Text("我学了"),
-          options,
-          callback,
-          15
-        );
-      }
-    });
-    sequence.addIntoSequence({
-      onStart() {
-        let word = "不错不错。";
-        let opt = Player.getInstance().getChoose(Event.FRE_WHAT_LEARN);
-        let ability = ABILITY.TRUST;
-        switch(opt) {
-          case 0:
-            word += "熊掌可好吃了";
-            ability = ABILITY.ATTACK
-            break;
-          case 1:
-            word += "鹿尾大补啊";
-            ability = ABILITY.INTELIGENCE
-            break;
-          case 2:
-            word += "大吉大利，今晚吃鸡";
-            ability = ABILITY.LOYAL
-            break;
-          case UNKNOWN:
-          case Player.CHOOSE_NOT_FOUND:
-            word += "应该是偷懒了";
-            break;
-        }
-        Player.getInstance().character.abilities[ability]++;
-        that.addDialogue(new Dialogue(
-          "荆轲",
-          new Text(word),
-          false
-        ));
-        that.addDialogue(new Dialogue(
-          "荆轲",
-          new Text("快随我入城把"),
-          false
-        ));
-        that.setOnDialogueFinish(() => {
-          sequence.next();
-        });
-      }
-    });
-    sequence.addIntoSequence({
-      onStart() {
-        that.hideDialogue();
         that.setupMainPanel();
       }
     });
-    sequence.startOne();
+    firstMeetSequence.startOne();
   }
 
   setupMainPanel() {
