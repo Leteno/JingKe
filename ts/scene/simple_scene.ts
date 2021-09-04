@@ -1,17 +1,9 @@
 import Animator from "../animator/animator";
-import { AnimatorSetBuilder } from "../animator/animator_set";
-import { CaptionTitleFadeInFadeOut } from "../animator/flow/caption_title_fadein_fadeout";
-import { MeanWhileBuilder } from "../animator/meanwhile";
-import NumberLinearAnimator from "../animator/number-linear-animator";
-import { textAlpha } from "../animator/text-affect";
 import GoodsPanel, { GoodsPanelModel } from "../compose/goods_panel";
-import { PageList } from "../compose/page_list";
 import PlayerDescriptionView from "../compose/player_description_view";
 import UserPanel from "../compose/UserPanel";
 import { Character } from "../data/character";
 import Dialogue from "../data/dialogue";
-import { Player } from "../data/player";
-import Main from "../main";
 import { ClickEvent, PressEvent } from "../misc/event";
 import { Align, LayoutParams, LayoutType, Specify } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
@@ -23,8 +15,6 @@ import Scene from "./scene";
 
 export default abstract class SimpleScene implements Scene {
   private mainPanel: Panel;
-  private sceneCaption: TextView;
-  private sceneTitle: TextView;
   private dialogueView: DialogueView;
   private optionView: OptionView;
   private descriptionView: PlayerDescriptionView;
@@ -36,8 +26,7 @@ export default abstract class SimpleScene implements Scene {
 
   private animators: Array<Animator<number>>;
 
-  constructor(canvas: HTMLCanvasElement,
-    caption: Text, title: Text) {
+  constructor(canvas: HTMLCanvasElement) {
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
 
@@ -47,27 +36,13 @@ export default abstract class SimpleScene implements Scene {
     // to capture click event first.
     this.optionView = new OptionView(canvas);
 
-    this.sceneCaption = new TextView(caption);
-    this.sceneTitle = new TextView(title);
-    this.mainPanel.addView(this.sceneCaption);
-    this.mainPanel.addView(this.sceneTitle);
-
     this.mainPanel.forceWidth = canvas.width;
     this.mainPanel.forceHeight = canvas.height;
     this.mainPanel.padding.left = 20;
     this.mainPanel.padding.right = 20;
     this.mainPanel.padding.bottom = 20;
-    this.sceneCaption.layoutParam = new LayoutParams(
-      Align.CENTER, Align.CENTER
-    );
-    this.sceneTitle.layoutParam = new LayoutParams(
-      Align.CENTER, Align.CENTER
-    );
-    this.sceneCaption.margin.top = -50;
 
     this.animators = new Array<Animator<number>>();
-    this.sceneCaption.setTransparent();
-    this.sceneTitle.setTransparent();
 
     this.dialogueView = new DialogueView();
     this.dialogueView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
@@ -109,17 +84,7 @@ export default abstract class SimpleScene implements Scene {
     this.userPanel.layout(this.canvasWidth, this.canvasHeight);
     this.goodsPanel.measure(ctx, this.canvasWidth, this.canvasHeight, Specify.NONE);
     this.goodsPanel.layout(this.canvasWidth, this.canvasHeight);
-
-    let animation = CaptionTitleFadeInFadeOut.getAnimator(
-      this.sceneCaption, this.sceneTitle
-    );
-    animation.onStop = () => {
-      this.onPageReady();
-    }
-    this.animators.push(animation);
   }
-
-  abstract onPageReady();
 
   update(dt: number) {
     this.animators.forEach(animator => {
