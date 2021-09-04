@@ -21,34 +21,41 @@ import { GoodsPanelModel } from "../compose/goods_panel";
 import { Prossession } from "../data/prossession";
 import { Actors } from "./data/actors";
 import { CaptionTitleFadeInFadeOut } from "../animator/flow/caption_title_fadein_fadeout";
+import { GameState } from "./game_state";
+import DBManager from "../storage/db_manager";
 
 export default class Act1 extends SimpleScene {
 
   onStart(ctx) {
     super.onStart(ctx);
 
-    let sceneCaption = new TextView(new Text("Act 01"));
-    let sceneTitle = new TextView(new Text("北风起, 黄花满地"));
-
-    sceneCaption.layoutParam = new LayoutParams(
-      Align.CENTER, Align.CENTER
-    );
-    sceneTitle.layoutParam = new LayoutParams(
-      Align.CENTER, Align.CENTER
-    );
-    sceneCaption.margin.top = -50;
-    sceneCaption.setTransparent();
-    sceneTitle.setTransparent();
-    this.addView(sceneCaption);
-    this.addView(sceneTitle);
-    this.forceRepaint();
-    let animation = CaptionTitleFadeInFadeOut.getAnimator(
-      sceneCaption, sceneTitle
-    );
-    animation.onStop = () => {
+    if (!GameState.instance.hasEnterState("act1_opening")) {
+      let sceneCaption = new TextView(new Text("Act 01"));
+      let sceneTitle = new TextView(new Text("北风起, 黄花满地"));
+      sceneCaption.layoutParam = new LayoutParams(
+        Align.CENTER, Align.CENTER
+      );
+      sceneTitle.layoutParam = new LayoutParams(
+        Align.CENTER, Align.CENTER
+      );
+      sceneCaption.margin.top = -50;
+      sceneCaption.setTransparent();
+      sceneTitle.setTransparent();
+      this.addView(sceneCaption);
+      this.addView(sceneTitle);
+      this.forceRepaint();
+      let animation = CaptionTitleFadeInFadeOut.getAnimator(
+        sceneCaption, sceneTitle
+      );
+      animation.onStop = () => {
+        GameState.instance.recordState("act1_opening");
+        DBManager.getInstance().save();
+        this.onPageReady();
+      }
+      this.addAnimator(animation);
+    } else {
       this.onPageReady();
     }
-    this.addAnimator(animation);
   }
 
   onPageReady() {
