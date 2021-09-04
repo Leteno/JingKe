@@ -3,13 +3,15 @@ import { LabelAffectFactory, Label_Type } from "../special_affect/label_affect";
 import { SpecialAffect } from "../special_affect/special_affect";
 
 export class Specials {
+  simpleAndNaive: SpecialAffect; // 朴素
   brave: SpecialAffect;  // 勇敢
   xianting: SpecialAffect; // 闲庭
   yiboyuntian: SpecialAffect; // 义薄云天
   kouruoxuanhe: SpecialAffect; // 口若悬河
 
-  private static instance = new Specials();
+  static instance = new Specials();
   private constructor() {
+    this.simpleAndNaive = LabelAffectFactory.getLabelAffect(Label_Type.SimpleAndNaive)
     this.brave = LabelAffectFactory.getLabelAffect(Label_Type.Brave);
     this.xianting = LabelAffectFactory.getLabelAffect(Label_Type.Xianting);
     this.yiboyuntian = LabelAffectFactory.getLabelAffect(Label_Type.Yiboyuntian);

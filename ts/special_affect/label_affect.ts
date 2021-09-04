@@ -5,6 +5,7 @@ import Assertion from "../misc/assertion";
 import { SpecialAffect } from "./special_affect";
 
 export enum Label_Type {
+  SimpleAndNaive,
   Brave,
   Xianting,
   Yiboyuntian
@@ -23,6 +24,10 @@ export class LabelAffectFactory {
     Assertion.expectTrue(args.length == 0);
     let name: string, desc: string;
     switch(t) {
+      case Label_Type.SimpleAndNaive:
+        name = "朴素"
+        desc = "很朴素，不知道未来有没有奇遇"
+        break;
       case Label_Type.Brave:
         name = "勇敢"
         desc = "遇到攻击力比自己高的，攻击力+3"

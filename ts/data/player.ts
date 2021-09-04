@@ -18,7 +18,7 @@ export class Player extends BindableAndSerializable {
   chooses: Map<number, number>;
   character: Character;
   money: number;
-  private static instance: Player;
+  static instance: Player = new Player();
 
   static CHOOSE_NOT_FOUND:number = -1;
 

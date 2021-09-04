@@ -7,6 +7,10 @@ import {LabelAffectFactory, Label_Type} from "../label_affect"
 test("crazy", () => {
   let types = getEnumCases(Label_Type) as Label_Type[];
   let expects = new Map<Label_Type, {name: string, desc: string}>();
+  expects.set(Label_Type.SimpleAndNaive, {
+    name: "朴素",
+    desc: "很朴素，不知道未来有没有奇遇",
+  })
   expects.set(Label_Type.Brave, {
     name: "勇敢",
     desc: "遇到攻击力比自己高的，攻击力+3",
