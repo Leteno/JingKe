@@ -5,15 +5,13 @@ import Timeout from "../animator/timeout";
 import Dialogue from "../data/dialogue";
 import { Align, LayoutParams, LayoutType } from "../misc/layout";
 import SimpleScene from "../scene/simple_scene"
-import ImageView, { PointerPosition } from "../widgets/imageview";
+import { PointerPosition } from "../widgets/imageview";
 import TextView, { Text } from "../widgets/textview";
 import {Option, OptionCallback} from "../widgets/option_view"
 import { Sequence } from "../schedule/sequence";
 import { Event, Player } from "../data/player";
-import BirdViewImage from "../widgets/birdview_image";
-import LinearLayout from "../widgets/linear_layout";
 import { BgText } from "../widgets/richtext";
-import { People, Place, PlaceAndPeopleView } from "../compose/place_and_people_view";
+import { Place } from "../compose/place_and_people_view";
 import { ABILITY } from "../data/character";
 import { Act1Flows } from "./data/act1_flows";
 import { UNKNOWN } from "../data/option";
@@ -23,24 +21,20 @@ import { Actors } from "./data/actors";
 import { CaptionTitleFadeInFadeOut } from "../animator/flow/caption_title_fadein_fadeout";
 import { GameState } from "./game_state";
 import DBManager from "../storage/db_manager";
+import { SimpleSceneViews } from "./data/views/simple_scene_views";
+import { Act1Views } from "./data/views/act1_views";
 
 export default class Act1 extends SimpleScene {
 
   onStart(ctx) {
     super.onStart(ctx);
+    SimpleSceneViews.init();
 
     if (!GameState.instance.hasEnterState("act1_opening")) {
-      let sceneCaption = new TextView(new Text("Act 01"));
-      let sceneTitle = new TextView(new Text("北风起, 黄花满地"));
-      sceneCaption.layoutParam = new LayoutParams(
-        Align.CENTER, Align.CENTER
-      );
-      sceneTitle.layoutParam = new LayoutParams(
-        Align.CENTER, Align.CENTER
-      );
-      sceneCaption.margin.top = -50;
-      sceneCaption.setTransparent();
-      sceneTitle.setTransparent();
+      let sceneCaption = SimpleSceneViews.sceneCaption;
+      let sceneTitle = SimpleSceneViews.sceneTitle;
+      sceneCaption.setText(new Text("Act 01"));
+      sceneTitle.setText(new Text("北风起, 黄花满地"));
       this.addView(sceneCaption);
       this.addView(sceneTitle);
       this.forceRepaint();
@@ -191,29 +185,18 @@ export default class Act1 extends SimpleScene {
   }
 
   setupMainPanel() {
-    let cityPhoto = new BirdViewImage("res/city_of_yan.png");
-    cityPhoto.layoutParam.xLayout = LayoutType.MATCH_PARENT;
-    cityPhoto.forceHeight = this.canvasHeight * 2 / 3;
-    cityPhoto.layoutParam.xcfg = Align.CENTER;
-    cityPhoto.layoutParam.ycfg = Align.CENTER;
-    this.addView(cityPhoto);
-    let placeAndPeopleView = new PlaceAndPeopleView();
-    placeAndPeopleView.layoutParam.xLayout = LayoutType.MATCH_PARENT;
-    placeAndPeopleView.margin.left = 10;
-    placeAndPeopleView.margin.right = 10;
-    placeAndPeopleView.margin.top = 40 + this.canvasHeight/6;
+    Act1Views.init(this.canvasWidth, this.canvasHeight);
+    let cityPhoto = Act1Views.cityPhoto;
+    let placeAndPeopleView = Act1Views.placeAndPeopleView;
+    let me = Act1Views.me;
+
     placeAndPeopleView.showDescription = this.showCharacterDescription.bind(this);
-    let me = new ImageView("res/created/me.png");
-    me.forceWidth = 30;
-    me.forceHeight = 30;
-    me.margin.right = 10;
-    me.margin.top = 10 + this.canvasHeight/6;
-    me.layoutParam.xcfg = Align.END;
     me.onclickInternal = (event) => {
       this.showUserPanel();
       return true;
     }
     me.visible = false;
+    this.addView(cityPhoto);
     this.addView(me);
     this.addView(placeAndPeopleView);
     this.forceRepaint();
