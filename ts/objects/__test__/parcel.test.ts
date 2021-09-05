@@ -24,6 +24,14 @@ test("test enlarge", ()=> {
   expect(p.readInt()).toBe(345);
 })
 
+test("double", ()=> {
+  let p = new Parcel();
+  p.writeDouble(0.1234);
+  p.writeString("guard");
+  expect(Math.abs(p.readDouble() - 0.1234)).toBeLessThan(0.001);
+  expect(p.readString()).toBe("guard");
+})
+
 test("toString and fromString", () => {
   let p = new Parcel();
   p.writeInt(123);

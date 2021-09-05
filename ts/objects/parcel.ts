@@ -4,7 +4,8 @@ enum TYPE {
   int = 0,
   string = 1,
   array = 2,
-  parcel = 3
+  parcel = 3,
+  double = 4,
 }
 
 export default class Parcel {
@@ -42,6 +43,18 @@ export default class Parcel {
     this._readIndex += 4;
     return result;
   }
+
+  readDouble(): number {
+    let type = this._dataView.getInt8(this._readIndex);
+    if (type != TYPE.double) {
+      console.warn(`readInt on unexpect type: ${type}, index: ${this._readIndex}`);
+    }
+    this._readIndex++;
+    let result = this._dataView.getFloat64(this._readIndex);
+    this._readIndex += 4;
+    return result;
+  }
+
   readString(): string {
     let type = this._dataView.getInt8(this._readIndex);
     if (type != TYPE.string) {
@@ -134,6 +147,13 @@ export default class Parcel {
     this.enlargeIfNeeded(5);
     this._dataView.setInt8(this._writeIndex++, TYPE.int);
     this._dataView.setInt32(this._writeIndex, n);
+    this._writeIndex += 4;
+  }
+
+  writeDouble(double: number) {
+    this.enlargeIfNeeded(5);
+    this._dataView.setInt8(this._writeIndex++, TYPE.double);
+    this._dataView.setFloat64(this._writeIndex, double);
     this._writeIndex += 4;
   }
 
