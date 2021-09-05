@@ -2,6 +2,7 @@
 // 这类 affect 只作为 label，不作为计算依据
 
 import Assertion from "../misc/assertion";
+import Parcel from "../objects/parcel";
 import { SpecialAffect } from "./special_affect";
 
 export enum Label_Type {
@@ -46,5 +47,14 @@ export class LabelAffectFactory {
     Assertion.expectTrue(name != undefined);
     Assertion.expectTrue(desc != undefined);
     return new LabelAffect(name, desc, t);
+  }
+
+  static toParcel(sp: LabelAffect, p: Parcel) {
+    p.writeInt(sp.type);
+  }
+
+  static fromParcel(p: Parcel): LabelAffect {
+    let type = p.readInt();
+    return this.getLabelAffect(type);
   }
 }

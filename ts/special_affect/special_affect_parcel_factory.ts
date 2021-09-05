@@ -1,7 +1,7 @@
 import Assertion from "../misc/assertion";
 import Parcel from "../objects/parcel";
 import { GoodsAffect, GoodsAffectFactory } from "./goods_affect";
-import { LabelAffect } from "./label_affect";
+import { LabelAffect, LabelAffectFactory } from "./label_affect";
 import { SpecialAffect } from "./special_affect";
 
 enum AffectType {
@@ -17,7 +17,7 @@ export default class SpecialAffectParcelFactory {
       GoodsAffectFactory.toParcel(sp, p);
     } else if (sp instanceof LabelAffect) {
       p.writeInt(AffectType.LabelAffect);
-      // TODO
+      LabelAffectFactory.toParcel(sp, p);
     } else {
       sp.toParcel(p);
     }
@@ -28,7 +28,7 @@ export default class SpecialAffectParcelFactory {
       return GoodsAffectFactory.fromParcel(p);
     }
     if (type == AffectType.LabelAffect) {
-      // TODO
+      return LabelAffectFactory.fromParcel(p);
     }
   }
 }
