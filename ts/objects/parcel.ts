@@ -28,6 +28,10 @@ export default class Parcel {
     return this.length;
   }
 
+  isEmpty() {
+    return this._writeIndex == 0;
+  }
+
   readInt(): number {
     let type = this._dataView.getInt8(this._readIndex);
     if (type != TYPE.int) {

@@ -1,5 +1,10 @@
 import Parcel from "../parcel"
 
+test("test empty", () => {
+  let p = new Parcel();
+  expect(p.isEmpty()).toBe(true);
+})
+
 test("test enlarge", ()=> {
   let p = new Parcel(16);
   expect(p.getLength()).toBe(16);
