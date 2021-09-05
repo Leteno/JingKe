@@ -15,12 +15,14 @@ import { SimpleSceneViews } from "./data/views/simple_scene_views";
 import { Act1Views } from "./data/views/act1_views";
 import Act1MeetQuizFlow from "./data/sequences/act1/act1_meet_quiz_flow";
 import Act1EnterTheCityFlow from "./data/sequences/act1/act1_enter_the_city_flow";
+import YanCity from "./data/places/yan_city";
 
 export default class Act1 extends SimpleScene {
 
   onStart(ctx) {
     super.onStart(ctx);
     SimpleSceneViews.init();
+    YanCity.init(this);
 
     if (!GameState.instance.hasEnterState("act1_opening")) {
       let sceneCaption = SimpleSceneViews.sceneCaption;

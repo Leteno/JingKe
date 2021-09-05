@@ -1,10 +1,8 @@
 import { AnimatorSetBuilder } from "../../../../animator/animator_set";
 import NumberLinearAnimator from "../../../../animator/number-linear-animator";
 import Timeout from "../../../../animator/timeout";
-import { GoodsPanelModel } from "../../../../compose/goods_panel";
-import { Place, PlaceAndPeopleView } from "../../../../compose/place_and_people_view";
+import { PlaceAndPeopleView } from "../../../../compose/place_and_people_view";
 import Dialogue from "../../../../data/dialogue";
-import { Prossession } from "../../../../data/prossession";
 import SimpleScene from "../../../../scene/simple_scene";
 import { Sequence } from "../../../../schedule/sequence";
 import BirdViewImage from "../../../../widgets/birdview_image";
@@ -12,12 +10,15 @@ import ImageView, { PointerPosition } from "../../../../widgets/imageview";
 import { BgText } from "../../../../widgets/richtext";
 import {Text} from "../../../../widgets/textview";
 import { Actors } from "../../actors";
+import YanCity from "../../places/yan_city";
 
 export default class Act1EnterTheCityFlow {
   static get(that: SimpleScene, cityPhoto: BirdViewImage,
     placeAndPeopleView: PlaceAndPeopleView, me: ImageView) {
     let sequence = new Sequence();
-    
+    let city = YanCity.city;
+    let market = YanCity.market;
+    let palace = YanCity.palace;
     sequence.addIntoSequence({
       onStart() {
         let timeout = new Timeout(1000);
@@ -58,43 +59,10 @@ export default class Act1EnterTheCityFlow {
         })
       }
     })
-    let mainPlace = new Place();
-    let palace = new Place();
-    let market = new Place();
-    palace.imageSrc = "res/copyleft/place_yan_palace.png";
-    market.imageSrc = "res/copyleft/place_market.png";
-    palace.onpressListener = () => {
-      console.log("This is the palace of Prince Dan");
-    }
-    market.onpressListener = () => {
-      console.log("This is the place for poors");
-    }
-    palace.peoples.push(Actors.getInstance().fanwuji);
-    mainPlace.peoples.push(Actors.getInstance().juzi);
-
-    market.peoples.push(Actors.getInstance().businessman);
-    mainPlace.places.push(palace, market);
-    Actors.getInstance().businessman.onclickListener = () => {
-      let model = new GoodsPanelModel();
-      let p1 = new Prossession();
-      p1.name = "六味补气丸";
-      p1.cost = 10;
-      p1.count = 10;
-      p1.functional_text = "益气活血，祛痰化瘀";
-      p1.image = "res/created/medition.png";
-      let p2 = new Prossession();
-      p2.name = "秦国军旗";
-      p2.cost = 100;
-      p2.count = 1;
-      p2.functional_text = "赳赳大秦，一往无前";
-      p2.image = "res/created/flag_of_qin.png";
-      model.goodsList.push(p1, p2);
-      that.showGoodsPanel(model);
-    }
     sequence.addIntoSequence({
       onStart() {
         palace.pointerPosition = PointerPosition.LEFT;
-        placeAndPeopleView.updatePlace(mainPlace);
+        placeAndPeopleView.updatePlace(city);
         me.visible = true;
         let peopleEffect = new BgText("green", "white");
         that.addDialogue(new Dialogue(
