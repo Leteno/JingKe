@@ -41,20 +41,6 @@ export class Player extends BindableAndSerializable {
     return this.instance;
   }
 
-  readFromDb() {
-    let p = DBManager.getInstance().getDb().getData("player");
-    if (p.getLength() > 0) {
-      this.fromParcel(p);
-    }
-  }
-
-  saveToDb() {
-    DBManager.getInstance().getDb().saveData(
-      "player",
-      this.toParcel()
-    );
-  }
-
   saveChoose(event: Event, choose: number) {
     this.chooses.set(event, choose);
   }

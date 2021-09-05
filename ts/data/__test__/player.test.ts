@@ -23,14 +23,14 @@ test("save and read", () => {
   player.money = 596;
   player.character.name = "leteno";
   player.character.imageSrc = "test://img";
-  player.saveToDb();
+  let parcel = player.toParcel();
 
   // Ruin the data.
   player.money += 1024;
   player.character.name = "change it";
   player.character.imageSrc = "lalalal";
 
-  player.readFromDb();
+  player.fromParcel(parcel);
 
   expect(player.money).toBe(596);
   expect(player.character.name).toBe("leteno");
