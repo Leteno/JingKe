@@ -1,9 +1,9 @@
 import Parcel from "../objects/parcel";
 import { BindableAndSerializable, Serializable } from "../objects/serializable";
 import { GoodsAffect } from "../special_affect/goods_affect";
-import DBManager from "../storage/db_manager";
 import { Character } from "./character";
 import { Prossession } from "./prossession";
+import Quest from "./quest";
 import { Specials } from "./specials";
 
 export enum Event {
@@ -17,6 +17,7 @@ export class Player extends BindableAndSerializable {
   version: number;
   chooses: Map<number, number>;
   character: Character;
+  quests: Array<Quest>;
   money: number;
   static instance: Player = new Player();
 
@@ -31,6 +32,7 @@ export class Player extends BindableAndSerializable {
     this.chooses = new Map<number, number>();
     this.money = 20;
     this.character.specials.push(Specials.getInstance().kouruoxuanhe);
+    this.quests = [];
   }
 
   static getInstance():Player {
@@ -56,6 +58,12 @@ export class Player extends BindableAndSerializable {
     p.writeInt(this.version);
     p.writeInt(this.money);
     this.character.toParcel(p);
+
+    p.writeInt(this.quests.length);
+    for (let i = 0; i < this.quests.length; i++) {
+      this.quests[i].toParcel(p);
+    }
+
     // TODO support Map.
   }
   fromParcel(p: Parcel) {
@@ -63,6 +71,15 @@ export class Player extends BindableAndSerializable {
     this.money = p.readInt();
     this.character = new Character();
     this.character.fromParcel(p);
+    this.quests.splice(0);
+
+    let questSize = p.readInt();
+    for (let i = 0; i < questSize; i++) {
+      let quest = new Quest();
+      quest.fromParcel(p);
+      this.quests.push(quest);
+    }
+
     // TODO support Map.
   }
 
