@@ -1,10 +1,7 @@
 import { Character } from "../data/character";
 import { Player } from "../data/player";
 import { Prossession } from "../data/prossession";
-import Main from "../main";
 import { Align, LayoutType } from "../misc/layout";
-import TextView from "../widgets/textview";
-import {Text} from "../widgets/textview";
 import { PageList } from "./page_list";
 import PlayerDescriptionView from "./player_description_view";
 import { UserProssessionView } from "./user_prossession_view";
@@ -40,13 +37,12 @@ export default class UserPanel extends PageList {
     prossessionPage.model.dirty = true;
     this.addPage("物品", prossessionPage);
 
-    this.descriptionView.bindData(Player.getInstance().character,
-      (v: PlayerDescriptionView, d: Character) => {
-      v.setCharacter(d);
-    });
-
     this.descriptionView.bgColor = undefined;
     this.bgColor = "#e6e6e6";
+  }
+
+  updateCharacter(character: Character) {
+    this.descriptionView.setCharacter(character);
   }
 
   onTouchOutside() {

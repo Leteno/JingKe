@@ -77,9 +77,7 @@ export default class PlayerDescriptionView extends Panel {
   }
 
   setCharacter(character: Character) {
-    this.bindData(character, (v:PlayerDescriptionView, p: Character) => {
-      v.onPlayerUpdate(p);
-    });
+    this.onPlayerUpdate(character);
   }
 
   onTouchOutside(event: ClickEvent): boolean {

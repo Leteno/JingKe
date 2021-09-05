@@ -5,6 +5,7 @@ import PlayerDescriptionView from "../compose/player_description_view";
 import UserPanel from "../compose/UserPanel";
 import { Character } from "../data/character";
 import Dialogue from "../data/dialogue";
+import { Player } from "../data/player";
 import { ClickEvent, PressEvent } from "../misc/event";
 import { Align, LayoutParams, LayoutType, Specify } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
@@ -171,6 +172,7 @@ export default abstract class SimpleScene implements Scene {
   }
 
   showUserPanel() {
+    this.userPanel.updateCharacter(Player.getInstance().character);
     this.userPanel.visible = true;
   }
 
