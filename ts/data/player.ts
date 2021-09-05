@@ -52,19 +52,17 @@ export class Player extends BindableAndSerializable {
     return this.chooses.get(event);
   }
   
-  toParcel(): Parcel {
-    let p = new Parcel();
+  toParcel(p: Parcel) {
     p.writeInt(this.version);
     p.writeInt(this.money);
-    p.writeParcel(this.character.toParcel());
+    this.character.toParcel(p);
     // TODO support Map.
-    return p;
   }
   fromParcel(p: Parcel) {
     this.version = p.readInt();
     this.money = p.readInt();
     this.character = new Character();
-    this.character.fromParcel(p.readParcel());
+    this.character.fromParcel(p);
     // TODO support Map.
   }
 

@@ -30,12 +30,10 @@ export class Character extends BindableAndSerializable {
     this.abilities[ABILITY.TRUST] = 0;
   }
 
-  toParcel(): parcel {
-    let p = new Parcel();
+  toParcel(p: parcel) {
     p.writeString(this.name);
     p.writeString(this.imageSrc);
     p.writeNumberArray(this.abilities);
-    return p;
   }
   fromParcel(p: parcel) {
     this.name = p.readString();

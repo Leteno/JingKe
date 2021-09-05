@@ -1,4 +1,5 @@
 
+import Parcel from "../../objects/parcel";
 import DBManager from "../../storage/db_manager";
 import { Character } from "../character";
 import {Event, Player} from "../player"
@@ -23,7 +24,8 @@ test("save and read", () => {
   player.money = 596;
   player.character.name = "leteno";
   player.character.imageSrc = "test://img";
-  let parcel = player.toParcel();
+  let parcel = new Parcel();
+  player.toParcel(parcel);
 
   // Ruin the data.
   player.money += 1024;

@@ -1,4 +1,5 @@
 
+import Parcel from "../../objects/parcel";
 import {GameState} from "../game_state"
 
 test("state check", () => {
@@ -25,7 +26,8 @@ test("parcel test", () => {
   state.recordState("hello");
   state.recordState("world");
 
-  let p = state.toParcel();
+  let p = new Parcel();
+  state.toParcel(p);
   let state2 = GameState.create();
   state2.fromParcel(p);
 

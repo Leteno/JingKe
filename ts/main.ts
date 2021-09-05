@@ -15,6 +15,7 @@ import DBManager from "./storage/db_manager";
 import { DBInteface } from "./storage/db_interface";
 import { GameState } from "./game/game_state";
 import TextEffects from "./game/data/styles/text_effects";
+import Parcel from "./objects/parcel";
 
 export default class Main {
   aniId: number;
@@ -78,8 +79,12 @@ export default class Main {
       }
     });
     DBManager.getInstance().setSaveFn((db: DBInteface) => {
-      db.saveData("game_state", GameState.instance.toParcel());
-      db.saveData("player", Player.getInstance().toParcel());
+      let p = new Parcel();
+      GameState.instance.toParcel(p);
+      db.saveData("game_state", p);
+      p = new Parcel();
+      Player.getInstance().toParcel(p);
+      db.saveData("player", p);
     });
   }
 

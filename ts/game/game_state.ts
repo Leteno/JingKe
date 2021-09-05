@@ -26,13 +26,11 @@ export class GameState implements Serializable {
   recordState(state: string) {
     this.states.push(state);
   }
-  toParcel(): parcel {
-    let p = new Parcel();
+  toParcel(p: Parcel) {
     p.writeString(this.currentSceneName);
     p.writeStringArray(this.states);
-    return p;
   }
-  fromParcel(p: parcel) {
+  fromParcel(p: Parcel) {
     this.currentSceneName = p.readString();
     this.states = p.readStringArray();
   }

@@ -7,7 +7,8 @@ test("simple", () => {
   demo.name = "郑大虾";
   demo.age = 12;
   demo.word = "Miss you.";
-  let p = demo.toParcel();
+  let p = new Parcel();
+  demo.toParcel(p);
   let demo2 = new SerializableDemo();
   demo2.fromParcel(p);
   expect(demo2.word).toBe("Miss you.")
@@ -20,7 +21,8 @@ test("string", () => {
   demo.name = "郑大虾";
   demo.age = 12;
   demo.word = "Miss you.";
-  let p = demo.toParcel();
+  let p = new Parcel();
+  demo.toParcel(p);
   let pData = p.toString();
 
   let p2 = new Parcel();
