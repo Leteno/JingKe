@@ -230,6 +230,7 @@ export default class Parcel {
       toView[i] = raw.charCodeAt(i);
     }
     this.length = raw.length;
+    this._writeIndex = raw.length;
     this._parcelData = newBuffer;
     this._dataView = new DataView(newBuffer);
   }

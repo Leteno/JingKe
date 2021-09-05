@@ -36,7 +36,7 @@ test("toString and fromString", () => {
   let data = p.toString();
   let p0 = new Parcel();
   p0.fromString(data);
-  
+  expect(p0.isEmpty()).toBe(false);
   expect(p0.readInt()).toBe(123);
   expect(p0.readString()).toBe("Hello world");
   expect(p0.readInt()).toBe(456);
