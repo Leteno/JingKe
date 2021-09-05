@@ -38,15 +38,15 @@ export default class Act1 extends SimpleScene {
       animation.onStop = () => {
         GameState.instance.recordState("act1_opening");
         DBManager.getInstance().save();
-        this.onPageReady();
+        this.showDescription();
       }
       this.addAnimator(animation);
     } else {
-      this.onPageReady();
+      this.showFirstMeetDialogues();
     }
   }
 
-  onPageReady() {
+  showDescription() {
     let desc = new TextView();
     desc.setText(new Text("战国末年，秦国吞并韩赵，势逼燕国。在此之际，燕太子丹记挂着质于秦的私仇。" +
       "你正投奔在太子做门客的舅舅，荆轲"));
@@ -67,20 +67,25 @@ export default class Act1 extends SimpleScene {
       .after(dismissDesc)
       .build();
     descAnimationSet.onStop = () => {
-      that.addFirstMeetDialogues();
+      that.showFirstMeetDialogues();
     }
     this.addAnimator(descAnimationSet);
   }
 
-  addFirstMeetDialogues() {
-    let that = this;
-    let firstMeetSequence = Act1MeetQuizFlow.get(this);
-    firstMeetSequence.addIntoSequence({
-      onStart() {
-        that.setupMainPanel();
-      }
-    });
-    firstMeetSequence.startOne();
+  showFirstMeetDialogues() {
+    if (!GameState.instance.hasEnterState("first_meet_quiz")) {
+      let that = this;
+      let firstMeetSequence = Act1MeetQuizFlow.get(this);
+      firstMeetSequence.addIntoSequence({
+        onStart() {
+          GameState.instance.recordState("first_meet_quiz");
+          that.setupMainPanel();
+        }
+      });
+      firstMeetSequence.startOne();
+    } else {
+      this.setupMainPanel();
+    }
   }
 
   setupMainPanel() {
@@ -108,14 +113,26 @@ export default class Act1 extends SimpleScene {
     }
 
     let that = this;
-    let sequence = Act1EnterTheCityFlow.get(
-      that, cityPhoto, placeAndPeopleView, me);
-    sequence.addIntoSequence({
-      onStart() {
-        that.showSimpleOptions();
+    if (!GameState.instance.hasEnterState("enter_city")) {
+      let sequence = Act1EnterTheCityFlow.get(
+        that, cityPhoto, placeAndPeopleView, me);
+      sequence.addIntoSequence({
+        onStart() {
+          that.showSimpleOptions();
+          GameState.instance.recordState("enter_city");
+          DBManager.getInstance().save();
+        }
+      })
+      sequence.startOne();
+    } else {
+      placeAndPeopleView.updatePlace(YanCity.city);
+      me.visible = true;
+      if (!GameState.instance.hasEnterState("enter_taizi_house")) {
+        YanCity.palace.showNoteSign = true;
+        YanCity.palace.dirty = true;
       }
-    })
-    sequence.startOne();
+      that.showSimpleOptions();
+    }
   }
 
   showSimpleOptions() {
