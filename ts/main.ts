@@ -66,14 +66,14 @@ export default class Main {
       return SceneManager.getInstance().currentScene.onpress(event);
     });
 
-    DBManager.getInstance().setReload((db: DBInteface) => {
+    DBManager.getInstance().setReloadFn((db: DBInteface) => {
       let p = db.getData("game_state");
       if (p.getLength() > 0) {
         // TODO support compatibility on proto upgrade.
         GameState.instance.fromParcel(p);
       }
     });
-    DBManager.getInstance().setSave((db: DBInteface) => {
+    DBManager.getInstance().setSaveFn((db: DBInteface) => {
       db.saveData("game_state", GameState.instance.toParcel());
     });
   }

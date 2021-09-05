@@ -28,11 +28,11 @@ export default class DBManager {
     }
   }
 
-  setReload(fn: (db: DBInteface)=>void) {
+  setReloadFn(fn: (db: DBInteface)=>void) {
     this.reload_ = fn;
   }
 
-  setSave(fn: (db: DBInteface)=>void) {
+  setSaveFn(fn: (db: DBInteface)=>void) {
     this.save_ = fn;
   }
 
