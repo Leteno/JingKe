@@ -22,7 +22,21 @@ export class SimpleDb implements DBInteface {
       parcel.toString()
     );
   }
+
   keyFormat(name: string): string {
     return this.dbName + "-" + name;
+  }
+
+  clear(name: string) {
+    localStorage.removeItem(this.keyFormat(name));
+  }
+
+  clearAll() {
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      if (key.startsWith(this.dbName)) {
+        localStorage.removeItem(key);
+      }
+    }
   }
 }

@@ -39,4 +39,8 @@ export default class DBManager {
   getDb(): DBInteface {
     return this.db;
   }
+
+  clearAllSave() {
+    this.db.clearAll();
+  }
 }
