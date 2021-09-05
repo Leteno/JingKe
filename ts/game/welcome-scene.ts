@@ -11,6 +11,9 @@ import { Border } from "../widgets/sprite";
 import DBManager from "../storage/db_manager";
 import { GameState } from "./game_state";
 import { StringUtils } from "../misc/string_utils";
+import SimpleView from "../widgets/simple_view";
+import Colors from "./data/styles/colors";
+import MessageBox from "../compose/message_box";
 
 export default class WelcomeScene implements Scene {
   mainPanel: Panel;
@@ -54,8 +57,11 @@ export default class WelcomeScene implements Scene {
     this.options.addView(configBtn);
     configBtn.textSize = 24;
     configBtn.margin.top = 60;
+    let configPanel = new ConfigPanel();
+    configPanel.visible = false;
+    this.mainPanel.addView(configPanel);
     configBtn.onclickInternal = (event: ClickEvent) : boolean => {
-      console.log("configBtn is clicked");
+      configPanel.visible = true;
       return true;
     }
 
@@ -139,6 +145,47 @@ class GameSelectPopup extends LinearLayout {
   }
   show() {
     this.visible = true;
+  }
+  onTouchOutside(event) {
+    if (this.visible) {
+      this.visible = false;
+      return true;
+    }
+    return super.onTouchOutside(event);
+  }
+}
+
+class ConfigPanel extends LinearLayout {
+  constructor() {
+    super();
+
+    this.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    this.margin.left = this.margin.right = 40;
+    this.padding.left = this.padding.right =
+      this.padding.bottom = this.padding.top = 10;
+    this.layoutParam.xcfg = Align.CENTER;
+    this.layoutParam.ycfg = Align.CENTER;
+    this.bgColor = Colors.winGrey;
+
+    let clearBtn = new TextView(new Text("清除存档:"));
+    clearBtn.textColor = Colors.black;
+    clearBtn.margin.bottom = 10;
+    this.addView(clearBtn);
+    for (let i = 1; i <= 3; i++) {
+      let text = new TextView();
+      text.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+      text.textColor = "#171717";
+      text.border = new Border();
+      text.border.color = "#e5e5e5";
+      text.setText(new Text(`Slot ${i}`));
+      let dbName = "Slot" + i;
+      text.onclickInternal = () => {
+        DBManager.getInstance().clearAllSave(dbName);
+        console.log("the save is clear");
+        return true;
+      }
+      this.addView(text);
+    }
   }
   onTouchOutside(event) {
     if (this.visible) {

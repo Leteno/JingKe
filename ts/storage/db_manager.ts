@@ -40,7 +40,7 @@ export default class DBManager {
     return this.db;
   }
 
-  clearAllSave() {
-    this.db.clearAll();
+  clearAllSave(dbName: string) {
+    new SimpleDb(dbName).clearAll();
   }
 }
