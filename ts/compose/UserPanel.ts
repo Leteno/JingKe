@@ -4,11 +4,13 @@ import { Prossession } from "../data/prossession";
 import { Align, LayoutType } from "../misc/layout";
 import { PageList } from "./page_list";
 import PlayerDescriptionView from "./player_description_view";
+import { QuestPanel } from "./quest_panel";
 import { UserProssessionView } from "./user_prossession_view";
 
 export default class UserPanel extends PageList {
 
   descriptionView: PlayerDescriptionView;
+  questPanel: QuestPanel;
   constructor() {
     super();
 
@@ -37,12 +39,16 @@ export default class UserPanel extends PageList {
     prossessionPage.model.dirty = true;
     this.addPage("物品", prossessionPage);
 
+    this.questPanel = new QuestPanel();
+    this.addPage("任务", this.questPanel);
+
     this.descriptionView.bgColor = undefined;
     this.bgColor = "#e6e6e6";
   }
 
   updateCharacter(character: Character) {
     this.descriptionView.setCharacter(character);
+    this.questPanel.update(Player.instance.quests);
   }
 
   onTouchOutside() {

@@ -5,7 +5,7 @@ export enum QuestType {
 }
 
 export default class QuestData {
-  getData(type: QuestType): {name: string, desc: string} {
+  static getData(type: QuestType): {name: string, desc: string} {
     switch(type) {
       case QuestType.YourConfuzed:
         return {
