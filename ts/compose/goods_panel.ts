@@ -4,6 +4,7 @@ import { Prossession } from "../data/prossession";
 import Assertion from "../misc/assertion";
 import { Clone } from "../misc/clone";
 import { Align, LayoutType } from "../misc/layout";
+import ScrollViewWithButton from "../widgets/compose/scrollview_with_button";
 import ImageView from "../widgets/imageview";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
 import Panel from "../widgets/panel";
@@ -188,10 +189,8 @@ class DescriptionView extends LinearLayout {
 }
 
 export default class GoodsPanel extends LinearLayout {
-  scrollView: ScrollView;
+  scrollView: ScrollViewWithButton;
   goodsList: LinearLayout;
-  goodsUpBtn: ImageView;
-  goodsDownBtn: ImageView;
   description: DescriptionView;
   constructor() {
     super();
@@ -204,37 +203,14 @@ export default class GoodsPanel extends LinearLayout {
       this.padding.top = this.padding.bottom = 20;
     this.bgColor = "#e6e6e6";
 
-    let scrollButtons = new LinearLayout(
-      Orientation.VERTICAL);
-    scrollButtons.layoutParam.ycfg = Align.CENTER;
-    let up = new ImageView("res/created/up.png");
-    up.forceWidth = up.forceHeight = 20;
-    let down = new ImageView("res/created/down.png");
-    down.forceWidth = down.forceHeight = 20;
-    scrollButtons.addView(up);
-    scrollButtons.addView(down);
-    this.addView(scrollButtons);
-    this.goodsUpBtn = up;
-    this.goodsDownBtn = down;
-
-    let scrollView = new ScrollView();
+    let scrollView = new ScrollViewWithButton(Align.START);
     scrollView.layoutParam.yLayout = LayoutType.MATCH_PARENT;
     scrollView.layoutParam.weight = 1;
     this.scrollView = scrollView;
     this.goodsList = new LinearLayout(
       Orientation.VERTICAL);
-    this.scrollView.addView(this.goodsList);
+    this.scrollView.setContentView(this.goodsList);
     this.addView(this.scrollView);
-    up.onclickInternal = up.onpressInternal =
-      (event) => {
-        scrollView.scrollBy(0, -10);
-        return true;
-      };
-    down.onclickInternal = down.onpressInternal =
-      (event) => {
-        scrollView.scrollBy(0, 10);
-        return true;
-      };
 
     this.description = new DescriptionView();
     this.description.layoutParam.weight = 1;

@@ -6,12 +6,16 @@ import SimpleView from "../simple_view";
 
 export default class ScrollViewWithButton extends Panel {
   private scrollView: ScrollView;
-  constructor() {
+  constructor(align: Align = Align.END) {
     super();
 
     let scrollView = new ScrollView();
-    scrollView.layoutParam.xcfg = Align.END;
-    scrollView.margin.right = 20;
+    scrollView.layoutParam.xcfg = align;
+    if (align == Align.START) {
+      scrollView.margin.left = 20;
+    } else {
+      scrollView.margin.right = 20;
+    }
     scrollView.layoutParam.yLayout = LayoutType.MATCH_PARENT;
     this.addView(scrollView);
     this.scrollView = scrollView;
@@ -19,11 +23,11 @@ export default class ScrollViewWithButton extends Panel {
     let upBtn = new ImageView("res/created/up.png");
     let downBtn = new ImageView("res/created/down.png");
     upBtn.forceWidth = upBtn.forceHeight = 20;
-    upBtn.layoutParam.xcfg = Align.END;
+    upBtn.layoutParam.xcfg = align;
     upBtn.layoutParam.ycfg = Align.CENTER;
     upBtn.margin.top = -20;
     downBtn.forceWidth = downBtn.forceHeight = 20;
-    downBtn.layoutParam.xcfg = Align.END;
+    downBtn.layoutParam.xcfg = align;
     downBtn.layoutParam.ycfg = Align.CENTER;
     downBtn.margin.top = 20;
     upBtn.onclickInternal = upBtn.onpressInternal =
