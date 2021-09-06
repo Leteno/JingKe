@@ -10,6 +10,7 @@ import { UserProssessionView } from "./user_prossession_view";
 export default class UserPanel extends PageList {
 
   descriptionView: PlayerDescriptionView;
+  prossessionPage: UserProssessionView;
   questPanel: QuestPanel;
   constructor() {
     super();
@@ -24,20 +25,10 @@ export default class UserPanel extends PageList {
     this.descriptionView.layoutParam.xcfg = Align.CENTER;
     this.descriptionView.layoutParam.ycfg = Align.CENTER;
     this.addPage("状态", this.descriptionView);
-    let prossessionPage = new UserProssessionView();
-    prossessionPage.layoutParam.xLayout = LayoutType.MATCH_PARENT;
-    let p1 = new Prossession();
-    p1.name = "六味补气丹";
-    p1.count = 1;
-    p1.functional_text = "治疗肾虚，你懂的";
-    let p2 = new Prossession();
-    p2.name = "大力金刚丸";
-    p1.count = 999;
-    p1.functional_text = "听说吃了会很大力";
-    for (let i = 0; i < 100; i++)
-      prossessionPage.model.items.push(p1, p2);
-    prossessionPage.model.dirty = true;
-    this.addPage("物品", prossessionPage);
+
+    this.prossessionPage = new UserProssessionView();
+    this.prossessionPage.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    this.addPage("物品", this.prossessionPage);
 
     this.questPanel = new QuestPanel();
     this.addPage("任务", this.questPanel);
@@ -48,6 +39,8 @@ export default class UserPanel extends PageList {
 
   updateCharacter(character: Character) {
     this.descriptionView.setCharacter(character);
+    this.prossessionPage.model.items = Player.instance.prossessions;
+    this.prossessionPage.model.dirty = true;
     this.questPanel.update(Player.instance.quests);
   }
 

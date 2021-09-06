@@ -19,6 +19,7 @@ export class Player extends BindableAndSerializable {
   character: Character;
   quests: Array<Quest>;
   money: number;
+  prossessions: Prossession[];
   static instance: Player = new Player();
 
   static CHOOSE_NOT_FOUND:number = -1;
@@ -33,6 +34,16 @@ export class Player extends BindableAndSerializable {
     this.money = 20;
     this.character.specials.push(Specials.getInstance().kouruoxuanhe);
     this.quests = [];
+    this.prossessions = [];
+    let p1 = new Prossession();
+    p1.name = "六味补气丹";
+    p1.count = 1;
+    p1.functional_text = "治疗肾虚，你懂的";
+    let p2 = new Prossession();
+    p2.name = "大力金刚丸";
+    p1.count = 999;
+    p1.functional_text = "听说吃了会很大力";
+    this.prossessions.push(p1, p2);
   }
 
   static getInstance():Player {
