@@ -10,6 +10,8 @@ import TextEffects from "../../styles/text_effects";
 import { Specials } from "../../../../data/specials";
 import { Actors } from "../../actors";
 import { GameState } from "../../../game_state";
+import Quest from "../../../../data/quest";
+import { QuestType } from "../../../../data/quest_data";
 
 export default class Act1MeetQuizFlow {
   static get(that: SimpleScene) {
@@ -160,6 +162,9 @@ export default class Act1MeetQuizFlow {
             new Text("获得任务：调查荆轲的困惑"),
             new Text("调查清楚叔叔的困惑"),
             () => {
+              let quest = new Quest();
+              quest.type = QuestType.JingkeConfuzed;
+              Player.instance.quests.push(quest);
               sequence.next();
             });
         })
