@@ -1,6 +1,7 @@
 import { BindableData } from "../data/bindable_data";
 import { Prossession } from "../data/prossession";
 import { Align, LayoutType } from "../misc/layout";
+import ScrollViewWithButton from "../widgets/compose/scrollview_with_button";
 import ImageView from "../widgets/imageview";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
 import Panel from "../widgets/panel"
@@ -22,7 +23,7 @@ export class UserProssessionView extends Panel {
 
   readonly model: ProssessionModel;
 
-  private scrollView: ScrollView;
+  private scrollViewWithButton: ScrollViewWithButton;
   private prossessionListView: LinearLayout;
   private descriptionView: TextView;
 
@@ -35,36 +36,11 @@ export class UserProssessionView extends Panel {
     this.prossessionListView.forceWidth = 200;
     this.prossessionListView.orientation =
       Orientation.VERTICAL;
-    let scrollView = new ScrollView();
-    scrollView.layoutParam.xcfg = Align.END;
-    scrollView.margin.right = 20;
-    scrollView.layoutParam.yLayout = LayoutType.MATCH_PARENT;
-    scrollView.addView(this.prossessionListView);
-    this.scrollView = scrollView;
-    this.addView(scrollView);
-
-    let upBtn = new ImageView("res/created/up.png");
-    let downBtn = new ImageView("res/created/down.png");
-    upBtn.forceWidth = upBtn.forceHeight = 20;
-    upBtn.layoutParam.xcfg = Align.END;
-    upBtn.layoutParam.ycfg = Align.CENTER;
-    upBtn.margin.top = -20;
-    downBtn.forceWidth = downBtn.forceHeight = 20;
-    downBtn.layoutParam.xcfg = Align.END;
-    downBtn.layoutParam.ycfg = Align.CENTER;
-    downBtn.margin.top = 20;
-    upBtn.onclickInternal = upBtn.onpressInternal =
-      (event) => {
-      scrollView.scrollBy(0, 10);
-      return true;
-    };
-    downBtn.onclickInternal = downBtn.onpressInternal =
-      (event) => {
-      scrollView.scrollBy(0, -10);
-      return true;
-    };
-    this.addView(upBtn);
-    this.addView(downBtn);
+    this.scrollViewWithButton = new ScrollViewWithButton();
+    this.scrollViewWithButton.layoutParam.xcfg = Align.END;
+    this.scrollViewWithButton.layoutParam.yLayout = LayoutType.MATCH_PARENT;
+    this.scrollViewWithButton.setContentView(this.prossessionListView);
+    this.addView(this.scrollViewWithButton);
 
     this.descriptionView = new TextView();
     this.descriptionView.margin.right =
@@ -106,7 +82,7 @@ export class UserProssessionView extends Panel {
       ));
     }
     view.prossessionListView.setIsDirty(true);
-    view.scrollView.setIsDirty(true);
+    view.scrollViewWithButton.setIsDirty(true);
     view.descriptionView.setIsDirty(true);
     view.setIsDirty(true);
   }
