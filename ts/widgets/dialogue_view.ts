@@ -12,10 +12,6 @@ export default class DialogueView extends Panel {
   nameViewRight: TextView;
   contentView: TextView;
   animators: Array<NumberLinearAnimator>;
-
-  showHint: boolean;
-  hintAnimator: DualStateInfiniteAnimator;
-
   queue: Array<Dialogue>;
 
   constructor() {
@@ -54,28 +50,9 @@ export default class DialogueView extends Panel {
 
     // Animator
     this.animators = new Array<NumberLinearAnimator>();
-    this.hintAnimator = new DualStateInfiniteAnimator(
-      500, false
-    );
 
     // Others
     this.queue = new Array<Dialogue>();
-    this.showHint = false;
-  }
-
-  drawToCanvasInternal(
-    ctx: CanvasRenderingContext2D) {
-    if (this.showHint && this.hintAnimator.getVal()) {
-      ctx.save();
-      ctx.strokeStyle = "black";
-      ctx.translate(
-        this.width - this.padding.right - 30,
-        this.height - this.padding.bottom - 30);
-      // ctx.ellipse(20, 20, 5, 5, 0, 0, 360);
-      ctx.stroke();
-      ctx.restore();
-    }
-    super.drawToCanvasInternal(ctx);
   }
 
   addDialogue(data: Dialogue) {
@@ -91,7 +68,6 @@ export default class DialogueView extends Panel {
 
   private updateView(data:Dialogue) {
     this.visible = true;
-    this.showHint = false;
     let nameView = data.showAtLeft ? this.nameViewLeft
                 : this.nameViewRight;
     nameView.setText(new Text(data.username));
@@ -116,7 +92,6 @@ export default class DialogueView extends Panel {
       this.contentView.showTextLength = Math.floor(val);
     }).bind(this);
     contentAnimator.onStop = (() => {
-      this.showHint = true;
       this.onContentLoadCompleted();
     }).bind(this);
     this.animators.push(contentAnimator);
@@ -126,7 +101,6 @@ export default class DialogueView extends Panel {
     this.animators.forEach(animator => {
       animator.update(dt);
     })
-    this.hintAnimator.update(dt);
   }
 
   onContentLoadCompleted() {
