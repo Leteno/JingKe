@@ -16,6 +16,8 @@ import { DBInteface } from "./storage/db_interface";
 import { GameState } from "./game/game_state";
 import TextEffects from "./game/data/styles/text_effects";
 import Parcel from "./objects/parcel";
+import DebugView from "./debug/debug_view";
+import { Specify } from "./misc/layout";
 
 export default class Main {
   aniId: number;
@@ -86,6 +88,9 @@ export default class Main {
       Player.getInstance().toParcel(p);
       db.saveData("player", p);
     });
+
+    DebugView.instance.measure(this.ctx, canvas.width, canvas.height, Specify.NONE);
+    DebugView.instance.layout(canvas.width, canvas.height, 20, 50);
   }
 
   gameLoop() {
@@ -106,6 +111,7 @@ export default class Main {
   render() {
     this.clearScreen();
     SceneManager.getInstance().currentScene.render(this.ctx);
+    DebugView.instance.drawToCanvas(this.ctx);
   }
 
   clearScreen() {
