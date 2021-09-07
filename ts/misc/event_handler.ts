@@ -9,6 +9,8 @@ export default class EventHandler {
   private startTime: number;
   private pointDownX: number;
   private pointDownY: number;
+  private movingX: number;
+  private movingY: number;
   private timeoutId: number;
   private intervalId: number;
 
@@ -20,18 +22,36 @@ export default class EventHandler {
 
   bind(widget: HTMLElement) {
     let that: EventHandler = this;
-    widget.onpointerdown = ((event) => {
-      that.onpointerdown(event.x, event.y);
-      event.preventDefault();
-    });
-    widget.onpointerup = ((event) => {
-      that.onpointerup(event.x, event.y);
-      event.preventDefault();
-    });
-    widget.onpointermove = ((event) => {
-      that.onpointermove(event.x, event.y);
-      event.preventDefault();
-    });
+
+    document.addEventListener(
+      "touchstart",
+      function (ev: TouchEvent) {
+        that.onpointerdown(
+          Math.round(ev.touches[0].pageX),
+          Math.round(ev.touches[0].pageY)
+        );
+      }
+    );
+
+    document.addEventListener(
+      "touchmove",
+      function (ev: TouchEvent) {
+        that.onpointermove(
+          Math.round(ev.touches[0].pageX),
+          Math.round(ev.touches[0].pageY)
+        );
+      }
+    );
+
+    document.addEventListener(
+      "touchend",
+      function (ev: TouchEvent) {
+        that.onpointerup(
+          that.movingX,
+          that.movingY
+        );
+      }
+    );
   }
 
   bindOnClickHandler(fn: (event:ClickEvent)=>boolean) {
@@ -47,6 +67,8 @@ export default class EventHandler {
     this.startTime = new Date().getTime();
     this.pointDownX = x;
     this.pointDownY = y;
+    this.movingX = x;
+    this.movingY = y;
     this.timeoutId = window.setTimeout(
       (() => {
         let fn = () => {
@@ -78,6 +100,8 @@ export default class EventHandler {
     }
   }
   onpointermove(x: number, y: number) {
+    this.movingX = x;
+    this.movingY = y;
     if (EventHandler.positionChanged(
       x, y,
       this.pointDownX, this.pointDownY)) {
