@@ -5,7 +5,9 @@ import { ScrollView } from "../scrollview";
 import SimpleView from "../simple_view";
 
 export default class ScrollViewWithButton extends Panel {
-  private scrollView: ScrollView;
+  scrollView: ScrollView;
+  goodsUpBtn: ImageView;
+  goodsDownBtn: ImageView;
   constructor(align: Align = Align.END) {
     super();
 
@@ -32,14 +34,16 @@ export default class ScrollViewWithButton extends Panel {
     downBtn.margin.top = 20;
     upBtn.onclickInternal = upBtn.onpressInternal =
       (event) => {
-      scrollView.scrollBy(0, 10);
+      scrollView.scrollBy(0, -10);
       return true;
     };
     downBtn.onclickInternal = downBtn.onpressInternal =
       (event) => {
-      scrollView.scrollBy(0, -10);
+      scrollView.scrollBy(0, 10);
       return true;
     };
+    this.goodsUpBtn = upBtn;
+    this.goodsDownBtn = downBtn;
     this.addView(upBtn);
     this.addView(downBtn);
   }

@@ -91,21 +91,21 @@ test("scroll", () => {
   goodsPanel.measure(defaultCtx, 400, 400, Specify.NONE);
   goodsPanel.layout(400, 400);
 
-  expect(goodsPanel.scrollView.offsetY)
+  expect(goodsPanel.scrollView.scrollView.offsetY)
     .toBe(0);
 
-  goodsPanel.goodsUpBtn.onclickInternal(new ClickEvent(0, 0));
-  expect(goodsPanel.scrollView.offsetY)
+  goodsPanel.scrollView.goodsUpBtn.onclickInternal(new ClickEvent(0, 0));
+  expect(goodsPanel.scrollView.scrollView.offsetY)
     .toBe(-10);
-  goodsPanel.goodsUpBtn.onpressInternal(new PressEvent(0, 0));
-  expect(goodsPanel.scrollView.offsetY)
+  goodsPanel.scrollView.goodsUpBtn.onpressInternal(new PressEvent(0, 0));
+  expect(goodsPanel.scrollView.scrollView.offsetY)
     .toBe(-20);
 
-  goodsPanel.goodsDownBtn.onclickInternal(new ClickEvent(0, 0));
-  expect(goodsPanel.scrollView.offsetY)
+  goodsPanel.scrollView.goodsDownBtn.onclickInternal(new ClickEvent(0, 0));
+  expect(goodsPanel.scrollView.scrollView.offsetY)
     .toBe(-10);
-  goodsPanel.goodsDownBtn.onpressInternal(new PressEvent(0, 0));
-  expect(goodsPanel.scrollView.offsetY)
+  goodsPanel.scrollView.goodsDownBtn.onpressInternal(new PressEvent(0, 0));
+  expect(goodsPanel.scrollView.scrollView.offsetY)
     .toBe(0);
 })
 
