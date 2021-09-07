@@ -12,6 +12,7 @@ export class LogModel extends BindableData {
     if (this.content.length > 10) {
       this.content = this.content.slice(1);
     }
+    this.dirty = true;
   }
   getText() {
     let totalText = "";
