@@ -71,7 +71,7 @@ export default class DialogueView extends Panel {
       ctx.translate(
         this.width - this.padding.right - 30,
         this.height - this.padding.bottom - 30);
-      ctx.ellipse(20, 20, 5, 5, 0, 0, 360);
+      // ctx.ellipse(20, 20, 5, 5, 0, 0, 360);
       ctx.stroke();
       ctx.restore();
     }
