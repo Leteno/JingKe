@@ -134,6 +134,7 @@ export default class Act1EnterTheCityFlow {
           false
         ));
         that.setOnDialogueFinish(() => {
+          that.hideDialogue();
           sequence.next();
         })
       }

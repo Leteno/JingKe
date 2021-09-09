@@ -16,6 +16,7 @@ import { Act1Views } from "./data/views/act1_views";
 import Act1MeetQuizFlow from "./data/sequences/act1/act1_meet_quiz_flow";
 import Act1EnterTheCityFlow from "./data/sequences/act1/act1_enter_the_city_flow";
 import YanCity from "./data/places/yan_city";
+import Act1TaizifuGreeting from "./data/sequences/act1/act1_taizifu_greeting";
 
 export default class Act1 extends SimpleScene {
 
@@ -118,7 +119,7 @@ export default class Act1 extends SimpleScene {
         that, cityPhoto, placeAndPeopleView, me);
       sequence.addIntoSequence({
         onStart() {
-          that.showSimpleOptions();
+          that.onEnterCity();
           GameState.instance.recordState("enter_city");
           DBManager.getInstance().save();
         }
@@ -127,11 +128,25 @@ export default class Act1 extends SimpleScene {
     } else {
       placeAndPeopleView.updatePlace(YanCity.city);
       me.visible = true;
-      if (!GameState.instance.hasEnterState("enter_taizi_house")) {
-        YanCity.palace.showNoteSign = true;
-        YanCity.palace.dirty = true;
+      that.onEnterCity();
+    }
+  }
+
+  onEnterCity() {
+    let that = this;
+    if (!GameState.instance.hasEnterState("enter_taizi_house")) {
+      YanCity.palace.showNoteSign = true;
+      YanCity.palace.dirty = true;
+      YanCity.palace.onclickListener = () => {
+        let sequence = Act1TaizifuGreeting.get(that);
+        sequence.addIntoSequence({
+          onStart() {
+            GameState.instance.recordState("enter_taizi_house");
+            DBManager.getInstance().save();
+          }
+        })
+        sequence.startOne();
       }
-      that.showSimpleOptions();
     }
   }
 

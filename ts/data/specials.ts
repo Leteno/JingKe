@@ -5,6 +5,7 @@ import { SpecialAffect } from "../special_affect/special_affect";
 export class Specials {
   simpleAndNaive: SpecialAffect; // 朴素
   brave: SpecialAffect;  // 勇敢
+  taizidandeenchong: SpecialAffect;  // 太子丹的恩宠
   xianting: SpecialAffect; // 闲庭
   yiboyuntian: SpecialAffect; // 义薄云天
   kouruoxuanhe: SpecialAffect; // 口若悬河
@@ -19,6 +20,11 @@ export class Specials {
       Goods_Type.GACostDiscount,
       "口若悬河", "商店购买时，要价便宜 30%",
       0.7
+    );
+    this.taizidandeenchong = GoodsAffectFactory.getGoodsAffect(
+      Goods_Type.GACostDiscount,
+      "太子丹的恩宠", "燕城商店购买免费",
+      0
     );
   }
 
