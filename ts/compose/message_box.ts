@@ -45,8 +45,9 @@ export default class MessageBox extends LinearLayout {
     if (this.visible) {
       this.visible = false;
       if (this.onMessageBoxDismiss) {
-        this.onMessageBoxDismiss();
+        let callback = this.onMessageBoxDismiss;
         this.onMessageBoxDismiss = null;
+        callback();
       }
       return true;
     }
