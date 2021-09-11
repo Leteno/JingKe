@@ -1,13 +1,16 @@
-import DualStateInfiniteAnimator from "../animator/dual-state-infinite-animator"
 import NumberLinearAnimator from "../animator/number-linear-animator";
+import { Character } from "../data/character";
 import Dialogue from "../data/dialogue";
 import { ClickEvent } from "../misc/event";
-import { Align, LayoutParams } from "../misc/layout";
+import { Align, LayoutParams, LayoutType } from "../misc/layout";
+import ImageView from "./imageview";
+import LinearLayout, { Orientation } from "./linear_layout";
 import Panel from "./panel";
-import { Border, MeasureResult } from "./sprite";
+import { Border } from "./sprite";
 import TextView, { Text } from "./textview";
 
 export default class DialogueView extends Panel {
+  avatarLayer: AvatarLayer;
   nameViewLeft: TextView;
   nameViewRight: TextView;
   contentView: TextView;
@@ -24,6 +27,12 @@ export default class DialogueView extends Panel {
     this.border = new Border();
     this.debugColor = "green";
 
+    // Configure View position
+    this.padding.left = 20;
+    this.padding.top = 10;
+    this.padding.right = 20;
+    this.padding.bottom = 20;
+
     // Add all views:
     this.nameViewLeft = new TextView(new Text("郑大侠"));
     this.nameViewRight = new TextView(new Text("嘉女士"));
@@ -35,11 +44,6 @@ export default class DialogueView extends Panel {
     this.addView(this.nameViewRight);
     this.addView(this.contentView);
 
-    // Configure View position
-    this.padding.left = 20;
-    this.padding.top = 10;
-    this.padding.right = 20;
-    this.padding.bottom = 20;
     this.nameViewRight.layoutParam = new LayoutParams(
       Align.END, Align.START
     );
@@ -47,6 +51,13 @@ export default class DialogueView extends Panel {
     this.contentView.margin.top = 40;
     this.contentView.margin.bottom = 20;
     this.contentView.textSize = 16;
+
+    this.avatarLayer = new AvatarLayer();
+    this.avatarLayer.margin.top =
+      -100 - this.padding.top;
+    this.avatarLayer.margin.left = - this.padding.left;
+    this.avatarLayer.margin.right = - this.padding.right;
+    this.addView(this.avatarLayer);
 
     // Animator
     this.animators = new Array<NumberLinearAnimator>();
@@ -83,6 +94,8 @@ export default class DialogueView extends Panel {
     );
     this.contentView.setText(data.content);
     this.contentView.showTextLength = 0;
+
+    this.avatarLayer.updateAvatar(data.character, data.showAtLeft);
 
     this.contentView.setIsDirty(true);
     nameView.setIsDirty(true);
@@ -147,5 +160,49 @@ export default class DialogueView extends Panel {
   // Call when no more dialogue follow up
   // Will call once.
   onDialogueFinished() {
+  }
+
+  hide() {
+    this.avatarLayer.reset();
+    this.visible = false;
+  }
+}
+
+class AvatarLayer extends LinearLayout {
+  avatarsLeft: ImageView;
+  emptyPlaceHolder: Panel;
+  avatarsRight: ImageView;
+
+  constructor() {
+    super(Orientation.HORIZONTAL);
+    this.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    this.avatarsLeft = new ImageView("res/copyleft/people_juzi.png");
+    this.avatarsRight = new ImageView("res/copyleft/people_fanwuji.png");
+    this.avatarsLeft.forceWidth = this.avatarsLeft.forceHeight =
+      this.avatarsRight.forceWidth = this.avatarsRight.forceHeight = 100;
+    this.emptyPlaceHolder = new Panel();
+    this.emptyPlaceHolder.layoutParam.weight = 1;
+    this.addView(this.avatarsLeft);
+    this.addView(this.emptyPlaceHolder);
+    this.addView(this.avatarsRight);
+
+    this.avatarsLeft.visible = false;
+    this.avatarsRight.visible = false;
+  }
+
+  updateAvatar(character: Character, showAtLeft: boolean) {
+    let avatar = showAtLeft ? this.avatarsLeft
+                            : this.avatarsRight;
+    let opposite = showAtLeft ? this.avatarsRight
+                              : this.avatarsLeft;
+    avatar.img.src = character.imageSrc;
+    avatar.visible = true;
+    opposite.visible = false;
+  }
+
+  // reset avatar views to be hidden
+  reset() {
+    this.avatarsLeft.visible = false;
+    this.avatarsRight.visible = false;
   }
 }
