@@ -123,6 +123,9 @@ class DescriptionView extends LinearLayout {
       Player.getInstance().money -= cost;
       this.yourMoneyLabel.setText(new Text(
         `您的金钱: ${Player.getInstance().money}`));
+      let prossession = Clone.clone(this.purchaseModel.original) as Prossession;
+      prossession.count = this.purchaseModel.count;
+      Player.getInstance().prossessions.push(prossession);
       this.purchaseModel.original.count -= this.purchaseModel.count;
       this.purchaseModel.count = 1;
       this.purchaseModel.dirty = true;
@@ -184,6 +187,8 @@ class DescriptionView extends LinearLayout {
         ));
       }
     }
+    view.yourMoneyLabel.setText(new Text(
+      `您的金钱: ${Player.getInstance().money}`));
     view.purchaseBtn.enable = Player.getInstance().money > currentCost;
   }
 }
