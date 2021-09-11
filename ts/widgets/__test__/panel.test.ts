@@ -2,6 +2,7 @@ import { Align, LayoutParams, LayoutType, Specify } from "../../misc/layout";
 import Panel from "../panel"
 import SimpleView from "../simple_view";
 import Sprite, { MeasureResult } from "../sprite"
+import { defaultCtx } from "./default_value.test";
 import TestSprite from "./test_sprite.test"
 
 function indexOf(pairList: Array<Sprite>, view: Sprite): number {
@@ -233,4 +234,21 @@ test("Match Parent with margin (y)", () => {
   panel.layout(200, 200);
   expect(panel.height).toBe(160);
   expect(panel.y).toBe(20);
+})
+
+test("isReady", () => {
+  let panel = new Panel();
+  expect(panel.isReady()).toBe(false);
+  panel.measure(defaultCtx, 100, 100, Specify.NONE);
+  panel.layout(100, 100);
+  expect(panel.isReady()).toBe(true);
+  let v1 = new TestSprite();
+  panel.addView(v1);
+  expect(panel.isReady()).toBe(false);
+  expect(v1.isReady()).toBe(false);
+  panel.setIsDirty(true);
+  panel.measure(defaultCtx, 100, 100, Specify.NONE);
+  panel.layout(100, 100);
+  expect(panel.isReady()).toBe(true);
+  expect(v1.isReady()).toBe(true);
 })

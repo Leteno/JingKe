@@ -103,6 +103,8 @@ export default abstract class Sprite {
               && spY <= this.y + this.height);
   }
 
+  abstract isReady();
+
   onclick(event: ClickEvent): boolean {
     if (!this.enable) return false;
     if (!this.visible) return false;

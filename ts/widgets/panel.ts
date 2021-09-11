@@ -78,6 +78,17 @@ export default class Panel extends SimpleView {
     this.children.splice(0)
   }
 
+  isReady() {
+    if (super.isReady()) {
+      for (let i = 0; i < this.children.length; i++) {
+        if (!this.children[i].isReady()) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
 
   // override
   drawToCanvasInternal(ctx: CanvasRenderingContext2D) {

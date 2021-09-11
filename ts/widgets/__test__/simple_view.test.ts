@@ -88,3 +88,11 @@ test("enable bg color", () => {
   expect(defaultCtx.fillStyle).toBe("blue");
 
 })
+
+test("isReady", ()=> {
+  let a = new TestView();
+  expect(a.isReady()).toBe(false);
+  a.measure(defaultCtx, 10, 10, Specify.NONE);
+  a.layout(10, 10);
+  expect(a.isReady()).toBe(true);
+})

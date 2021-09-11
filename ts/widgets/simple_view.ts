@@ -7,6 +7,9 @@ export default abstract class SimpleView extends Sprite {
 
   private layoutCache: LayoutCache;
 
+  private isMeasured: boolean;
+  private isLayouted: boolean;
+
   // Databinding support
   private bindedData: BindableData;
   private onBind: (v:Sprite, data: BindableData) => void;
@@ -14,6 +17,8 @@ export default abstract class SimpleView extends Sprite {
   constructor() {
     super();
     this.layoutCache = new LayoutCache();
+    this.isMeasured = false;
+    this.isLayouted = false;
   }
 
   measure(
@@ -76,6 +81,7 @@ export default abstract class SimpleView extends Sprite {
       calcHeight: this.height + this.getPortraitMargin()
     }
     this.layoutCache.saveMeasureResult(result);
+    this.isMeasured = true;
     return result;
   }
 
@@ -150,6 +156,7 @@ export default abstract class SimpleView extends Sprite {
         this.y = top + this.margin.top;
         break;
     }
+    this.isLayouted = true;
     this.onLayout(parentWidth, parentHeight, left, top);
   }
 
@@ -216,6 +223,10 @@ export default abstract class SimpleView extends Sprite {
 
   setIsDirty(dirty: boolean) {
     this.layoutCache.setIsDirty(dirty);  
+  }
+
+  isReady() {
+    return this.isMeasured && this.isLayouted;
   }
 
   bindData(data: BindableData, fn: (v:Sprite, d:BindableData)=>void) {

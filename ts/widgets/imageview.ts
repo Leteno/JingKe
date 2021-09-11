@@ -97,4 +97,8 @@ export default class ImageView extends SimpleView {
     ImageView.drawPointer(ctx, this.pointerPosition, this);
     ImageView.drawNoteSign(ctx, this);
   }
+
+  isReady() {
+    return super.isReady() && this.img && this.img.complete
+  }
 }
