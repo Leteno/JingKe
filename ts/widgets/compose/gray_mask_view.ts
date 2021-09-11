@@ -14,15 +14,10 @@ export default class GrayMaskView extends Panel {
     let x = matrix.m41;
     let y = matrix.m42;
     if (this.cacheImageData == undefined) {
-      let imageData = ctx.getImageData(x, y, this.width, this.height);
-      console.log("imageData: " + imageData.data.length);
-      if (undefined == imageData.data.find((v, i, o) => {
-          // i is not alpha channel, and value is not 0
-          return (i & 0x3) != 3 && v != 0;
-        })) {
-        // Skip as they are totally 0
+      if (!this.isReady()) {
         return;
       }
+      let imageData = ctx.getImageData(x, y, this.width, this.height);
       this.cacheImageData =  ctx.createImageData(this.width, this.height);
       let src = imageData.data;
       let target = this.cacheImageData.data;
