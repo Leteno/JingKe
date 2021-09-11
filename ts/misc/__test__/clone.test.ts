@@ -8,9 +8,12 @@ class TestStudent {
     this.name = name;
     this.age = age;
   }
+  getName() {
+    return this.name;
+  }
 }
 
-test("simple", () => {
+test("simple", () => {new Object
   let student = new TestStudent("leteno", 12);
   let cloned = Clone.clone(student) as TestStudent;
   expect(cloned).toHaveProperty("age");
@@ -19,4 +22,5 @@ test("simple", () => {
   expect(cloned.age).toBe(13);
   expect(student.age).toBe(12);
   expect(cloned).not.toEqual(student);
+  expect(cloned.getName()).toEqual("leteno")
 })

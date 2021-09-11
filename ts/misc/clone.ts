@@ -1,8 +1,8 @@
 
 export class Clone {
   static clone (obj: Object) : Object {
-    return JSON.parse(
-      JSON.stringify(obj)
-    );
+    let target = Object.create(obj);
+    Object.assign(target, obj);
+    return target;
   }
 }
