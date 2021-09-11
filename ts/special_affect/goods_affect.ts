@@ -1,11 +1,11 @@
-import { Prossession } from "../data/prossession";
+import { Goods } from "../data/goods";
 import Assertion from "../misc/assertion";
 import Parcel from "../objects/parcel";
 import { SpecialAffect } from "./special_affect";
 
 export abstract class GoodsAffect extends SpecialAffect {
   abstract affect(
-    data: Prossession
+    data: Goods
   ) : boolean;
 }
 
@@ -15,7 +15,7 @@ class GACostDiscount extends GoodsAffect {
     super(name, description);
     this.costDiscount = costDiscount;
   }
-  affect(data: Prossession): boolean {
+  affect(data: Goods): boolean {
     data.cost = Math.round(data.cost * this.costDiscount);
     return true;
   }
@@ -36,7 +36,7 @@ class GACountChange extends GoodsAffect {
     super(name, description);
     this.countDelta = countDelta;
   }
-  affect(data: Prossession): boolean {
+  affect(data: Goods): boolean {
     data.count += this.countDelta;
     if (data.count < 0)  {
       data.count = 0;

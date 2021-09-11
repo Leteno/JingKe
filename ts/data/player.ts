@@ -2,7 +2,7 @@ import Parcel from "../objects/parcel";
 import { BindableAndSerializable, Serializable } from "../objects/serializable";
 import { GoodsAffect } from "../special_affect/goods_affect";
 import { Character } from "./character";
-import { Prossession } from "./prossession";
+import { Goods as Goods } from "./goods";
 import Quest from "./quest";
 import { Specials } from "./specials";
 
@@ -19,7 +19,7 @@ export class Player extends BindableAndSerializable {
   character: Character;
   quests: Array<Quest>;
   money: number;
-  prossessions: Prossession[];
+  possessions: Goods[];
   static instance: Player = new Player();
 
   static CHOOSE_NOT_FOUND:number = -1;
@@ -34,7 +34,7 @@ export class Player extends BindableAndSerializable {
     this.money = 20;
     this.character.specials.push(Specials.getInstance().kouruoxuanhe);
     this.quests = [];
-    this.prossessions = [];
+    this.possessions = [];
   }
 
   static getInstance():Player {
@@ -66,9 +66,9 @@ export class Player extends BindableAndSerializable {
       this.quests[i].toParcel(p);
     }
 
-    p.writeInt(this.prossessions.length);
-    for (let i = 0; i < this.prossessions.length; i++) {
-      this.prossessions[i].toParcel(p);
+    p.writeInt(this.possessions.length);
+    for (let i = 0; i < this.possessions.length; i++) {
+      this.possessions[i].toParcel(p);
     }
 
     // TODO support Map.
@@ -90,19 +90,19 @@ export class Player extends BindableAndSerializable {
 
     let prossessionSize = p.readInt();
     for (let i = 0; i < prossessionSize; i++) {
-      let prossession = new Prossession();
-      prossession.fromParcel(p);
-      this.prossessions.push(prossession);
+      let possession = new Goods();
+      possession.fromParcel(p);
+      this.possessions.push(possession);
     }
 
     // TODO support Map.
   }
 
-  applyGoodsEffect(prossession: Prossession) {
+  applyGoodsEffect(possession: Goods) {
     let changed: boolean = false;
     this.character.specials.filter(k => k instanceof GoodsAffect)
       .forEach(affect => {
-        changed = (affect as GoodsAffect).affect(prossession) || changed;
+        changed = (affect as GoodsAffect).affect(possession) || changed;
       })
     return changed;
   }

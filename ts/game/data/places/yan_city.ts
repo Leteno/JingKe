@@ -1,6 +1,6 @@
 import { GoodsPanelModel } from "../../../compose/goods_panel";
 import { Place } from "../../../compose/place_and_people_view";
-import { Prossession } from "../../../data/prossession";
+import { Goods } from "../../../data/goods";
 import SimpleScene from "../../../scene/simple_scene";
 import { Actors } from "../actors";
 
@@ -28,13 +28,13 @@ export default class YanCity {
     mainPlace.places.push(palace, market);
     Actors.getInstance().businessman.onclickListener = () => {
       let model = new GoodsPanelModel();
-      let p1 = new Prossession();
+      let p1 = new Goods();
       p1.name = "六味补气丸";
       p1.cost = 10;
       p1.count = 10;
       p1.functional_text = "益气活血，祛痰化瘀";
       p1.image = "res/created/medition.png";
-      let p2 = new Prossession();
+      let p2 = new Goods();
       p2.name = "秦国军旗";
       p2.cost = 100;
       p2.count = 1;

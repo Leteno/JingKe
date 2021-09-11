@@ -1,6 +1,6 @@
 
 import { Player } from "../../data/player";
-import { Prossession } from "../../data/prossession";
+import { Goods } from "../../data/goods";
 import { ClickEvent, PressEvent } from "../../misc/event";
 import { Specify } from "../../misc/layout";
 import { GoodsAffect, GoodsAffectFactory, Goods_Type } from "../../special_affect/goods_affect";
@@ -11,12 +11,12 @@ import GoodsPanel, { GoodsPanelModel } from "../goods_panel"
 
 function buildModelForTest(): GoodsPanelModel {
   let model = new GoodsPanelModel();
-  let p1 = new Prossession();
+  let p1 = new Goods();
   p1.name = "六味补气丸";
   p1.count = 10;
   p1.cost = 10;
   p1.functional_text = "益气活血，祛痰化瘀";
-  let p2 = new Prossession();
+  let p2 = new Goods();
   p2.name = "秦国军旗";
   p2.count = 1;
   p2.cost = 100;

@@ -1,7 +1,7 @@
 import parcel from "../objects/parcel";
 import { BindableAndSerializable } from "../objects/serializable";
 
-export class Prossession extends BindableAndSerializable {
+export class Goods extends BindableAndSerializable {
   name: string;
   cost: number;
   count: number;

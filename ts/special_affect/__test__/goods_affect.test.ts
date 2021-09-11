@@ -1,11 +1,11 @@
 import { type } from "os";
-import { Prossession } from "../../data/prossession"
+import { Goods } from "../../data/goods"
 import { Clone } from "../../misc/clone";
 import { getEnumCases } from "../../misc/enum";
 import {GoodsAffect, GoodsAffectFactory, Goods_Type} from "../goods_affect"
 
 test("one rule", () => {
-  let x = new Prossession();
+  let x = new Goods();
   x.count = 12;
   x.cost = 10;
 
@@ -17,7 +17,7 @@ test("one rule", () => {
 })
 
 test("mix rules", () => {
-  let x = new Prossession();
+  let x = new Goods();
   x.count = 12;
   x.cost = 10;
   let affect1 = GoodsAffectFactory.getGoodsAffect(
@@ -33,7 +33,7 @@ test("mix rules", () => {
 })
 
 test("crazy rules", () => {
-  let x = new Prossession();
+  let x = new Goods();
   x.count = 12;
   x.cost = 10;
   let affect1 = GoodsAffectFactory.getGoodsAffect(

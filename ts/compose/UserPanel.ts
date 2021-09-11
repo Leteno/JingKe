@@ -1,16 +1,16 @@
 import { Character } from "../data/character";
 import { Player } from "../data/player";
-import { Prossession } from "../data/prossession";
+import { Goods } from "../data/goods";
 import { Align, LayoutType } from "../misc/layout";
 import { PageList } from "./page_list";
 import PlayerDescriptionView from "./player_description_view";
 import { QuestPanel } from "./quest_panel";
-import { UserProssessionView } from "./user_prossession_view";
+import { UserGoodsView } from "./user_goods_view";
 
 export default class UserPanel extends PageList {
 
   descriptionView: PlayerDescriptionView;
-  prossessionPage: UserProssessionView;
+  prossessionPage: UserGoodsView;
   questPanel: QuestPanel;
   constructor() {
     super();
@@ -26,7 +26,7 @@ export default class UserPanel extends PageList {
     this.descriptionView.layoutParam.ycfg = Align.CENTER;
     this.addPage("状态", this.descriptionView);
 
-    this.prossessionPage = new UserProssessionView();
+    this.prossessionPage = new UserGoodsView();
     this.prossessionPage.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.addPage("物品", this.prossessionPage);
 
@@ -39,7 +39,7 @@ export default class UserPanel extends PageList {
 
   updateCharacter(character: Character) {
     this.descriptionView.setCharacter(character);
-    this.prossessionPage.model.items = Player.instance.prossessions;
+    this.prossessionPage.model.items = Player.instance.possessions;
     this.prossessionPage.model.dirty = true;
     this.questPanel.update(Player.instance.quests);
   }

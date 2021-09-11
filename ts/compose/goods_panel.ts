@@ -1,6 +1,6 @@
 import { BindableData } from "../data/bindable_data";
 import { Player } from "../data/player";
-import { Prossession } from "../data/prossession";
+import { Goods } from "../data/goods";
 import Assertion from "../misc/assertion";
 import { Clone } from "../misc/clone";
 import { Align, LayoutType } from "../misc/layout";
@@ -15,11 +15,11 @@ import TextView from "../widgets/textview";
 import {Text} from "../widgets/textview"
 
 export class GoodsPanelModel extends BindableData {
-  goodsList: Array<Prossession>;
+  goodsList: Array<Goods>;
   currentIndex: number;
   constructor() {
     super();
-    this.goodsList = new Array<Prossession>();
+    this.goodsList = new Array<Goods>();
     this.currentIndex = -1;
   }
 }
@@ -29,7 +29,7 @@ class PurchaseModel extends BindableData {
   minCount: number;
   maxCount: number;
   cost: number;
-  original: Prossession;
+  original: Goods;
   constructor() {
     super();
     this.count = 1;
@@ -124,9 +124,9 @@ class DescriptionView extends LinearLayout {
       Player.getInstance().money -= cost;
       this.yourMoneyLabel.setText(new Text(
         `您的金钱: ${Player.getInstance().money}`));
-      let prossession = Clone.clone(this.purchaseModel.original) as Prossession;
-      prossession.count = this.purchaseModel.count;
-      Player.getInstance().prossessions.push(prossession);
+      let possession = Clone.clone(this.purchaseModel.original) as Goods;
+      possession.count = this.purchaseModel.count;
+      Player.getInstance().possessions.push(possession);
       DBManager.getInstance().save();
       this.purchaseModel.original.count -= this.purchaseModel.count;
       this.purchaseModel.count = 1;
@@ -139,8 +139,8 @@ class DescriptionView extends LinearLayout {
     this.bindData(this.purchaseModel, DescriptionView.bindModel);
   }
 
-  update(goods: Prossession) {
-    this.title.bindData(goods, ((v: DescriptionView, d: Prossession) => {
+  update(goods: Goods) {
+    this.title.bindData(goods, ((v: DescriptionView, d: Goods) => {
       this.title.setText(new Text(
         d.name
       ));
@@ -153,7 +153,7 @@ class DescriptionView extends LinearLayout {
     }).bind(this));
 
     // 暂时不考虑 goods change 之后，还需要更新 purchaseModel.
-    let copy = Clone.clone(goods) as Prossession;
+    let copy = Clone.clone(goods) as Goods;
     Player.getInstance().applyGoodsEffect(copy);
     this.purchaseModel.count = 1;
     this.purchaseModel.cost = copy.cost;

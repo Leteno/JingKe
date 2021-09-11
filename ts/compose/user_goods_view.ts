@@ -1,27 +1,25 @@
 import { BindableData } from "../data/bindable_data";
-import { Prossession } from "../data/prossession";
+import { Goods } from "../data/goods";
 import { Align, LayoutType } from "../misc/layout";
 import ScrollViewWithButton from "../widgets/compose/scrollview_with_button";
-import ImageView from "../widgets/imageview";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
 import Panel from "../widgets/panel"
-import { ScrollView } from "../widgets/scrollview";
 import { Border } from "../widgets/sprite";
 import TextView, { Text } from "../widgets/textview";
 
-class ProssessionModel extends BindableData {
-  items: Array<Prossession>;
+class GoodsModel extends BindableData {
+  items: Array<Goods>;
   selectIndex: number;
   constructor() {
     super();
-    this.items = new Array<Prossession>();
+    this.items = new Array<Goods>();
     this.selectIndex = -1;
   }
 }
 
-export class UserProssessionView extends Panel {
+export class UserGoodsView extends Panel {
 
-  readonly model: ProssessionModel;
+  readonly model: GoodsModel;
 
   private scrollViewWithButton: ScrollViewWithButton;
   private prossessionListView: LinearLayout;
@@ -30,7 +28,7 @@ export class UserProssessionView extends Panel {
   constructor() {
     super();
 
-    this.model = new ProssessionModel();
+    this.model = new GoodsModel();
 
     this.prossessionListView = new LinearLayout();
     this.prossessionListView.forceWidth = 200;
@@ -49,16 +47,16 @@ export class UserProssessionView extends Panel {
     this.descriptionView.textSize = 12;
     this.addView(this.descriptionView);
 
-    this.bindData(this.model, UserProssessionView.updateProssessionListView);
+    this.bindData(this.model, UserGoodsView.updateGoodsListView);
   }
 
-  static updateProssessionListView(
-    view: UserProssessionView, model: ProssessionModel) {
+  static updateGoodsListView(
+    view: UserGoodsView, model: GoodsModel) {
     view.prossessionListView.removeAllViews();
     for (let i = 0; i < model.items.length; i++) {
-      let prossession = model.items[i];
+      let goods = model.items[i];
       let tv = new TextView(
-        new Text(prossession.name));
+        new Text(goods.name));
       tv.border = new Border();
       tv.border.color = "black";
       tv.textColor = "black";

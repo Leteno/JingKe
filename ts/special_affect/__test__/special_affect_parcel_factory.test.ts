@@ -1,4 +1,4 @@
-import { Prossession } from "../../data/prossession";
+import { Goods } from "../../data/goods";
 import Parcel from "../../objects/parcel";
 import { GoodsAffect, GoodsAffectFactory, Goods_Type } from "../goods_affect"
 import { LabelAffectFactory, Label_Type } from "../label_affect";
@@ -23,7 +23,7 @@ test("GoodsAffect write and read", () => {
   expect(out2.name).toBe("affect2");
   expect(out2.description).toBe("bar");
 
-  let x = new Prossession();
+  let x = new Goods();
   x.count = 12;
   x.cost = 10;
   (out1 as GoodsAffect).affect(x);
