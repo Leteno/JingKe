@@ -2,6 +2,7 @@
 export enum QuestType {
   YourConfuzed = 0,
   JingkeConfuzed = 1,
+  BuyWineForJingke = 2,
 }
 
 export default class QuestData {
@@ -16,6 +17,11 @@ export default class QuestData {
         return {
           name: "荆轲的困惑",
           desc: "你的叔叔似乎有什么事情瞒着，你想调查清楚，帮他解决"
+        }
+      case QuestType.BuyWineForJingke:
+        return {
+          name: "买燕浊酒",
+          desc: "舅舅的酒没了 我得给他买 燕浊酒"
         }
     }
   }

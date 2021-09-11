@@ -8,6 +8,7 @@ import { Sequence } from "../../../../schedule/sequence";
 import DBManager from "../../../../storage/db_manager";
 import { Text } from "../../../../widgets/textview";
 import { Actors } from "../../actors";
+import TextEffects from "../../styles/text_effects";
 
 export default class Act1TaizifuGreeting {
   static get(scene: SimpleScene):Sequence {
@@ -104,15 +105,38 @@ export default class Act1TaizifuGreeting {
         ));
         scene.addDialogue(new Dialogue(
           Actors.instance.jinke.character,
-          new Text("你可以到处转一转，我后面办完事来找你"),
+          new Text("你可以去城里转一下，我去办点事，待会找你。"),
+          false
+        ));
+        scene.addDialogue(new Dialogue(
+          Actors.instance.jinke.character,
+          new Text("对了，我酒壶没酒了，你帮我买一下 \f燕浊酒\r")
+            .setDefaultEffect(TextEffects.processionEffect),
           false
         ));
         scene.setOnDialogueFinish(() => {
+          Player.instance.money += 200;
           scene.showMessageBox(
-            new Text("（荆轲离去）"),
             new Text(""),
+            new Text("金钱 + 200"),
             () => {
-              sequence.next();
+              let quest = new Quest();
+              quest.type = QuestType.BuyWineForJingke;
+              Player.instance.quests.push(quest);
+              DBManager.getInstance().save();
+              scene.showMessageBox(
+                new Text("获得任务： 买燕浊酒"),
+                new Text("燕多苦寒之地，燕声悲怆，燕酒高烈"),
+                () => {
+                  scene.showMessageBox(
+                    new Text("（荆轲离去）"),
+                    new Text(""),
+                    () => {
+                      sequence.next();
+                    }
+                  )
+                }
+              )
             }
           )
         });
@@ -123,6 +147,18 @@ export default class Act1TaizifuGreeting {
         scene.addDialogue(new Dialogue(
           Player.instance.character,
           new Text("（奇怪，舅舅怎么刚刚神情恍惚，他是有什么心事吗？）")
+        ))
+        scene.addDialogue(new Dialogue(
+          Player.instance.character,
+          new Text("（舅舅武功很好，人也很聪明，村里的小孩都是以他为榜样）")
+        ))
+        scene.addDialogue(new Dialogue(
+          Player.instance.character,
+          new Text("（第一次看到舅舅如此，估计是遇上什么事了，我要打探一下，帮帮他。）")
+        ))
+        scene.addDialogue(new Dialogue(
+          Player.instance.character,
+          new Text("不过现在的我也只能帮他买酒了（苦笑）")
         ))
         scene.setOnDialogueFinish(() => {
           scene.showMessageBox(
