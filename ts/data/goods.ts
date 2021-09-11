@@ -5,10 +5,11 @@ export class Goods extends BindableAndSerializable {
   count: number;
   cost: number;
   info: GoodsInfo;
-  constructor(info: GoodsInfo = new GoodsInfo) {
+  constructor(info: GoodsInfo = new GoodsInfo, count: number = 1) {
     super();
     this.info = info;
     this.cost = info.cost;
+    this.count = count;
   }
 
   toParcel(p: parcel) {

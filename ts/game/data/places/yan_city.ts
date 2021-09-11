@@ -29,10 +29,8 @@ export default class YanCity {
     mainPlace.places.push(palace, market);
     Actors.getInstance().businessman.onclickListener = () => {
       let model = new GoodsPanelModel();
-      let p1 = new Goods(SimpleGoodsInfos.LiuWeiWan);
-      p1.count = 100;
-      let p2 = new Goods(SimpleGoodsInfos.QinFlag);
-      p2.count = 1;
+      let p1 = new Goods(SimpleGoodsInfos.LiuWeiWan, 100);
+      let p2 = new Goods(SimpleGoodsInfos.QinFlag, 1);
       model.goodsList.push(p1, p2);
       that.showGoodsPanel(model);
     }

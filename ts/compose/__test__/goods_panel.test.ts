@@ -13,10 +13,8 @@ import SimpleGoodsInfos from "../../game/data/goods/simple_goods_infos";
 function buildModelForTest(): GoodsPanelModel {
   SimpleGoodsInfos.init();
   let model = new GoodsPanelModel();
-  let p1 = new Goods(SimpleGoodsInfos.LiuWeiWan);
-  p1.count = 10;
-  let p2 = new Goods(SimpleGoodsInfos.QinFlag);
-  p2.count = 1;
+  let p1 = new Goods(SimpleGoodsInfos.LiuWeiWan, 10);
+  let p2 = new Goods(SimpleGoodsInfos.QinFlag, 1);
   for (let i = 0; i < 100; i++)
     model.goodsList.push(p1, p2);
   return model;
