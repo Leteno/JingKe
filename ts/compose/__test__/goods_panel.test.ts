@@ -8,19 +8,15 @@ import Panel from "../../widgets/panel";
 import TextView from "../../widgets/textview";
 import { defaultCtx } from "../../widgets/__test__/default_value.test";
 import GoodsPanel, { GoodsPanelModel } from "../goods_panel"
+import SimpleGoodsInfos from "../../game/data/goods/simple_goods_infos";
 
 function buildModelForTest(): GoodsPanelModel {
+  SimpleGoodsInfos.init();
   let model = new GoodsPanelModel();
-  let p1 = new Goods();
-  p1.name = "六味补气丸";
+  let p1 = new Goods(SimpleGoodsInfos.LiuWeiWan);
   p1.count = 10;
-  p1.cost = 10;
-  p1.functional_text = "益气活血，祛痰化瘀";
-  let p2 = new Goods();
-  p2.name = "秦国军旗";
+  let p2 = new Goods(SimpleGoodsInfos.QinFlag);
   p2.count = 1;
-  p2.cost = 100;
-  p2.functional_text = "赳赳大秦，一往无前";
   for (let i = 0; i < 100; i++)
     model.goodsList.push(p1, p2);
   return model;

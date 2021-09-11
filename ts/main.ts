@@ -18,6 +18,8 @@ import TextEffects from "./game/data/styles/text_effects";
 import Parcel from "./objects/parcel";
 import DebugView from "./debug/debug_view";
 import { Specify } from "./misc/layout";
+import SimpleGoodsInfos from "./game/data/goods/simple_goods_infos";
+import QuestGoodsInfos from "./game/data/goods/quest_goods_infos";
 
 export default class Main {
   aniId: number;
@@ -40,6 +42,8 @@ export default class Main {
 
     SceneManager.init(this.ctx);
     TextEffects.init();
+    SimpleGoodsInfos.init();
+    QuestGoodsInfos.init();
 
     let welcomeScene = new WelcomeScene(canvas);
     SceneManager.getInstance().push("welcome", welcomeScene);
