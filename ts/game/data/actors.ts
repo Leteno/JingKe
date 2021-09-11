@@ -6,11 +6,22 @@ export class Actors {
   businessman: People;
   fanwuji: People;
   juzi: People;
+  jinke: People;
   taizidan: People;
 
   static instance: Actors = new Actors();
 
   private constructor() {
+
+    let businessman = new People();
+    businessman.character.name = "商人";
+    businessman.character.imageSrc = "res/copyleft/people_businessman.png";
+    businessman.character.abilities[ABILITY.INTELIGENCE] = 10;
+    businessman.character.specials.push(
+      Specials.getInstance().kouruoxuanhe
+    );
+    this.businessman = businessman;
+
     let fanwuji = new People();
     fanwuji.character.name = "樊于期";
     fanwuji.character.imageSrc = "res/copyleft/people_fanwuji.png";
@@ -30,14 +41,10 @@ export class Actors {
     );
     this.juzi = juzi;
 
-    let businessman = new People();
-    businessman.character.name = "商人";
-    businessman.character.imageSrc = "res/copyleft/people_businessman.png";
-    businessman.character.abilities[ABILITY.INTELIGENCE] = 10;
-    businessman.character.specials.push(
-      Specials.getInstance().kouruoxuanhe
-    );
-    this.businessman = businessman;
+    let jinke = new People();
+    jinke.character.name = "荆轲";
+    jinke.character.imageSrc = "res/copyleft/people_juzi.png";
+    this.jinke = jinke;
 
     let taizidan = new People();
     taizidan.character.name = "太子丹";

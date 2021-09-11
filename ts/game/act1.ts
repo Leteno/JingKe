@@ -149,26 +149,4 @@ export default class Act1 extends SimpleScene {
       }
     }
   }
-
-  showSimpleOptions() {
-    let that = this;
-    let options = new Array<Option>();
-    let optionCallback = {
-      onOptionClicked(op: number):boolean {
-        that.addDialogue(new Dialogue("另一个我", new Text("这些都是可以的，关键在行动，关键在坚持")));
-        that.setOnDialogueFinish(() => {
-          that.hideDialogue();
-        })
-        return true;
-      }
-    }
-    let opt1 = new Option(1, new Text("要有很多很多的钱"));
-    let opt2 = new Option(2, new Text("成为一名科学家"));
-    let opt3 = new Option(3, new Text("写出令自己满意的作品，最好能流传"));
-    options.push(opt1);
-    options.push(opt2);
-    options.push(opt3);
-
-    this.showOptionView(new Text("你有什么理想吗？"), options, optionCallback);
-  }
 }

@@ -1,3 +1,4 @@
+import { Character } from "../data/character";
 import Dialogue from "../data/dialogue";
 import { ClickEvent, PressEvent } from "../misc/event";
 import { Specify } from "../misc/layout";
@@ -31,24 +32,26 @@ export default class Scene1 implements Scene {
   }
 
   onStart(ctx: CanvasRenderingContext2D) {
+    let me = new Character();
+    me.name = "荆棘";
     this.dialogueView.addDialogue(new Dialogue(
-      "荆棘",
+      me,
       new Text("我叔父是荆轲，荆棘是我的名字。")
     ));
     this.dialogueView.addDialogue(new Dialogue(
-      "荆棘",
+      me,
       new Text("叔父被人杀了，")
     ));
     this.dialogueView.addDialogue(new Dialogue(
-      "荆棘",
+      me,
       new Text("而我却没有替他报仇..")
     ));
     this.dialogueView.addDialogue(new Dialogue(
-      "荆棘",
+      me,
       new Text("这里面的纠缠在我脑中挥之不去，请你耐心听我倾诉")
     ));
     this.dialogueView.addDialogue(new Dialogue(
-      "荆棘",
+      me,
       new Text("那年我 16 岁，而叔父还在燕都太子做门客，我去投奔叔父....")
     ));
 

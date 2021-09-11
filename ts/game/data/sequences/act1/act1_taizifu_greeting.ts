@@ -15,22 +15,22 @@ export default class Act1TaizifuGreeting {
     sequence.addIntoSequence({
       onStart() {
         scene.addDialogue(new Dialogue(
-          "太子丹",
+          Actors.instance.taizidan.character,
           new Text("荆先生，你回来得正好，我有要事跟你商量"),
           false
         ));
         scene.addDialogue(new Dialogue(
-          "太子丹",
+          Actors.instance.taizidan.character,
           new Text("这位是? (指着你)"),
           false
         ));
         scene.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("这是我的侄子"),
         ));
         if (Actors.instance.taizidan.friendship > 60) {
           scene.addDialogue(new Dialogue(
-            "太子丹",
+            Actors.instance.taizidan.character,
             new Text("真是一表人才，在这座城里，你买任何东西都算我的"),
             false,
           ))
@@ -48,7 +48,7 @@ export default class Act1TaizifuGreeting {
           });
         } else {
           scene.addDialogue(new Dialogue(
-            "太子丹",
+            Actors.instance.taizidan.character,
             new Text("真是一表人才，不错不错"),
             false,
           ));
@@ -61,12 +61,12 @@ export default class Act1TaizifuGreeting {
     sequence.addIntoSequence({
       onStart() {
         scene.addDialogue(new Dialogue(
-          "太子丹",
+          Actors.instance.taizidan.character,
           new Text("荆先生，你整顿好这位少侠后，来我房里，我有事情要跟你商量，先走了"),
           false
         ));
         scene.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("好")
         ));
         scene.setOnDialogueFinish(() => {
@@ -94,16 +94,16 @@ export default class Act1TaizifuGreeting {
     sequence.addIntoSequence({
       onStart() {
         scene.addDialogue(new Dialogue(
-          "荆棘",
+          Player.instance.character,
           new Text("舅舅，怎么了？")
         ))
         scene.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("没事，就是有点累了"),
           false
         ));
         scene.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("你可以到处转一转，我后面办完事来找你"),
           false
         ));
@@ -121,7 +121,7 @@ export default class Act1TaizifuGreeting {
     sequence.addIntoSequence({
       onStart() {
         scene.addDialogue(new Dialogue(
-          "荆棘",
+          Player.instance.character,
           new Text("（奇怪，舅舅怎么刚刚神情恍惚，他是有什么心事吗？）")
         ))
         scene.setOnDialogueFinish(() => {

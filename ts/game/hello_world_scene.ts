@@ -13,6 +13,7 @@ import { BgText } from "../widgets/richtext";
 import BirdViewImage from "../widgets/birdview_image";
 import { AnimatorSetBuilder } from "../animator/animator_set";
 import { ScrollView } from "../widgets/scrollview";
+import { Character } from "../data/character";
 
 export default class HelloWorldScene implements Scene {
   mainPanel: Panel;
@@ -22,6 +23,9 @@ export default class HelloWorldScene implements Scene {
 
   canvasWidth: number;
   canvasHeight: number;
+
+  me: Character;
+  her: Character;
 
   constructor(canvas: HTMLCanvasElement) {
 
@@ -138,13 +142,19 @@ export default class HelloWorldScene implements Scene {
     this.dialogueView.forceHeight = canvas.height / 4;
     this.mainPanel.addView(this.dialogueView);
     this.dialogueView.bgColor = "#FFF99D";
+    let me = new Character();
+    me.name = "郑虾米";
+    me.imageSrc = "res/copyleft/people_fanwuji.png";
+    this.me = me;
+    let her = new Character();
+    her.name = "蒋小加";
     this.dialogueView.addDialogue(new Dialogue(
-      "郑虾米",
+      me,
       new Text("这是一段很长的话，但是如果你想看完，Ok, Fine. 我也没有任何意见，只是觉得你或许可以做一点更有意义的事情")
       )
     );
     this.dialogueView.addDialogue(new Dialogue(
-      "郑虾米",
+      me,
       new Text("不要讲干话")
       )
     );
@@ -194,23 +204,23 @@ export default class HelloWorldScene implements Scene {
         switch(option) {
           case OPT.ACCEPT:
             that.dialogueView.addDialogue(
-              new Dialogue("郑虾米", new Text("谢谢，好啊好啊好啊")));
+              new Dialogue(that.me, new Text("谢谢，好啊好啊好啊")));
             that.dialogueView.addDialogue(
-              new Dialogue("蒋小嘉", new Text("哈哈哈哈哈"), false /* showAtLeft */)
+              new Dialogue(that.her, new Text("哈哈哈哈哈"), false /* showAtLeft */)
             );
             break;
           case OPT.DENY:
             that.dialogueView.addDialogue(
-              new Dialogue("郑虾米", new Text("谢谢，我不能接受")));
+              new Dialogue(that.me, new Text("谢谢，我不能接受")));
             that.dialogueView.addDialogue(
-              new Dialogue("蒋小嘉", new Text("我误会你了"), false /* showAtLeft */)
+              new Dialogue(that.her, new Text("我误会你了"), false /* showAtLeft */)
             );
             break;
           case OPT.FIGHT:
             that.dialogueView.addDialogue(
-              new Dialogue("郑虾米", new Text("你不能侮辱我的人格，我要跟你决斗")));
+              new Dialogue(that.me, new Text("你不能侮辱我的人格，我要跟你决斗")));
             that.dialogueView.addDialogue(
-              new Dialogue("蒋小嘉", new Text("啊啊啊啊"), false /* showAtLeft */)
+              new Dialogue(that.her, new Text("啊啊啊啊"), false /* showAtLeft */)
             );
             break;
         }

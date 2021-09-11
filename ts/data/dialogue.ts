@@ -1,8 +1,9 @@
 
 import {Text} from "../widgets/textview"
+import { Character } from "./character";
 
 export default class Dialogue {
-  username: string;
+  character: Character;
   content: Text;
   showAtLeft: boolean;
 
@@ -10,12 +11,12 @@ export default class Dialogue {
   speed: number;
 
   constructor(
-      username: string,
+      character: Character,
       content: Text,
       showAtLeft: boolean=true,
       speed: number=20,
   ) {
-    this.username = username;
+    this.character = character;
     this.content = content;
     this.showAtLeft = showAtLeft;
     this.speed = speed;

@@ -70,7 +70,7 @@ export default class DialogueView extends Panel {
     this.visible = true;
     let nameView = data.showAtLeft ? this.nameViewLeft
                 : this.nameViewRight;
-    nameView.setText(new Text(data.username));
+    nameView.setText(new Text(data.character.name));
     nameView.visible = true;
     let otherView = data.showAtLeft ? this.nameViewRight
                 : this.nameViewLeft;

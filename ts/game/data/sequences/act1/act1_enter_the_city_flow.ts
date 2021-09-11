@@ -3,6 +3,7 @@ import NumberLinearAnimator from "../../../../animator/number-linear-animator";
 import Timeout from "../../../../animator/timeout";
 import { PlaceAndPeopleView } from "../../../../compose/place_and_people_view";
 import Dialogue from "../../../../data/dialogue";
+import { Player } from "../../../../data/player";
 import SimpleScene from "../../../../scene/simple_scene";
 import { Sequence } from "../../../../schedule/sequence";
 import BirdViewImage from "../../../../widgets/birdview_image";
@@ -46,16 +47,16 @@ export default class Act1EnterTheCityFlow {
     sequence.addIntoSequence({
       onStart() {
         that.addDialogue(new Dialogue(
-          "荆棘",
+          Player.instance.character,
           new Text("大都真大啊，人也有很多")
         ))
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("呵呵，过段时间你就会习惯的"),
           false
         ))
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("我给你介绍这上面的住所以及有什么人"),
           false
         ))
@@ -71,7 +72,7 @@ export default class Act1EnterTheCityFlow {
         me.visible = true;
         let peopleEffect = new BgText("green", "white");
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("这个是太子丹的住所，你可以在里面找到\f太子丹\r\f樊于期\r其他门客还有我")
            .setDefaultEffect(peopleEffect),
           false
@@ -89,7 +90,7 @@ export default class Act1EnterTheCityFlow {
         market.dirty = true;
         let peopleEffect = new BgText("green", "white");
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("而下面是集市，我的好朋友\f高渐离\r，\f狗屠\r也在那里，你有什么要买的，都可以去这买，应该都能买到")
             .setDefaultEffect(peopleEffect),
           false
@@ -107,7 +108,7 @@ export default class Act1EnterTheCityFlow {
         juzi.pointerPosition = PointerPosition.RIGHT;
         juzi.dirty = true;
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("右边栏目是这个地方的人物，长按可以看这个人的描述，点击可以与之互动，待会可以试一下"),
           false
         ));
@@ -124,12 +125,12 @@ export default class Act1EnterTheCityFlow {
     sequence.addIntoSequence({
       onStart() {
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("注意到太子府右上角有个惊叹号，某些人物头像也可能有惊叹号，这表示点击则会触发剧情"),
           false
         ));
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("我们一起去太子府把"),
           false
         ));

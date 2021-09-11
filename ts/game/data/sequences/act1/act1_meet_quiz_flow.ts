@@ -19,16 +19,16 @@ export default class Act1MeetQuizFlow {
     sequence.addIntoSequence({
       onStart() {
         that.addDialogue(new Dialogue(
-          "荆棘",
+          Player.instance.character,
           new Text("舅舅，我来看你了，近来可好?")
         ));
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("我这边还好，那么多年不见，你已经这么高了."),
           false
         ));
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("这些年你都做了什么呢？"),
           false
         ))
@@ -90,7 +90,7 @@ export default class Act1MeetQuizFlow {
     sequence.addIntoSequence({
       onStart() {
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("挺好的，你未来想做什么吗？"),
           false
         ));
@@ -138,22 +138,22 @@ export default class Act1MeetQuizFlow {
           return;
         }
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("我以前很想练的一身好武艺，行侠仗义，建功立业，却只能放歌闹市之中，终不得志。"),
           false
         ));
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("幸得田光先生，我得以见重于太子。"),
           false
         ));
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("然而之后各种事情的发生，我也开始有点迷糊了"),
           false
         ));
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("先不聊这了"),
           false
         ));
@@ -174,7 +174,7 @@ export default class Act1MeetQuizFlow {
     sequence.addIntoSequence({
       onStart() {
         that.addDialogue(new Dialogue(
-          "荆轲",
+          Actors.instance.jinke.character,
           new Text("我们进城把."),
           false
         ));
