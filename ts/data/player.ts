@@ -35,15 +35,6 @@ export class Player extends BindableAndSerializable {
     this.character.specials.push(Specials.getInstance().kouruoxuanhe);
     this.quests = [];
     this.prossessions = [];
-    let p1 = new Prossession();
-    p1.name = "六味补气丹";
-    p1.count = 1;
-    p1.functional_text = "治疗肾虚，你懂的";
-    let p2 = new Prossession();
-    p2.name = "大力金刚丸";
-    p1.count = 999;
-    p1.functional_text = "听说吃了会很大力";
-    this.prossessions.push(p1, p2);
   }
 
   static getInstance():Player {
@@ -75,8 +66,14 @@ export class Player extends BindableAndSerializable {
       this.quests[i].toParcel(p);
     }
 
+    p.writeInt(this.prossessions.length);
+    for (let i = 0; i < this.prossessions.length; i++) {
+      this.prossessions[i].toParcel(p);
+    }
+
     // TODO support Map.
   }
+
   fromParcel(p: Parcel) {
     this.version = p.readInt();
     this.money = p.readInt();
@@ -89,6 +86,13 @@ export class Player extends BindableAndSerializable {
       let quest = new Quest();
       quest.fromParcel(p);
       this.quests.push(quest);
+    }
+
+    let prossessionSize = p.readInt();
+    for (let i = 0; i < prossessionSize; i++) {
+      let prossession = new Prossession();
+      prossession.fromParcel(p);
+      this.prossessions.push(prossession);
     }
 
     // TODO support Map.

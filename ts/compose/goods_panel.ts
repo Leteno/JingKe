@@ -4,6 +4,7 @@ import { Prossession } from "../data/prossession";
 import Assertion from "../misc/assertion";
 import { Clone } from "../misc/clone";
 import { Align, LayoutType } from "../misc/layout";
+import DBManager from "../storage/db_manager";
 import ScrollViewWithButton from "../widgets/compose/scrollview_with_button";
 import ImageView from "../widgets/imageview";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
@@ -126,6 +127,7 @@ class DescriptionView extends LinearLayout {
       let prossession = Clone.clone(this.purchaseModel.original) as Prossession;
       prossession.count = this.purchaseModel.count;
       Player.getInstance().prossessions.push(prossession);
+      DBManager.getInstance().save();
       this.purchaseModel.original.count -= this.purchaseModel.count;
       this.purchaseModel.count = 1;
       this.purchaseModel.dirty = true;
