@@ -56,7 +56,7 @@ export class UserGoodsView extends Panel {
     for (let i = 0; i < model.items.length; i++) {
       let goods = model.items[i];
       let tv = new TextView(
-        new Text(goods.name));
+        new Text(goods.info.name));
       tv.border = new Border();
       tv.border.color = "black";
       tv.textColor = "black";
@@ -74,9 +74,9 @@ export class UserGoodsView extends Panel {
     } else {
       let item = model.items[model.selectIndex];
       view.descriptionView.setText(new Text(
-        "名字: " + item.name + "\n"
+        "名字: " + item.info.name + "\n"
         + "数目: " + item.count + "\n"
-        + "功效: " + item.functional_text
+        + "功效: " + item.info.functional_text
       ));
     }
     view.prossessionListView.setIsDirty(true);

@@ -1,6 +1,6 @@
 import { GoodsPanelModel } from "../../../compose/goods_panel";
 import { Place } from "../../../compose/place_and_people_view";
-import { Goods } from "../../../data/goods";
+import { Goods, GoodsInfo } from "../../../data/goods";
 import SimpleScene from "../../../scene/simple_scene";
 import { Actors } from "../actors";
 
@@ -28,18 +28,20 @@ export default class YanCity {
     mainPlace.places.push(palace, market);
     Actors.getInstance().businessman.onclickListener = () => {
       let model = new GoodsPanelModel();
-      let p1 = new Goods();
-      p1.name = "六味补气丸";
-      p1.cost = 10;
-      p1.count = 10;
-      p1.functional_text = "益气活血，祛痰化瘀";
-      p1.image = "res/created/medition.png";
-      let p2 = new Goods();
-      p2.name = "秦国军旗";
-      p2.cost = 100;
+      let info1 = new GoodsInfo();
+      info1.name = "六味补气丸";
+      info1.cost = 10;
+      info1.functional_text = "益气活血，祛痰化瘀";
+      info1.image = "res/created/medition.png";
+      let p1 = new Goods(info1);
+      p1.count = 100;
+      let info2 = new GoodsInfo();
+      info2.name = "秦国军旗";
+      info2.cost = 100;
+      info2.functional_text = "赳赳大秦，一往无前";
+      info2.image = "res/created/flag_of_qin.png";
+      let p2 = new Goods(info2);
       p2.count = 1;
-      p2.functional_text = "赳赳大秦，一往无前";
-      p2.image = "res/created/flag_of_qin.png";
       model.goodsList.push(p1, p2);
       that.showGoodsPanel(model);
     }

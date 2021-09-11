@@ -142,10 +142,10 @@ class DescriptionView extends LinearLayout {
   update(goods: Goods) {
     this.title.bindData(goods, ((v: DescriptionView, d: Goods) => {
       this.title.setText(new Text(
-        d.name
+        d.info.name
       ));
       this.content.setText(new Text(
-        d.functional_text
+        d.info.functional_text
       ));
       this.left.setText(new Text(
         "剩余: " + d.count
@@ -244,13 +244,13 @@ export default class GoodsPanel extends LinearLayout {
       row.border = new Border();
       row.border.color = "#d3d3d3";
       row.layoutParam.xLayout = LayoutType.MATCH_PARENT;
-      let tv = new TextView(new Text(goods.name));
+      let tv = new TextView(new Text(goods.info.name));
       tv.textColor = "#000000";
       tv.textSize = 16;
       tv.layoutParam.ycfg = Align.CENTER;
       tv.layoutParam.weight = 1;
       row.addView(tv);
-      let img = new ImageView(goods.image);
+      let img = new ImageView(goods.info.image);
       img.forceWidth = img.forceHeight = 30;
       img.margin.left = 20;
       row.addView(img);
