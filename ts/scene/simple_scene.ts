@@ -132,7 +132,7 @@ export default abstract class SimpleScene implements Scene {
   }
 
   hideDialogue() {
-    this.dialogueView.visible = false;
+    this.dialogueView.hide();
   }
 
   showOptionView(
