@@ -19,6 +19,7 @@ export class Goods extends BindableAndSerializable {
   fromParcel(p: parcel) {
     this.count = p.readInt();
     this.info.fromParcel(p);
+    this.cost = this.info.cost;
   }
 }
 
