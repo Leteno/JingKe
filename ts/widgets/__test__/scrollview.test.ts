@@ -1,4 +1,4 @@
-import { ClickEvent, PressEvent } from "../../misc/event";
+import { ClickEvent, DragEvent, PressEvent } from "../../misc/event";
 import { Specify } from "../../misc/layout";
 import LinearLayout from "../linear_layout";
 import {ScrollView} from "../scrollview"
@@ -155,4 +155,25 @@ test("press", () => {
     .toBe(1)
   expect((v3.onpressInternal as jest.Mock).mock.calls[0][0])
     .toEqual({"x": 71, "y": 250})
+})
+
+test("drag", () => {
+  let scrollView = new ScrollView();
+  scrollView.width = 100;
+  scrollView.height = 100;
+  scrollView.childrenMaxWidth = 200;
+  scrollView.childrenMaxHeight = 400;
+
+  scrollView.ondrag(new DragEvent(
+    20, 40, 10, -10, 0));
+  expect(scrollView.offsetY).toBe(-10);
+
+  scrollView.ondrag(new DragEvent(
+    30, 40, 10, -11, 0));
+  expect(scrollView.offsetY).toBe(-11);
+
+  // startTime is changed.
+  scrollView.ondrag(new DragEvent(
+    30, 40, 10, -10, 1));
+  expect(scrollView.offsetY).toBe(-21);
 })
