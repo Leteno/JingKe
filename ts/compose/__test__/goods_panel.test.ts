@@ -1,7 +1,7 @@
 
 import { Player } from "../../data/player";
 import { Goods } from "../../data/goods";
-import { ClickEvent, PressEvent } from "../../misc/event";
+import { ClickEvent, DragEvent, PressEvent } from "../../misc/event";
 import { Specify } from "../../misc/layout";
 import { GoodsAffect, GoodsAffectFactory, Goods_Type } from "../../special_affect/goods_affect";
 import Panel from "../../widgets/panel";
@@ -85,22 +85,17 @@ test("scroll", () => {
   goodsPanel.measure(defaultCtx, 400, 400, Specify.NONE);
   goodsPanel.layout(400, 400);
 
-  expect(goodsPanel.scrollView.scrollView.offsetY)
+  expect(goodsPanel.scrollView.offsetY)
     .toBe(0);
 
-  goodsPanel.scrollView.goodsUpBtn.onclickInternal(new ClickEvent(0, 0));
-  expect(goodsPanel.scrollView.scrollView.offsetY)
+  goodsPanel.scrollView.ondragInternal(
+    new DragEvent(0, 0, 10, -10, 0));
+  expect(goodsPanel.scrollView.offsetY)
     .toBe(-10);
-  goodsPanel.scrollView.goodsUpBtn.onpressInternal(new PressEvent(0, 0));
-  expect(goodsPanel.scrollView.scrollView.offsetY)
+  goodsPanel.scrollView.ondragInternal(
+    new DragEvent(0, 0, 10, -20, 0));
+  expect(goodsPanel.scrollView.offsetY)
     .toBe(-20);
-
-  goodsPanel.scrollView.goodsDownBtn.onclickInternal(new ClickEvent(0, 0));
-  expect(goodsPanel.scrollView.scrollView.offsetY)
-    .toBe(-10);
-  goodsPanel.scrollView.goodsDownBtn.onpressInternal(new PressEvent(0, 0));
-  expect(goodsPanel.scrollView.scrollView.offsetY)
-    .toBe(0);
 })
 
 test("goods affect", () => {

@@ -5,7 +5,6 @@ import Assertion from "../misc/assertion";
 import { Clone } from "../misc/clone";
 import { Align, LayoutType } from "../misc/layout";
 import DBManager from "../storage/db_manager";
-import ScrollViewWithButton from "../widgets/compose/scrollview_with_button";
 import ImageView from "../widgets/imageview";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
 import Panel from "../widgets/panel";
@@ -196,7 +195,7 @@ class DescriptionView extends LinearLayout {
 }
 
 export default class GoodsPanel extends LinearLayout {
-  scrollView: ScrollViewWithButton;
+  scrollView: ScrollView;
   goodsList: LinearLayout;
   description: DescriptionView;
   constructor() {
@@ -210,13 +209,13 @@ export default class GoodsPanel extends LinearLayout {
       this.padding.top = this.padding.bottom = 20;
     this.bgColor = "#e6e6e6";
 
-    let scrollView = new ScrollViewWithButton(Align.START);
+    let scrollView = new ScrollView();
     scrollView.layoutParam.yLayout = LayoutType.MATCH_PARENT;
     scrollView.layoutParam.weight = 1;
     this.scrollView = scrollView;
     this.goodsList = new LinearLayout(
       Orientation.VERTICAL);
-    this.scrollView.setContentView(this.goodsList);
+    this.scrollView.addView(this.goodsList);
     this.addView(this.scrollView);
 
     this.description = new DescriptionView();

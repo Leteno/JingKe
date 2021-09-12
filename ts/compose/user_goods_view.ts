@@ -2,9 +2,9 @@ import { BindableData } from "../data/bindable_data";
 import { Goods } from "../data/goods";
 import Colors from "../game/data/styles/colors";
 import { Align, LayoutType } from "../misc/layout";
-import ScrollViewWithButton from "../widgets/compose/scrollview_with_button";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
 import Panel from "../widgets/panel"
+import { ScrollView } from "../widgets/scrollview";
 import { Border } from "../widgets/sprite";
 import TextView, { Text } from "../widgets/textview";
 
@@ -23,7 +23,7 @@ export class UserGoodsView extends Panel {
 
   readonly model: GoodsModel;
 
-  private scrollViewWithButton: ScrollViewWithButton;
+  private scrollView: ScrollView;
   private prossessionListView: LinearLayout;
   private descriptionView: TextView;
   private moneyView: TextView;
@@ -37,11 +37,11 @@ export class UserGoodsView extends Panel {
     this.prossessionListView.forceWidth = 200;
     this.prossessionListView.orientation =
       Orientation.VERTICAL;
-    this.scrollViewWithButton = new ScrollViewWithButton();
-    this.scrollViewWithButton.layoutParam.xcfg = Align.END;
-    this.scrollViewWithButton.layoutParam.yLayout = LayoutType.MATCH_PARENT;
-    this.scrollViewWithButton.setContentView(this.prossessionListView);
-    this.addView(this.scrollViewWithButton);
+    this.scrollView = new ScrollView();
+    this.scrollView.layoutParam.xcfg = Align.END;
+    this.scrollView.layoutParam.yLayout = LayoutType.MATCH_PARENT;
+    this.scrollView.addView(this.prossessionListView);
+    this.addView(this.scrollView);
 
     this.descriptionView = new TextView();
     this.descriptionView.margin.right =
@@ -91,7 +91,7 @@ export class UserGoodsView extends Panel {
     }
     view.moneyView.setText(new Text(`剩余金钱 ${model.money}`))
     view.prossessionListView.setIsDirty(true);
-    view.scrollViewWithButton.setIsDirty(true);
+    view.scrollView.setIsDirty(true);
     view.descriptionView.setIsDirty(true);
     view.setIsDirty(true);
   }
