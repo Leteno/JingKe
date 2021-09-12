@@ -17,6 +17,8 @@ import Act1MeetQuizFlow from "./data/sequences/act1/act1_meet_quiz_flow";
 import Act1EnterTheCityFlow from "./data/sequences/act1/act1_enter_the_city_flow";
 import YanCity from "./data/places/yan_city";
 import Act1TaizifuGreeting from "./data/sequences/act1/act1_taizifu_greeting";
+import Act1BuyYanWine from "./data/sequences/act1/act1_buy_yan_wine_from_bm";
+import Act1BuyYanWineFromBm from "./data/sequences/act1/act1_buy_yan_wine_from_bm";
 
 export default class Act1 extends SimpleScene {
 
@@ -141,7 +143,31 @@ export default class Act1 extends SimpleScene {
         let sequence = Act1TaizifuGreeting.get(that);
         sequence.addIntoSequence({
           onStart() {
+            YanCity.palace.showNoteSign = false;
             GameState.instance.recordState("enter_taizi_house");
+            DBManager.getInstance().save();
+            that.wineBussinessmanFlow();
+          }
+        })
+        sequence.startOne();
+      }
+    } else {
+      this.wineBussinessmanFlow();
+    }
+  }
+
+  wineBussinessmanFlow() {
+    let that = this;
+    if (!GameState.instance.hasEnterState("yan_wine_bussinessman")) {
+      YanCity.market.showNoteSign = true;
+      YanCity.market.dirty = true;
+      YanCity.market.onclickListener = () => {
+        let sequence = Act1BuyYanWineFromBm.get(that);
+        sequence.addIntoSequence({
+          onStart() {
+            that.hideDialogue();
+            YanCity.palace.showNoteSign = false;
+            GameState.instance.recordState("yan_wine_bussinessman");
             DBManager.getInstance().save();
           }
         })

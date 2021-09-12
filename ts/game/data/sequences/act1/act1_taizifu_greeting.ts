@@ -111,7 +111,7 @@ export default class Act1TaizifuGreeting {
         scene.addDialogue(new Dialogue(
           Actors.instance.jinke.character,
           new Text("对了，我酒壶没酒了，你帮我买一下 \f燕浊酒\r")
-            .setDefaultEffect(TextEffects.processionEffect),
+            .setDefaultEffect(TextEffects.goodsEffect),
           false
         ));
         scene.setOnDialogueFinish(() => {
