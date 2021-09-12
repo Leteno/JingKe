@@ -20,7 +20,7 @@ export default abstract class BussinessMan implements Serializable {
   }
   fromParcel(p: parcel) {
     let length = p.readInt();
-    this.goodsList = [];
+    this.goodsList.splice(0);
     for (let i = 0; i < length; i++) {
       let goods = new Goods();
       goods.fromParcel(p);

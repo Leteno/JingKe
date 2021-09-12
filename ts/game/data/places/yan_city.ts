@@ -3,6 +3,7 @@ import { Place } from "../../../compose/place_and_people_view";
 import { Goods, GoodsInfo } from "../../../data/goods";
 import SimpleScene from "../../../scene/simple_scene";
 import { Actors } from "../actors";
+import { YanBm } from "../bussinessman_data/yan_bm";
 import SimpleGoodsInfos from "../goods/simple_goods_infos";
 
 export default class YanCity {
@@ -29,9 +30,7 @@ export default class YanCity {
     mainPlace.places.push(palace, market);
     Actors.getInstance().businessman.onclickListener = () => {
       let model = new GoodsPanelModel();
-      let p1 = new Goods(SimpleGoodsInfos.LiuWeiWan, 100);
-      let p2 = new Goods(SimpleGoodsInfos.QinFlag, 1);
-      model.goodsList.push(p1, p2);
+      model.goodsList = YanBm.instance.goodsList;
       that.showGoodsPanel(model);
     }
     this.city = mainPlace;

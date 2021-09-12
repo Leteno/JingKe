@@ -20,6 +20,7 @@ import DebugView from "./debug/debug_view";
 import { Specify } from "./misc/layout";
 import SimpleGoodsInfos from "./game/data/goods/simple_goods_infos";
 import QuestGoodsInfos from "./game/data/goods/quest_goods_infos";
+import { YanBm } from "./game/data/bussinessman_data/yan_bm";
 
 export default class Main {
   aniId: number;
@@ -42,8 +43,11 @@ export default class Main {
 
     SceneManager.init(this.ctx);
     TextEffects.init();
+
+    // Goods init
     SimpleGoodsInfos.init();
     QuestGoodsInfos.init();
+    YanBm.init();
 
     let welcomeScene = new WelcomeScene(canvas);
     SceneManager.getInstance().push("welcome", welcomeScene);
@@ -83,14 +87,23 @@ export default class Main {
       if (!playerP.isEmpty()) {
         Player.instance.fromParcel(playerP);
       }
+      let yanBmP = db.getData("YanBm");
+      if (!yanBmP.isEmpty()) {
+        YanBm.instance.fromParcel(yanBmP);
+      }
     });
     DBManager.getInstance().setSaveFn((db: DBInteface) => {
       let p = new Parcel();
       GameState.instance.toParcel(p);
       db.saveData("game_state", p);
+
       p = new Parcel();
       Player.getInstance().toParcel(p);
       db.saveData("player", p);
+
+      p = new Parcel();
+      YanBm.instance.toParcel(p);
+      db.saveData("YanBm", p);
     });
 
     DebugView.instance.measure(this.ctx, canvas.width, canvas.height, Specify.NONE);
