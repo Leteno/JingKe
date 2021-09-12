@@ -59,22 +59,26 @@ export class DragEvent implements SimpleEvent {
   // To know which view is responsible for it.
   x: number;
   y: number;
+  // To know whether these dragEvent come from one.
+  startTime: number;
   // dragOffset
   dragX: number;
   dragY: number;
 
   constructor(startX: number, startY: number,
-    dragX: number, dragY: number) {
+    dragX: number, dragY: number, startTime: number) {
     this.x = startX;
     this.y = startY;
     this.dragX = dragX;
     this.dragY = dragY;
+    this.startTime = startTime;
   }
 
   static alignChildren(event: DragEvent, view: Sprite): DragEvent {
     let ret = new DragEvent(
       event.x, event.y,
-      event.dragX, event.dragY
+      event.dragX, event.dragY,
+      event.startTime
     );
     ret.x -= view.x + view.padding.left;
     ret.y -= view.y + view.padding.top;

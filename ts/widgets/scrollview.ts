@@ -1,4 +1,4 @@
-import { SimpleEvent } from "../misc/event";
+import { DragEvent, SimpleEvent } from "../misc/event";
 import Panel from "./panel";
 import { MeasureResult } from "./sprite";
 
@@ -8,18 +8,22 @@ export class ScrollView extends Panel {
   offsetX: number;
   offsetY: number;
 
-  scrollOffset: number;
   childrenMaxWidth: number;
   childrenMaxHeight: number;
+
+  dragStartTime: number;
+  offsetYBeforeDrag: number;
 
   constructor() {
     super();
     this.offsetX = 0;
     this.offsetY = 0;
 
-    this.scrollOffset = 10;
     this.childrenMaxWidth = 0;
     this.childrenMaxHeight = 0;
+
+    this.dragStartTime = 0;
+    this.offsetYBeforeDrag = 0;
   }
 
   drawToCanvasInternal(ctx: CanvasRenderingContext2D) {
@@ -84,6 +88,15 @@ export class ScrollView extends Panel {
       }
     }
     this.offsetY = newOffsetY;
+  }
+
+  ondragInternal(event: DragEvent) {
+    if (event.startTime != this.dragStartTime) {
+      this.dragStartTime = event.startTime;
+      this.offsetYBeforeDrag = this.offsetY;
+    }
+    this.offsetY = this.offsetYBeforeDrag + event.dragY;
+    return true;
   }
 
   specialModifyOnEvent(event: SimpleEvent) {

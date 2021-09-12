@@ -117,7 +117,8 @@ export default class EventHandler {
     this.sendDragEvent(
       this.pointDownX,
       this.pointDownY,
-      dragX, dragY);
+      dragX, dragY,
+      this.startTime);
   }
 
   private stopTimeout() {
@@ -147,10 +148,14 @@ export default class EventHandler {
     }
   }
 
-  private sendDragEvent(startX: number, startY: number, dragX: number, dragY: number) {
+  private sendDragEvent(
+    startX: number, startY: number,
+    dragX: number, dragY: number,
+    startTime: number) {
     if (this.ondragHandler) {
       this.ondragHandler(new DragEvent(
-        startX, startY, dragX, dragY
+        startX, startY, dragX, dragY,
+        startTime
       ));
     }
   }
