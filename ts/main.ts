@@ -3,7 +3,7 @@ import WelcomeScene from "./game/welcome-scene";
 import Scene from "./scene/scene";
 import SceneManager from "./scene/scene_manager"
 import {timestamp} from "./misc/time"
-import { ClickEvent, PressEvent } from "./misc/event";
+import { ClickEvent, DragEvent, PressEvent } from "./misc/event";
 import HelloWorldScene from "./game/hello_world_scene";
 import Scene1 from "./game/scene1";
 import SimpleScene from "./scene/simple_scene";
@@ -76,6 +76,10 @@ export default class Main {
     this.eventHandler.bindOnPressHandler((event: PressEvent) => {
       return SceneManager.getInstance().currentScene.onpress(event);
     });
+
+    this.eventHandler.bindOnDragHandler((event: DragEvent) => {
+      return SceneManager.getInstance().currentScene.ondrag(event);
+    })
 
     DBManager.getInstance().setReloadFn((db: DBInteface) => {
       let gameStateP = db.getData("game_state");

@@ -1,4 +1,4 @@
-import { ClickEvent, PressEvent } from "../misc/event";
+import { ClickEvent, DragEvent, PressEvent } from "../misc/event";
 import { Align, LayoutParams, LayoutType, Specify } from "../misc/layout";
 import Animator from "../animator/animator"
 import NumberLinearAnimator from "../animator/number-linear-animator";
@@ -251,5 +251,9 @@ export default class HelloWorldScene implements Scene {
   
   onpress(event: PressEvent) {
     this.mainPanel.onpress(event);
+  }
+
+  ondrag(event: DragEvent) {
+    this.mainPanel.ondrag(event);
   }
 }

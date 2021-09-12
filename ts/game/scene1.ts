@@ -1,6 +1,6 @@
 import { Character } from "../data/character";
 import Dialogue from "../data/dialogue";
-import { ClickEvent, PressEvent } from "../misc/event";
+import { ClickEvent, DragEvent, PressEvent } from "../misc/event";
 import { Specify } from "../misc/layout";
 import Scene from "../scene/scene";
 import DialogueView from "../widgets/dialogue_view";
@@ -72,5 +72,9 @@ export default class Scene1 implements Scene {
 
   onpress(event: PressEvent) {
     this.mainPanel.onpress(event);
+  }
+
+  ondrag(event: DragEvent) {
+    this.mainPanel.ondrag(event);
   }
 }

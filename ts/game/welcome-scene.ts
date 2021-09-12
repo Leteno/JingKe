@@ -4,7 +4,7 @@ import Scene from "../scene/scene"
 import {Align, LayoutParams, LayoutType, Specify} from "../misc/layout"
 import Panel from "../widgets/panel";
 import TextView, { Text } from "../widgets/textview";
-import { ClickEvent, PressEvent } from "../misc/event";
+import { ClickEvent, DragEvent, PressEvent } from "../misc/event";
 import SceneManager from "../scene/scene_manager";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
 import { Border } from "../widgets/sprite";
@@ -105,6 +105,9 @@ export default class WelcomeScene implements Scene {
   }
   onpress(event: PressEvent) {
     this.mainPanel.onpress(event);
+  }
+  ondrag(event: DragEvent) {
+    this.mainPanel.ondrag(event);
   }
 }
 

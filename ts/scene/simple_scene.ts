@@ -6,7 +6,7 @@ import UserPanel from "../compose/UserPanel";
 import { Character } from "../data/character";
 import Dialogue from "../data/dialogue";
 import { Player } from "../data/player";
-import { ClickEvent, PressEvent } from "../misc/event";
+import { ClickEvent, DragEvent, PressEvent } from "../misc/event";
 import { Align, LayoutParams, LayoutType, Specify } from "../misc/layout";
 import DialogueView from "../widgets/dialogue_view";
 import OptionView, { Option, OptionCallback } from "../widgets/option_view";
@@ -122,6 +122,14 @@ export default abstract class SimpleScene implements Scene {
   onpress(event: PressEvent) {
     for (let i = this.components.length - 1; i >= 0; i--) {
       if (this.components[i].onpress(event)) {
+        return;
+      }
+    }
+  }
+
+  ondrag(event: DragEvent) {
+    for (let i = this.components.length - 1; i >= 0; i--) {
+      if (this.components[i].ondrag(event)) {
         return;
       }
     }
