@@ -1,5 +1,6 @@
 import { BindableData } from "../data/bindable_data";
 import { Goods } from "../data/goods";
+import Colors from "../game/data/styles/colors";
 import { Align, LayoutType } from "../misc/layout";
 import ScrollViewWithButton from "../widgets/compose/scrollview_with_button";
 import LinearLayout, { Orientation } from "../widgets/linear_layout";
@@ -10,6 +11,7 @@ import TextView, { Text } from "../widgets/textview";
 class GoodsModel extends BindableData {
   items: Array<Goods>;
   selectIndex: number;
+  money: number;
   constructor() {
     super();
     this.items = new Array<Goods>();
@@ -24,6 +26,7 @@ export class UserGoodsView extends Panel {
   private scrollViewWithButton: ScrollViewWithButton;
   private prossessionListView: LinearLayout;
   private descriptionView: TextView;
+  private moneyView: TextView;
 
   constructor() {
     super();
@@ -46,6 +49,13 @@ export class UserGoodsView extends Panel {
     this.descriptionView.textColor = "black";
     this.descriptionView.textSize = 12;
     this.addView(this.descriptionView);
+
+    this.moneyView = new TextView();
+    this.moneyView.margin.right = this.descriptionView.margin.right;
+    this.moneyView.layoutParam.ycfg = Align.END;
+    this.moneyView.textColor = Colors.black;
+    this.moneyView.textSize = 12;
+    this.addView(this.moneyView);
 
     this.bindData(this.model, UserGoodsView.updateGoodsListView);
   }
@@ -79,6 +89,7 @@ export class UserGoodsView extends Panel {
         + "功效: " + item.info.functional_text
       ));
     }
+    view.moneyView.setText(new Text(`剩余金钱 ${model.money}`))
     view.prossessionListView.setIsDirty(true);
     view.scrollViewWithButton.setIsDirty(true);
     view.descriptionView.setIsDirty(true);

@@ -40,6 +40,7 @@ export default class UserPanel extends PageList {
   updateCharacter(character: Character) {
     this.descriptionView.setCharacter(character);
     this.prossessionPage.model.items = Player.instance.possessions;
+    this.prossessionPage.model.money = Player.instance.money;
     this.prossessionPage.model.dirty = true;
     this.questPanel.update(Player.instance.quests);
   }
