@@ -9,23 +9,23 @@ test("scrollBy", () => {
   let scrollView = new ScrollView();
   scrollView.width = 200;
   scrollView.height = 400;
-  scrollView.childrenMaxWidth = 100;
-  scrollView.childrenMaxHeight = 100;
+  scrollView.childrenMaxWidth = 300;
+  scrollView.childrenMaxHeight = 600;
 
   expect(scrollView.offsetX).toBe(0);
   expect(scrollView.offsetY).toBe(0);
 
   scrollView.scrollBy(10, 10);
-  expect(scrollView.offsetX).toBe(10);
-  expect(scrollView.offsetY).toBe(10);
-
-  scrollView.scrollBy(-10, -40);
   expect(scrollView.offsetX).toBe(0);
   expect(scrollView.offsetY).toBe(0);
 
-  scrollView.scrollBy(200, 200);
-  expect(scrollView.offsetX).toBe(100);
-  expect(scrollView.offsetY).toBe(200);
+  scrollView.scrollBy(-10, -40);
+  expect(scrollView.offsetX).toBe(-10);
+  expect(scrollView.offsetY).toBe(-40);
+
+  scrollView.scrollBy(-200, -200);
+  expect(scrollView.offsetX).toBe(-100);
+  expect(scrollView.offsetY).toBe(-200);
 })
 
 test("scrollBy big parent small children", () => {
@@ -39,17 +39,18 @@ test("scrollBy big parent small children", () => {
   expect(scrollView.offsetX).toBe(0);
   expect(scrollView.offsetY).toBe(0);
 
+  // offset should be 0 all the time.
   scrollView.scrollBy(10, 10);
-  expect(scrollView.offsetX).toBe(10);
-  expect(scrollView.offsetY).toBe(10);
+  expect(scrollView.offsetX).toBe(0);
+  expect(scrollView.offsetY).toBe(0);
 
   scrollView.scrollBy(-10, -40);
   expect(scrollView.offsetX).toBe(0);
   expect(scrollView.offsetY).toBe(0);
 
   scrollView.scrollBy(200, 200);
-  expect(scrollView.offsetX).toBe(100);
-  expect(scrollView.offsetY).toBe(200);
+  expect(scrollView.offsetX).toBe(0);
+  expect(scrollView.offsetY).toBe(0);
 })
 
 test("scrollBy small parent with big child", () => {

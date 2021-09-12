@@ -76,12 +76,7 @@ export class ScrollView extends Panel {
   alignOffset() {
     let newOffsetX = this.offsetX;
     if (this.width > this.childrenMaxWidth) {
-      if (newOffsetX < 0) {
-        newOffsetX = 0;
-      } else {
-        newOffsetX = Math.min(newOffsetX,
-          this.width - this.childrenMaxWidth);
-      }
+      newOffsetX = 0;
     } else {
       if (newOffsetX < 0) {
         newOffsetX = Math.max(newOffsetX,
@@ -94,12 +89,7 @@ export class ScrollView extends Panel {
 
     let newOffsetY = this.offsetY;
     if (this.height > this.childrenMaxHeight) {
-      if (newOffsetY < 0) {
-        newOffsetY = 0;
-      } else {
-        newOffsetY = Math.min(newOffsetY,
-          this.height - this.childrenMaxHeight);
-      }
+      newOffsetY = 0;
     } else {
       if (newOffsetY < 0) {
         newOffsetY = Math.max(newOffsetY,
