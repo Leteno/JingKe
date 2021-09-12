@@ -53,7 +53,28 @@ export class ScrollView extends Panel {
   }
     
   scrollBy(x: number, y: number) {
-    let newOffsetX = x + this.offsetX;
+    this.offsetX += x;
+    this.offsetY += y;
+    this.alignOffset();
+  }
+
+  ondragInternal(event: DragEvent) {
+    if (event.startTime != this.dragStartTime) {
+      this.dragStartTime = event.startTime;
+      this.offsetYBeforeDrag = this.offsetY;
+    }
+    this.offsetY = this.offsetYBeforeDrag + event.dragY;
+    this.alignOffset();
+    return true;
+  }
+
+  specialModifyOnEvent(event: SimpleEvent) {
+    event.x -= this.offsetX;
+    event.y -= this.offsetY;
+  }
+
+  alignOffset() {
+    let newOffsetX = this.offsetX;
     if (this.width > this.childrenMaxWidth) {
       if (newOffsetX < 0) {
         newOffsetX = 0;
@@ -71,7 +92,7 @@ export class ScrollView extends Panel {
     }
     this.offsetX = newOffsetX;
 
-    let newOffsetY = y + this.offsetY;
+    let newOffsetY = this.offsetY;
     if (this.height > this.childrenMaxHeight) {
       if (newOffsetY < 0) {
         newOffsetY = 0;
@@ -88,19 +109,5 @@ export class ScrollView extends Panel {
       }
     }
     this.offsetY = newOffsetY;
-  }
-
-  ondragInternal(event: DragEvent) {
-    if (event.startTime != this.dragStartTime) {
-      this.dragStartTime = event.startTime;
-      this.offsetYBeforeDrag = this.offsetY;
-    }
-    this.offsetY = this.offsetYBeforeDrag + event.dragY;
-    return true;
-  }
-
-  specialModifyOnEvent(event: SimpleEvent) {
-    event.x -= this.offsetX;
-    event.y -= this.offsetY;
   }
 }
