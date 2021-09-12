@@ -3,6 +3,14 @@ import { waitForMs } from "../concurency";
 import {DragEvent} from "../event"
 import EventHandler from "../event_handler"
 
+function expectEqualExceptForStartTime(
+  wanted: DragEvent, actual: DragEvent) {
+  expect(wanted.dragX).toBe(actual.dragX);
+  expect(wanted.dragY).toBe(actual.dragY);
+  expect(wanted.x).toBe(actual.x);
+  expect(wanted.y).toBe(actual.y);
+}
+
 test("click", () => {
   let eventHandler = new EventHandler();
   let onClick = jest.fn();
@@ -92,15 +100,17 @@ test("drag", () => {
   eventHandler.onpointerdown(30, 30);
   eventHandler.onpointermove(50, 50);
   expect(onDrag.mock.calls.length).toBe(1);
-  expect(onDrag.mock.calls[0][0]).toEqual(
-    new DragEvent(30, 30, 20, 20)
-  );
+  expectEqualExceptForStartTime(
+    onDrag.mock.calls[0][0] as DragEvent,
+    new DragEvent(30, 30, 20, 20, 0)
+  )
 
   eventHandler.onpointermove(20, 20);
   expect(onDrag.mock.calls.length).toBe(2);
-  expect(onDrag.mock.calls[1][0]).toEqual(
-    new DragEvent(30, 30, -10, -10)
-  );
+  expectEqualExceptForStartTime(
+    onDrag.mock.calls[1][0] as DragEvent,
+    new DragEvent(30, 30, -10, -10, 0)
+  )
 })
 
 test("drag several", () => {
@@ -115,13 +125,15 @@ test("drag several", () => {
   eventHandler.onpointerdown(60, 60);
   eventHandler.onpointermove(50, 50);
   expect(onDrag.mock.calls.length).toBe(2);
-  expect(onDrag.mock.calls[1][0]).toEqual(
-    new DragEvent(60, 60, -10, -10)
+  expectEqualExceptForStartTime(
+    onDrag.mock.calls[1][0] as DragEvent,
+    new DragEvent(60, 60, -10, -10, 0)
   );
 
   eventHandler.onpointermove(120, 130);
   expect(onDrag.mock.calls.length).toBe(3);
-  expect(onDrag.mock.calls[2][0]).toEqual(
-    new DragEvent(60, 60, 60, 70)
+  expectEqualExceptForStartTime(
+    onDrag.mock.calls[2][0] as DragEvent,
+    new DragEvent(60, 60, 60, 70, 0)
   );
 })

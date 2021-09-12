@@ -13,6 +13,7 @@ export default class TestScene implements Scene {
   }
   onclick(event: ClickEvent) {
   }
+  ondrag(event: ClickEvent) {}
 }
 
 test("ignore", ()=>{})
