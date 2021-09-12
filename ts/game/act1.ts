@@ -19,6 +19,8 @@ import YanCity from "./data/places/yan_city";
 import Act1TaizifuGreeting from "./data/sequences/act1/act1_taizifu_greeting";
 import Act1BuyYanWine from "./data/sequences/act1/act1_buy_yan_wine_from_bm";
 import Act1BuyYanWineFromBm from "./data/sequences/act1/act1_buy_yan_wine_from_bm";
+import Act1BuyYanWineFanwujiFirstFlow from "./data/sequences/act1/act1_buy_yan_wine_fanwuji_first_flow";
+import { Sequence } from "../schedule/sequence";
 
 export default class Act1 extends SimpleScene {
 
@@ -166,9 +168,61 @@ export default class Act1 extends SimpleScene {
         sequence.addIntoSequence({
           onStart() {
             that.hideDialogue();
-            YanCity.palace.showNoteSign = false;
+            YanCity.market.showNoteSign = false;
             GameState.instance.recordState("yan_wine_bussinessman");
             DBManager.getInstance().save();
+            YanCity.market.onclickListener = ()=>{}
+            that.wineFanwujiFirstMeetFlow();
+          }
+        })
+        sequence.startOne();
+      }
+    } else {
+      that.wineFanwujiFirstMeetFlow();
+    }
+  }
+
+  wineFanwujiFirstMeetFlow() {
+    let that = this;
+    if (!GameState.instance.hasEnterState("yan_wine_fanwuji_first")) {
+      Actors.instance.fanwuji.showNoteSign = true;
+      Actors.instance.fanwuji.onclickListener = () => {
+        let sequence = Act1BuyYanWineFanwujiFirstFlow.get(that);
+        sequence.addIntoSequence({
+          onStart() {
+            GameState.instance.recordState("yan_wine_fanwuji_first");
+            DBManager.getInstance().save();
+            Actors.instance.fanwuji.onclickListener = () => {}
+            that.wineFanwujiBattleFlow();
+          }
+        })
+        sequence.startOne();
+      }
+    } else {
+      that.wineFanwujiBattleFlow();
+    }
+  }
+
+  wineFanwujiBattleFlow() {
+    let scene = this;
+    if (!GameState.instance.hasEnterState("yan_wine_fanwuji_battle")) {
+      Actors.instance.fanwuji.showNoteSign = true;
+      Actors.instance.fanwuji.onclickListener = () => {
+        let sequence = new Sequence();
+        sequence.addIntoSequence({
+          onStart() {
+            scene.addDialogue(new Dialogue(
+              Actors.instance.fanwuji.character,
+              new Text("你准备好了吗？")
+            ))
+            scene.setOnDialogueFinish(() => {
+              sequence.next();
+            })
+          }
+        })
+        sequence.addIntoSequence({
+          onStart() {
+            scene.hideDialogue();
           }
         })
         sequence.startOne();
