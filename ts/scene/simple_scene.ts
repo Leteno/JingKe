@@ -1,4 +1,5 @@
 import Animator from "../animator/animator";
+import { BattlePanel } from "../compose/battle_panel";
 import GoodsPanel, { GoodsPanelModel } from "../compose/goods_panel";
 import MessageBox from "../compose/message_box";
 import PlayerDescriptionView from "../compose/player_description_view";
@@ -23,6 +24,7 @@ export default abstract class SimpleScene implements Scene {
   private descriptionView: PlayerDescriptionView;
   private userPanel: UserPanel;
   private goodsPanel: GoodsPanel;
+  private battlePanel: BattlePanel;
   private messageBox: MessageBox;
 
   canvasWidth: number;
@@ -76,6 +78,13 @@ export default abstract class SimpleScene implements Scene {
     this.goodsPanel.forceHeight = canvas.height / 3;
     this.goodsPanel.visible = false;
 
+    this.battlePanel = new BattlePanel();
+    this.battlePanel.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    this.battlePanel.layoutParam.xcfg = Align.CENTER;
+    this.battlePanel.layoutParam.ycfg = Align.CENTER;
+    this.battlePanel.margin.left = this.battlePanel.margin.right = 20;
+    this.battlePanel.visible = false;
+
     this.messageBox = new MessageBox();
     this.messageBox.visible = false;
 
@@ -85,6 +94,7 @@ export default abstract class SimpleScene implements Scene {
       this.descriptionView,
       this.userPanel,
       this.goodsPanel,
+      this.battlePanel,
       this.optionView,
       this.messageBox
     ];
@@ -187,6 +197,10 @@ export default abstract class SimpleScene implements Scene {
   showGoodsPanel(model: GoodsPanelModel) {
     this.goodsPanel.bindModel(model);
     this.goodsPanel.visible = true;
+  }
+
+  showBattlePanel(ch1: Character, ch2: Character, onWin: ()=>void, onFail: ()=>void) {
+    this.battlePanel.show(ch1, ch2, onWin, onFail);
   }
 
   showMessageBox(title: Text, content: Text, fn?: ()=>void) {

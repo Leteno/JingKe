@@ -21,6 +21,7 @@ import Act1BuyYanWine from "./data/sequences/act1/act1_buy_yan_wine_from_bm";
 import Act1BuyYanWineFromBm from "./data/sequences/act1/act1_buy_yan_wine_from_bm";
 import Act1BuyYanWineFanwujiFirstFlow from "./data/sequences/act1/act1_buy_yan_wine_fanwuji_first_flow";
 import { Sequence } from "../schedule/sequence";
+import { Player } from "../data/player";
 
 export default class Act1 extends SimpleScene {
 
@@ -222,7 +223,38 @@ export default class Act1 extends SimpleScene {
         })
         sequence.addIntoSequence({
           onStart() {
-            scene.hideDialogue();
+            scene.showBattlePanel(
+              Player.instance.character,
+              Actors.instance.fanwuji.character,
+              /** onWin */
+              () => {
+                scene.addDialogue(new Dialogue(
+                  Actors.instance.fanwuji.character,
+                  new Text("恭喜你，这壶酒你拿去把"),
+                  false
+                ))
+                scene.addDialogue(new Dialogue(
+                  Player.instance.character,
+                  new Text("多谢先生"),
+                ))
+                scene.setOnDialogueFinish(() => {
+                  scene.hideDialogue();
+                  sequence.next();
+                })
+              },
+              /** onFail */
+              () => {
+                scene.addDialogue(new Dialogue(
+                  Actors.instance.fanwuji.character,
+                  new Text("看来你还得努力啊"),
+                  false
+                ))
+                scene.setOnDialogueFinish(() => {
+                  scene.hideDialogue();
+                  sequence.next();
+                })
+              }
+            )
           }
         })
         sequence.startOne();
