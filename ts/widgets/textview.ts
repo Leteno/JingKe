@@ -181,7 +181,6 @@ export default class TextView extends SimpleView {
         x = x + currentWidth;
 
         patStart = -1;
-        currentWidth = 0;
         start = i + 1;
         continue;
       } else if (ch == '\n') {
@@ -295,7 +294,7 @@ export default class TextView extends SimpleView {
       actualHeight += this.lineHeight;
     }
 
-    if (this.drawLines.length > 1) {
+    if (actualHeight > this.lineHeight) {
       actualWidth = maxWidthForCalculation;
     } else {
       actualWidth = currentWidth;

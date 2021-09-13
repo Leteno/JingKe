@@ -238,3 +238,10 @@ test("enable text color", () => {
   t.drawToCanvas(defaultCtx);
   expect(defaultCtx.fillStyle).toBe("blue");
 })
+
+test("line with in \f\r", () => {
+  let t = new TextView(new Text("\fvs\r"));
+  t.measure(defaultCtx, 400, 400, Specify.NONE);
+  t.layout(400, 400);
+  expect(t.width).toBe(10);
+})
