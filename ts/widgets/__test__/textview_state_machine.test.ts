@@ -9,6 +9,8 @@ test("normal", () => {
   expect(machine.output()[0]).toEqual(
     new DrawItem(0, 0, 23, 10, "Hello world, 郑", false)
   )
+  expect(machine.maxWidth).toBe(23);
+  expect(machine.maxHeight).toBe(10);
 })
 
 test("two line", () => {
@@ -21,6 +23,8 @@ test("two line", () => {
   expect(machine.output()[1]).toEqual(
     new DrawItem(0, 10, 30, 10, "包拿来", false)
   )
+  expect(machine.maxWidth).toBe(60);
+  expect(machine.maxHeight).toBe(20);
 })
 
 test("two line, first line ends with english words", () => {
@@ -33,6 +37,8 @@ test("two line, first line ends with english words", () => {
     new DrawItem(0, 10, 80, 10, "Morning 啊，吃点", false))
   expect(machine.output()[2]).toEqual(
     new DrawItem(0, 20, 30, 10, "早餐把", false))
+  expect(machine.maxWidth).toBe(80);
+  expect(machine.maxHeight).toBe(30);
 })
 
 test("one line ends with pattern", () => {
@@ -43,6 +49,8 @@ test("one line ends with pattern", () => {
     new DrawItem(0, 0, 50, 10, "刘小姐喜欢", false))
   expect(machine.output()[1]).toEqual(
     new DrawItem(50, 0, 20, 10, "面包", true))
+  expect(machine.maxWidth).toBe(70);
+  expect(machine.maxHeight).toBe(10);
 })
 
 test("one line with pattern inside", () => {
@@ -55,6 +63,8 @@ test("one line with pattern inside", () => {
     new DrawItem(50, 0, 20, 10, "面包", true))
   expect(machine.output()[2]).toEqual(
     new DrawItem(70, 0, 90, 10, "，是这么一回事吗？", false))
+  expect(machine.maxWidth).toBe(160);
+  expect(machine.maxHeight).toBe(10);
 })
 
 test("serveral line with pattern inside", () => {
@@ -71,6 +81,8 @@ test("serveral line with pattern inside", () => {
     new DrawItem(0, 10, 80, 10, "是这么一回事吗？", false))
   expect(machine.output()[4]).toEqual(
     new DrawItem(0, 20, 50, 10, "你知道吗？", false))
+  expect(machine.maxWidth).toBe(80);
+  expect(machine.maxHeight).toBe(30);
 })
 
 test("pattern was cut by lines", () => {
@@ -91,4 +103,6 @@ test("pattern was cut by lines", () => {
     new DrawItem(0, 30, 80, 10, "pattern 现在结束", false))
   expect(machine.output()[6]).toEqual(
     new DrawItem(0, 40, 10, 10, "了", false))
+  expect(machine.maxWidth).toBe(80);
+  expect(machine.maxHeight).toBe(50);
 })

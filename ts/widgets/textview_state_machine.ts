@@ -27,6 +27,8 @@ export class DrawItem {
 }
 
 export default class TextViewStateMachine {
+  maxWidth: number;
+  maxHeight: number;
 
   private result: Array<DrawItem> = []
   output(): Array<DrawItem> {
@@ -141,12 +143,14 @@ export default class TextViewStateMachine {
           if (ch == '\r') {
             // End of pattern
             // Output a DrawItem and back to normal mode.
-            this.outputDrawItem(
-              x, y,
-              currentXOffset - x, lineHeight,
-              text.substr(textStartIndex, i - textStartIndex),
-              true
-            );
+            if (textStartIndex < i) {
+              this.outputDrawItem(
+                x, y,
+                currentXOffset - x, lineHeight,
+                text.substr(textStartIndex, i - textStartIndex),
+                true
+              );
+            }
             state = State.Normal;
             // Ignore current char
             textStartIndex = i + 1;
@@ -164,6 +168,12 @@ export default class TextViewStateMachine {
         currentXOffset - x, lineHeight,
         text.substr(textStartIndex, text.length - textStartIndex)
       );
+    }
+    this.maxHeight = y + lineHeight;
+    if (this.maxHeight > lineHeight) {
+      this.maxWidth = maxWidth;
+    } else {
+      this.maxWidth = currentXOffset;
     }
   }
 
