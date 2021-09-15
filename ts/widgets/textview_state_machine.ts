@@ -41,7 +41,7 @@ export default class TextViewStateMachine {
     englishLetterSize: number) {
 
     let x = 0, y =0;
-    let currentWidth = 0;
+    let currentXOffset = 0;
     let textStartIndex = 0;
 
     let widthWhenletterStart = 0;
@@ -53,60 +53,107 @@ export default class TextViewStateMachine {
       let chCode = text.charCodeAt(i);
       let isChinese = chCode > 512;
       let chSize = isChinese ? chineseLetterSize : englishLetterSize;
+
+      if (ch == '\f') {
+        // pattern is far beyond state ! Importance and code line.
+        // output and new line
+        this.outputDrawItem(
+          x, y,
+          currentXOffset - x, lineHeight,
+          text.substr(textStartIndex, i - textStartIndex)
+        );
+        x = currentXOffset;
+        // ignore \f
+        textStartIndex = i + 1;
+        // move to next state
+        state = State.PatternMode;
+        continue;
+      }
       switch(state) {
         case State.Normal:
-          if (currentWidth + chSize > maxWidth) {
+          if (currentXOffset + chSize > maxWidth) {
             // output and new line
             this.outputDrawItem(
               x, y,
-              currentWidth, lineHeight,
+              currentXOffset - x, lineHeight,
               text.substr(textStartIndex, i - textStartIndex)
             );
             x = 0;
             y += lineHeight;
-            currentWidth = 0;
+            currentXOffset = 0;
             textStartIndex = i;
             // fall down on purpose, share the same new char logic.
           }
           if (!isChinese) {
             state = State.NormalEndswithLetter;
-            widthWhenletterStart = currentWidth;
+            widthWhenletterStart = currentXOffset;
             letterTextStartIndex = i;
           }
-          currentWidth += chSize;
+          currentXOffset += chSize;
           break;
         case State.NormalEndswithLetter:
-          if (currentWidth + chSize > maxWidth) {
+          if (currentXOffset + chSize > maxWidth) {
             if (isChinese || ch == ' ' || ch == ',' || ch == '.' || ch == '，' || ch == '。') {
               // current char could seperate English Letter as a word.
               // current line could treat as normal DrawItem
               this.outputDrawItem(
                 x, y,
-                currentWidth, lineHeight,
+                currentXOffset - x, lineHeight,
                 text.substr(textStartIndex, i - textStartIndex)
               );
               x = 0;
               y += lineHeight;
-              currentWidth = 0;
+              currentXOffset = 0;
               textStartIndex = i;
             } else {
               // We should output DrawItem without letters at the end.
               // These letter should be in next time.
               this.outputDrawItem(
                 x, y,
-                widthWhenletterStart, lineHeight,
+                widthWhenletterStart - x, lineHeight,
                 text.substr(textStartIndex, letterTextStartIndex - textStartIndex)
               );
               x = 0;
               y += lineHeight;
-              currentWidth = currentWidth - widthWhenletterStart;
+              currentXOffset = currentXOffset - widthWhenletterStart;
               textStartIndex = letterTextStartIndex;
             }
           }
           if (isChinese || ch == ' ' || ch == ',' || ch == '.' || ch == '，' || ch == '。') {
             state = State.Normal;
           }
-          currentWidth += chSize;
+          currentXOffset += chSize;
+          break;
+        case State.PatternMode:
+          if (currentXOffset + chSize > maxWidth) {
+            // Output a line and continue to be pattern mode.
+            this.outputDrawItem(
+              x, y,
+              currentXOffset - x, lineHeight,
+              text.substr(textStartIndex, i - textStartIndex),
+              true
+            );
+            x = 0;
+            y += lineHeight;
+            currentXOffset = 0;
+            textStartIndex = i;
+          }
+          if (ch == '\r') {
+            // End of pattern
+            // Output a DrawItem and back to normal mode.
+            this.outputDrawItem(
+              x, y,
+              currentXOffset - x, lineHeight,
+              text.substr(textStartIndex, i - textStartIndex),
+              true
+            );
+            state = State.Normal;
+            // Ignore current char
+            textStartIndex = i + 1;
+            x = currentXOffset;
+            break;
+          }
+          currentXOffset += chSize;
           break;
       }
     }
@@ -114,7 +161,7 @@ export default class TextViewStateMachine {
     if (textStartIndex < text.length) {
       this.outputDrawItem(
         x, y,
-        currentWidth, lineHeight,
+        currentXOffset - x, lineHeight,
         text.substr(textStartIndex, text.length - textStartIndex)
       );
     }
