@@ -5,7 +5,7 @@ import NumberLinearAnimator from "../animator/number-linear-animator";
 import Scene from "../scene/scene";
 import ImageView from "../widgets/imageview";
 import Panel from "../widgets/panel";
-import TextView, { DrawFunc, Text, TextHelper } from "../widgets/textview";
+import TextView, { DrawFunc, Text } from "../widgets/textview";
 import DialogueView from "../widgets/dialogue_view";
 import Dialogue from "../data/dialogue";
 import OptionView, {Option, OptionCallback} from "../widgets/option_view";
