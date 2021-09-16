@@ -12,15 +12,20 @@ export class DrawItem {
   width: number;
   height: number;
   text: string;
+  startIndex: number;
+  endIndex: number;
   isPattern: boolean;
   constructor(
     x: number, y: number,
     width: number, height: number,
+    startIndex: number, endIndex: number,
     text:string, isPattern: boolean=false) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
+    this.startIndex = startIndex;
+    this.endIndex = endIndex;
     this.text = text;
     this.isPattern = isPattern;
   }
@@ -62,6 +67,7 @@ export default class TextViewStateMachine {
         this.outputDrawItem(
           x, y,
           currentXOffset - x, lineHeight,
+          textStartIndex, i - 1,
           text.substr(textStartIndex, i - textStartIndex)
         );
         x = currentXOffset;
@@ -78,6 +84,7 @@ export default class TextViewStateMachine {
             this.outputDrawItem(
               x, y,
               currentXOffset - x, lineHeight,
+              textStartIndex, i - 1,
               text.substr(textStartIndex, i - textStartIndex)
             );
             x = 0;
@@ -101,6 +108,7 @@ export default class TextViewStateMachine {
               this.outputDrawItem(
                 x, y,
                 currentXOffset - x, lineHeight,
+                textStartIndex, i - 1,
                 text.substr(textStartIndex, i - textStartIndex)
               );
               x = 0;
@@ -113,6 +121,7 @@ export default class TextViewStateMachine {
               this.outputDrawItem(
                 x, y,
                 widthWhenletterStart - x, lineHeight,
+                textStartIndex, letterTextStartIndex - 1,
                 text.substr(textStartIndex, letterTextStartIndex - textStartIndex)
               );
               x = 0;
@@ -132,6 +141,7 @@ export default class TextViewStateMachine {
             this.outputDrawItem(
               x, y,
               currentXOffset - x, lineHeight,
+              textStartIndex, i - 1,
               text.substr(textStartIndex, i - textStartIndex),
               true
             );
@@ -147,6 +157,7 @@ export default class TextViewStateMachine {
               this.outputDrawItem(
                 x, y,
                 currentXOffset - x, lineHeight,
+                textStartIndex, i - 1,
                 text.substr(textStartIndex, i - textStartIndex),
                 true
               );
@@ -166,6 +177,7 @@ export default class TextViewStateMachine {
       this.outputDrawItem(
         x, y,
         currentXOffset - x, lineHeight,
+        textStartIndex, text.length - 1,
         text.substr(textStartIndex, text.length - textStartIndex)
       );
     }
@@ -180,8 +192,13 @@ export default class TextViewStateMachine {
   private outputDrawItem(
     x: number, y: number,
     width: number, height: number,
+    startIndex: number, endIndex: number,
     text:string, isPattern: boolean=false) {
-    let ret = new DrawItem(x, y, width, height, text, isPattern);
+    let ret = new DrawItem(
+      x, y,
+      width, height,
+      startIndex, endIndex,
+      text, isPattern);
     this.result.push(ret);
   }
 }
