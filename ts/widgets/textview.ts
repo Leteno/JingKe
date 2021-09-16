@@ -52,6 +52,8 @@ export default class TextView extends SimpleView {
     this.textColor = Colors.white;
     this.disabledTextColor = "#cccccc";
     this.textSize = 24;
+    this.drawItems = [];
+    this.underline = false;
     this.showTextLength = text.content.length;
   }
 

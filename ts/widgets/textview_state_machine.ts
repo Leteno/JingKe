@@ -79,7 +79,7 @@ export default class TextViewStateMachine {
       }
       switch(state) {
         case State.Normal:
-          if (currentXOffset + chSize > maxWidth) {
+          if (currentXOffset + chSize > maxWidth || ch == '\n') {
             // output and new line
             this.outputDrawItem(
               x, y,
@@ -93,6 +93,10 @@ export default class TextViewStateMachine {
             textStartIndex = i;
             // fall down on purpose, share the same new char logic.
           }
+          if (ch == '\n') {
+            textStartIndex = i + 1;
+            continue;
+          }
           if (!isChinese) {
             state = State.NormalEndswithLetter;
             widthWhenletterStart = currentXOffset;
@@ -101,8 +105,8 @@ export default class TextViewStateMachine {
           currentXOffset += chSize;
           break;
         case State.NormalEndswithLetter:
-          if (currentXOffset + chSize > maxWidth) {
-            if (isChinese || ch == ' ' || ch == ',' || ch == '.' || ch == '，' || ch == '。') {
+          if (currentXOffset + chSize > maxWidth || ch == '\n') {
+            if (isChinese || ch == ' ' || ch == ',' || ch == '.' || ch == '，' || ch == '。' || ch == '\n') {
               // current char could seperate English Letter as a word.
               // current line could treat as normal DrawItem
               this.outputDrawItem(
@@ -115,6 +119,9 @@ export default class TextViewStateMachine {
               y += lineHeight;
               currentXOffset = 0;
               textStartIndex = i;
+              if (ch == '\n') {
+                textStartIndex = i + 1;
+              }
             } else {
               // We should output DrawItem without letters at the end.
               // These letter should be in next time.
@@ -130,7 +137,7 @@ export default class TextViewStateMachine {
               textStartIndex = letterTextStartIndex;
             }
           }
-          if (isChinese || ch == ' ' || ch == ',' || ch == '.' || ch == '，' || ch == '。') {
+          if (isChinese || ch == ' ' || ch == ',' || ch == '.' || ch == '，' || ch == '。' || ch == '\n') {
             state = State.Normal;
           }
           currentXOffset += chSize;

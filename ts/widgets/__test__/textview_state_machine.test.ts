@@ -106,3 +106,23 @@ test("pattern was cut by lines", () => {
   expect(machine.maxWidth).toBe(80);
   expect(machine.maxHeight).toBe(50);
 })
+
+test("text with \n", () => {
+  let machine = new TextViewStateMachine();
+  machine.parse("我说话很喜欢换行\n你看\n又换一行\n不是", 10, 1000, 10, 5);
+  expect(machine.output().length).toEqual(4);
+  expect(machine.output()[0]).toEqual(
+    new DrawItem(0, 0, 80, 10, 0, 7, "我说话很喜欢换行", false)
+  )
+  expect(machine.output()[1]).toEqual(
+    new DrawItem(0, 10, 20, 10, 9, 10, "你看", false)
+  )
+  expect(machine.output()[2]).toEqual(
+    new DrawItem(0, 20, 40, 10, 12, 15, "又换一行", false)
+  )
+  expect(machine.output()[3]).toEqual(
+    new DrawItem(0, 30, 20, 10, 17, 18, "不是", false)
+  )
+  expect(machine.maxWidth).toBe(1000);
+  expect(machine.maxHeight).toEqual(40);
+})

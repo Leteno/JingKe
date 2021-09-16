@@ -1,6 +1,7 @@
 import { number, string } from "yargs";
 import { Specify } from "../../misc/layout";
-import TextView, {DrawFunc, Text, TextHelper} from "../textview"
+import TextView, {DrawFunc, Text} from "../textview"
+import { TextHelper } from "../text_helper";
 import { defaultCtx } from "./default_value.test";
 
 test("testCalculate", () => {
@@ -64,8 +65,8 @@ test("english", () => {
 
   expect(mockFillText.mock.calls.length).toBe(3);
   expect(mockFillText.mock.calls[0][0]).toBe("大家好，我系渣渣豪，");
-  expect(mockFillText.mock.calls[1][0]).toBe("是兄弟，就来 ");
-  expect(mockFillText.mock.calls[2][0]).toBe("helloworld 砍我把");
+  expect(mockFillText.mock.calls[1][0]).toBe("是兄弟，就来");
+  expect(mockFillText.mock.calls[2][0]).toBe(" helloworld 砍我把");
 })
 
 test("animation", () => {
@@ -222,9 +223,9 @@ test("Chinese \\n", () => {
   expect(mockFillText.mock.calls[2][0])
     .toBe("数目：999");
   expect(mockFillText.mock.calls[3][0])
-    .toBe("功效: 听说吃了");
+    .toBe("功效: 听说吃");
   expect(mockFillText.mock.calls[4][0])
-    .toBe("会很大力");
+    .toBe("了会很大力");
 })
 
 test("enable text color", () => {
