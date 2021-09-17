@@ -120,6 +120,7 @@ class GameSelectPopup extends LinearLayout {
 
     this.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.margin.left = this.margin.right = 40;
+    this.setPadding(20);
     this.layoutParam.xcfg = Align.CENTER;
     this.layoutParam.ycfg = Align.CENTER;
     this.bgColor = "#f6f6f6";

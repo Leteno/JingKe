@@ -225,6 +225,12 @@ export default abstract class SimpleView extends Sprite {
     this.layoutCache.setIsDirty(dirty);  
   }
 
+  setPadding(padding: number) {
+    this.padding.left = this.padding.right
+      = this.padding.top = this.padding.bottom
+      = padding;
+  }
+
   isReady() {
     return this.isMeasured && this.isLayouted;
   }
