@@ -149,6 +149,7 @@ export default class Act1 extends SimpleScene {
             YanCity.palace.showNoteSign = false;
             GameState.instance.recordState("enter_taizi_house");
             DBManager.getInstance().save();
+            YanCity.palace.onclickListener = ()=>{}
             that.wineBussinessmanFlow();
           }
         })
@@ -239,6 +240,9 @@ export default class Act1 extends SimpleScene {
                 ))
                 scene.setOnDialogueFinish(() => {
                   scene.hideDialogue();
+                  Actors.instance.fanwuji.showNoteSign = false;
+                  Actors.instance.fanwuji.dirty = true;
+                  Actors.instance.fanwuji.onclickListener = () => {}
                   sequence.next();
                 })
               },
