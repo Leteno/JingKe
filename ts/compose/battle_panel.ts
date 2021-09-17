@@ -13,6 +13,7 @@ export class BattlePanel extends LinearLayout {
   ch2: Character;
   onWin: () => void;
   onFail: () => void;
+  onCancel: () => void;
 
   brief1: BattleBriefView;
   brief2: BattleBriefView;
@@ -48,16 +49,28 @@ export class BattlePanel extends LinearLayout {
     }).bind(this);
     this.addView(button);
 
+    let cancelBtn = new TextView(new Text("取消"));
+    cancelBtn.margin.top = 20;
+    cancelBtn.layoutParam.xcfg = Align.END;
+    cancelBtn.textColor = Colors.black;
+    cancelBtn.onclickInternal = (() => {
+      this.visible = false;
+      if (this.onCancel) this.onCancel();
+      return true;
+    }).bind(this);
+    this.addView(cancelBtn);
+
     this.visible = false;
   }
 
-  show(ch1: Character, ch2: Character, onWin: ()=>void, onFail: ()=>void) {
+  show(ch1: Character, ch2: Character, onWin: ()=>void, onFail: ()=>void, onCancel: ()=>void) {
     this.visible = true;
 
     this.ch1 = ch1;
     this.ch2 = ch2;
     this.onWin = onWin;
     this.onFail = onFail;
+    this.onCancel = onCancel;
     this.brief1.update(ch1);
     this.brief2.update(ch2);
 
@@ -66,9 +79,16 @@ export class BattlePanel extends LinearLayout {
 
   private startBattle() {
     // TODO
-    if (this.onWin) {
+    let win = this.getAttack(this.ch1) > this.getAttack(this.ch2);
+    if (win && this.onWin) {
       this.onWin();
+    } else if (!win && this.onFail) {
+      this.onFail();
     }
+  }
+
+  private getAttack(ch: Character) {
+    return ch.abilities[ABILITY.ATTACK];
   }
 }
 

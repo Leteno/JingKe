@@ -199,8 +199,8 @@ export default abstract class SimpleScene implements Scene {
     this.goodsPanel.visible = true;
   }
 
-  showBattlePanel(ch1: Character, ch2: Character, onWin: ()=>void, onFail: ()=>void) {
-    this.battlePanel.show(ch1, ch2, onWin, onFail);
+  showBattlePanel(ch1: Character, ch2: Character, onWin: ()=>void, onFail: ()=>void, onCancel: ()=>void) {
+    this.battlePanel.show(ch1, ch2, onWin, onFail, onCancel);
   }
 
   showMessageBox(title: Text, content: Text, fn?: ()=>void) {

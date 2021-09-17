@@ -257,6 +257,11 @@ export default class Act1 extends SimpleScene {
                   scene.hideDialogue();
                   sequence.next();
                 })
+              },
+              /** onCancel */
+              () => {
+                scene.hideDialogue();
+                sequence.next();
               }
             )
           }
