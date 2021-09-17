@@ -17,3 +17,7 @@ npm i jest @types/jest ts-jest typescript -D
 ```
 npx jest -w
 ```
+
+## Have fun
+* You could access it using Wechat
+![qr-code](Others/qr-code.jpg)
