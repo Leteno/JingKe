@@ -63,7 +63,7 @@ export default class WelcomeScene implements Scene {
     configPanel.visible = false;
     this.mainPanel.addView(configPanel);
     configBtn.onclickInternal = (event: ClickEvent) : boolean => {
-      configPanel.visible = true;
+      configPanel.show();
       return true;
     }
 
@@ -165,31 +165,37 @@ class ConfigPanel extends LinearLayout {
     this.layoutParam.xLayout = LayoutType.MATCH_PARENT;
     this.margin.left = this.margin.right = 40;
     this.padding.left = this.padding.right =
-      this.padding.bottom = this.padding.top = 10;
+      this.padding.bottom = this.padding.top = 20;
     this.layoutParam.xcfg = Align.CENTER;
     this.layoutParam.ycfg = Align.CENTER;
     this.bgColor = Colors.winGrey;
+  }
+
+  show() {
+    let that = this;
+    this.removeAllViews();
 
     let clearBtn = new TextView(new Text("清除存档:"));
     clearBtn.textColor = Colors.black;
     clearBtn.margin.bottom = 10;
     this.addView(clearBtn);
-    for (let i = 1; i <= 3; i++) {
-      let text = new TextView();
-      text.layoutParam.xLayout = LayoutType.MATCH_PARENT;
-      text.textColor = "#171717";
-      text.border = new Border();
-      text.border.color = "#e5e5e5";
-      text.setText(new Text(`Slot ${i}`));
-      let dbName = "Slot" + i;
-      text.onclickInternal = () => {
-        DBManager.getInstance().clearAllSave(dbName);
-        console.log("the save is clear");
+
+    let infos = DBManager.getInstance().getSaveInfos();
+    infos.forEach(info => {
+      let view = new SaveItemView(info);
+      let cacheInfo = info;
+      view.onclickInternal = () => {
+        DBManager.getInstance().clearAllSave(cacheInfo.dbName);
+        that.show();
         return true;
       }
-      this.addView(text);
-    }
+      this.addView(view);
+    })
+
+    this.setIsDirty(true);
+    this.visible = true;
   }
+
   onTouchOutside(event) {
     if (this.visible) {
       this.visible = false;

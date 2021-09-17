@@ -47,6 +47,7 @@ export default class DBManager {
 
   clearAllSave(dbName: string) {
     new SimpleDb(dbName).clearAll();
+    this.setSaveInfo(dbName, "<空>", "");
   }
 
   getDateString() {
