@@ -14,6 +14,8 @@ import { StringUtils } from "../misc/string_utils";
 import SimpleView from "../widgets/simple_view";
 import Colors from "./data/styles/colors";
 import MessageBox from "../compose/message_box";
+import { SaveInfo } from "../storage/basic_info";
+import { info } from "console";
 
 export default class WelcomeScene implements Scene {
   mainPanel: Panel;
@@ -121,20 +123,19 @@ class GameSelectPopup extends LinearLayout {
     this.layoutParam.xcfg = Align.CENTER;
     this.layoutParam.ycfg = Align.CENTER;
     this.bgColor = "#f6f6f6";
+  }
 
-    let that: GameSelectPopup = this;
-    for (let i = 1; i <= 3; i++) {
-      let text = new TextView();
-      text.layoutParam.xLayout = LayoutType.MATCH_PARENT;
-      text.textColor = "#171717";
-      text.border = new Border();
-      text.border.color = "#e5e5e5";
-      text.setText(new Text(`Slot ${i}`));
-      let dbName = "Slot" + i;
-      text.onclickInternal = () => {
+  show() {
+    let that = this;
+    that.removeAllViews();
+    let infos = DBManager.getInstance().getSaveInfos();
+    infos.forEach(info => {
+      let view = new SaveItemView(info);
+      let cacheInfo = info;
+      view.onclickInternal = () => {
         that.visible = false;
-        console.log("use " + dbName);
-        DBManager.getInstance().use(dbName);
+        console.log("use " + cacheInfo.dbName);
+        DBManager.getInstance().use(cacheInfo.dbName);
         if (StringUtils.isEmpty(GameState.instance.currentSceneName)) {
           GameState.instance.currentSceneName = 'act1';
         }
@@ -143,10 +144,9 @@ class GameSelectPopup extends LinearLayout {
         );
         return true;
       }
-      this.addView(text);
-    }
-  }
-  show() {
+      this.addView(view);
+    })
+    that.setIsDirty(true);
     this.visible = true;
   }
   onTouchOutside(event) {
@@ -196,5 +196,24 @@ class ConfigPanel extends LinearLayout {
       return true;
     }
     return super.onTouchOutside(event);
+  }
+}
+
+class SaveItemView extends LinearLayout {
+  constructor(info: SaveInfo) {
+    super(Orientation.VERTICAL);
+    this.padding.top = this.padding.bottom
+      = this.padding.left = this.padding.right
+      = 40;
+    this.layoutParam.xLayout = LayoutType.MATCH_PARENT;
+    this.border = new Border();
+    this.border.color = Colors.black;
+    let title = new TextView(new Text(info.name));
+    let date = new TextView(new Text(info.date));
+    title.textColor = Colors.black;
+    date.textColor = Colors.black;
+    date.layoutParam.xcfg = Align.END;
+    this.addView(title);
+    this.addView(date);
   }
 }
