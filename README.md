@@ -21,3 +21,5 @@ npx jest -w
 ## Have fun
 * You could access it using Wechat
 ![qr-code](Others/qr-code.jpg)
+* Here is the demo video: [demo.mp4](Others/demo.mp4)
+
