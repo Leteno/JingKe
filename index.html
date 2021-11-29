@@ -4,7 +4,13 @@
     <title>JingKe</title>
   </head>
   <body>
-    <canvas id="canvas" />
+    <canvas id="canvas"/>
+    <script type="text/javascript">
+      // setup canvas
+      var canvas = document.getElementById("canvas");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    </script>
     <script type="text/javascript" src="game.bundle.js"></script>
   </body>
 </html>
