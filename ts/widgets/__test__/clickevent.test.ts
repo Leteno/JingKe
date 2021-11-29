@@ -21,6 +21,7 @@ test("testSimpleView", () => {
   expect(view.onclick(event)).toBe(false);
   event.y = 100;
   expect(view.onclick(event)).toBe(true);
+  expect(1).toBe(2);
 })
 
 test("testPanel", () => {
