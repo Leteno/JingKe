@@ -19,4 +19,5 @@ test("parcel", () => {
     new SaveInfo().setData("n2", "db2", "Dec"),
     new SaveInfo().setData("n3", "db3", "Jan"),
   ]);
+  expect(1).toBe(2);
 })
