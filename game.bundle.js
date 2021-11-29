@@ -5545,6 +5545,15 @@
           document.addEventListener("touchend", function(ev) {
             that.onpointerup(that.movingX, that.movingY);
           });
+          document.addEventListener("mousedown", function(ev) {
+            that.onpointerdown(Math.round(ev.pageX), Math.round(ev.pageY));
+          });
+          document.addEventListener("mousemove", function(ev) {
+            that.onpointermove(Math.round(ev.pageX), Math.round(ev.pageY));
+          });
+          document.addEventListener("mouseup", function(ev) {
+            that.onpointerup(Math.round(ev.pageX), Math.round(ev.pageY));
+          });
         }
         bindOnClickHandler(fn) {
           this.onclickHandler = fn;

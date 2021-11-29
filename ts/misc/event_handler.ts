@@ -53,6 +53,36 @@ export default class EventHandler {
         );
       }
     );
+
+    document.addEventListener(
+      "mousedown",
+      function (ev: MouseEvent) {
+        that.onpointerdown(
+          Math.round(ev.pageX),
+          Math.round(ev.pageY)
+        )
+      }
+    );
+
+    document.addEventListener(
+      "mousemove",
+      function (ev: MouseEvent) {
+        that.onpointermove(
+          Math.round(ev.pageX),
+          Math.round(ev.pageY)
+        )
+      }
+    );
+
+    document.addEventListener(
+      "mouseup",
+      function (ev: MouseEvent) {
+        that.onpointerup(
+          Math.round(ev.pageX),
+          Math.round(ev.pageY)
+        )
+      }
+    );
   }
 
   bindOnClickHandler(fn: (event:ClickEvent)=>boolean) {
