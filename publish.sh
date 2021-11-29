@@ -2,7 +2,6 @@
 
 set -eux
 
+npx jest
 tsc
-./node_modules/.bin/esbuild game.js --bundle --outfile=docs/game.bundle.js
-
-cp -r res docs/
+./node_modules/.bin/esbuild game.js --bundle --outfile=game.bundle.js
