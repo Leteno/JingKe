@@ -21,6 +21,7 @@ import { Specify } from "./misc/layout";
 import SimpleGoodsInfos from "./game/data/goods/simple_goods_infos";
 import QuestGoodsInfos from "./game/data/goods/quest_goods_infos";
 import { YanBm } from "./game/data/bussinessman_data/yan_bm";
+import FPSView from "./debug/fps_view";
 
 export default class Main {
   aniId: number;
@@ -112,11 +113,14 @@ export default class Main {
 
     DebugView.instance.measure(this.ctx, canvas.width, canvas.height, Specify.NONE);
     DebugView.instance.layout(canvas.width, canvas.height, 20, 50);
+    FPSView.instance.measure(this.ctx, canvas.width, canvas.height, Specify.NONE)
+    FPSView.instance.layout(canvas.width, canvas.height);
   }
 
   gameLoop() {
     let now = timestamp();
     let dt = now - this.last;
+    FPSView.instance.updateFps(1000/dt);
     this.update(dt);
     this.render();
     this.last = now;
@@ -133,6 +137,7 @@ export default class Main {
     this.clearScreen();
     SceneManager.getInstance().currentScene.render(this.ctx);
     DebugView.instance.drawToCanvas(this.ctx);
+    FPSView.instance.drawToCanvas(this.ctx)
   }
 
   clearScreen() {

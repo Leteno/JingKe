@@ -5730,6 +5730,43 @@
     }
   });
 
+  // js/debug/fps_view.js
+  var require_fps_view = __commonJS({
+    "js/debug/fps_view.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      var bindable_data_1 = require_bindable_data();
+      var colors_1 = require_colors();
+      var panel_1 = require_panel();
+      var textview_1 = require_textview();
+      var FPSModel = class extends bindable_data_1.BindableData {
+        constructor() {
+          super();
+          this.fps = -1;
+        }
+      };
+      var FPSView = class extends panel_1.default {
+        constructor() {
+          super();
+          this.fpsText = new textview_1.default();
+          this.fpsText.textColor = colors_1.default.white;
+          this.addView(this.fpsText);
+          this.fpsModel = new FPSModel();
+          this.bindData(this.fpsModel, FPSView.update);
+        }
+        static update(v, m) {
+          v.fpsText.setText(new textview_1.Text(`fps: ${m.fps.toPrecision(4)}`));
+        }
+        updateFps(fps) {
+          this.fpsModel.fps = fps;
+          this.fpsModel.dirty = true;
+        }
+      };
+      exports.default = FPSView;
+      FPSView.instance = new FPSView();
+    }
+  });
+
   // js/main.js
   var require_main = __commonJS({
     "js/main.js"(exports) {
@@ -5752,6 +5789,7 @@
       var simple_goods_infos_1 = require_simple_goods_infos();
       var quest_goods_infos_1 = require_quest_goods_infos();
       var yan_bm_1 = require_yan_bm();
+      var fps_view_1 = require_fps_view();
       var Main2 = class {
         constructor(canvas2) {
           this.canvas = canvas2;
@@ -5814,10 +5852,13 @@
           });
           debug_view_1.default.instance.measure(this.ctx, canvas2.width, canvas2.height, layout_1.Specify.NONE);
           debug_view_1.default.instance.layout(canvas2.width, canvas2.height, 20, 50);
+          fps_view_1.default.instance.measure(this.ctx, canvas2.width, canvas2.height, layout_1.Specify.NONE);
+          fps_view_1.default.instance.layout(canvas2.width, canvas2.height);
         }
         gameLoop() {
           let now = (0, time_1.timestamp)();
           let dt = now - this.last;
+          fps_view_1.default.instance.updateFps(1e3 / dt);
           this.update(dt);
           this.render();
           this.last = now;
@@ -5830,6 +5871,7 @@
           this.clearScreen();
           scene_manager_1.default.getInstance().currentScene.render(this.ctx);
           debug_view_1.default.instance.drawToCanvas(this.ctx);
+          fps_view_1.default.instance.drawToCanvas(this.ctx);
         }
         clearScreen() {
           this.ctx.save();
