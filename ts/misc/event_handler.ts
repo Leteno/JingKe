@@ -51,6 +51,7 @@ export default class EventHandler {
           that.movingX,
           that.movingY
         );
+        ev.preventDefault();
       }
     );
 

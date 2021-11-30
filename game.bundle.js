@@ -5544,6 +5544,7 @@
           });
           document.addEventListener("touchend", function(ev) {
             that.onpointerup(that.movingX, that.movingY);
+            ev.preventDefault();
           });
           document.addEventListener("mousedown", function(ev) {
             that.onpointerdown(Math.round(ev.pageX), Math.round(ev.pageY));
