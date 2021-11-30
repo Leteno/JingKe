@@ -11,6 +11,9 @@ export enum ABILITY {
   ATTACK = 1, // 勇武
   INTELIGENCE = 2, // 智慧
   TRUST = 3, // 信誉
+  DEFEND = 4, // 防御
+  AGILE = 5, // 灵敏
+  STRENGTH = 6, // 体力
 }
 
 export class Character extends BindableAndSerializable {
@@ -29,6 +32,9 @@ export class Character extends BindableAndSerializable {
     this.abilities[ABILITY.INTELIGENCE] = 0;
     this.abilities[ABILITY.LOYAL] = 0;
     this.abilities[ABILITY.TRUST] = 0;
+    this.abilities[ABILITY.DEFEND] = 0;
+    this.abilities[ABILITY.AGILE] = 0;
+    this.abilities[ABILITY.STRENGTH] = 0;
   }
 
   toParcel(p: parcel) {

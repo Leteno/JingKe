@@ -544,6 +544,9 @@
         ABILITY2[ABILITY2["ATTACK"] = 1] = "ATTACK";
         ABILITY2[ABILITY2["INTELIGENCE"] = 2] = "INTELIGENCE";
         ABILITY2[ABILITY2["TRUST"] = 3] = "TRUST";
+        ABILITY2[ABILITY2["DEFEND"] = 4] = "DEFEND";
+        ABILITY2[ABILITY2["AGILE"] = 5] = "AGILE";
+        ABILITY2[ABILITY2["STRENGTH"] = 6] = "STRENGTH";
       })(ABILITY = exports.ABILITY || (exports.ABILITY = {}));
       var Character = class extends serializable_1.BindableAndSerializable {
         constructor() {
@@ -554,6 +557,9 @@
           this.abilities[ABILITY.INTELIGENCE] = 0;
           this.abilities[ABILITY.LOYAL] = 0;
           this.abilities[ABILITY.TRUST] = 0;
+          this.abilities[ABILITY.DEFEND] = 0;
+          this.abilities[ABILITY.AGILE] = 0;
+          this.abilities[ABILITY.STRENGTH] = 0;
         }
         toParcel(p) {
           p.writeString(this.name);
