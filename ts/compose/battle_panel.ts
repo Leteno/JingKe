@@ -95,20 +95,37 @@ export class BattlePanel extends LinearLayout {
 class BattleBriefView extends LinearLayout {
   avatar: ImageView;
   attack: TextView;
+  defend: TextView
+  agile: TextView
+  strength: TextView
   constructor() {
     super(Orientation.VERTICAL);
     this.avatar = new ImageView("");
     this.avatar.forceWidth = this.avatar.forceHeight = 100;
     this.avatar.margin.bottom = 10;
-    this.attack = new TextView(new Text(""));
-    this.attack.textSize = 24;
-    this.attack.textColor = Colors.black;
+    this.attack = this.createTextView()
+    this.defend = this.createTextView()
+    this.agile = this.createTextView()
+    this.strength = this.createTextView()
     this.addView(this.avatar);
+    this.addView(this.strength)
     this.addView(this.attack);
+    this.addView(this.defend)
+    this.addView(this.agile)
+  }
+
+  createTextView() {
+    let ret = new TextView();
+    ret.textSize = 24;
+    ret.textColor = Colors.black;
+    return ret;
   }
 
   update(ch:Character) {
     this.avatar.img.src = ch.imageSrc;
+    this.strength.setText(new Text("体力: " + ch.abilities[ABILITY.STRENGTH]));
     this.attack.setText(new Text("勇武: " + ch.abilities[ABILITY.ATTACK]));
+    this.defend.setText(new Text("防御: " + ch.abilities[ABILITY.DEFEND]));
+    this.agile.setText(new Text("灵敏: " + ch.abilities[ABILITY.AGILE]));
   }
 }
