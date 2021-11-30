@@ -105,3 +105,21 @@ test("write and read", () => {
   expect(array3.pop()?.readString()).toBe("watermelon");
   expect(array3.pop()?.readInt()).toBe(8424);
 })
+
+test("Test default value", () => {
+  let p = new Parcel();
+  p.writeString("Hello world");
+
+  let r = new Parcel();
+  r.fromString(p.toString());
+  expect(r.readString()).toBe("Hello world");
+
+  // read more, output default
+  expect(r.readString()).toBe("");
+  expect(r.readInt()).toBe(0);
+  expect(r.readDouble()).toBe(0);
+  expect(r.readNumberArray()).toEqual([]);
+  expect(r.readArray()).toEqual([])
+  expect(r.readStringArray()).toEqual([]);
+  expect(r.readParcel()).toEqual(new Parcel());
+})

@@ -2085,7 +2085,16 @@
         isEmpty() {
           return this._writeIndex == 0;
         }
+        isEnoughForRead(requireSpace) {
+          return this._writeIndex >= this._readIndex + requireSpace;
+        }
+        warn(s) {
+        }
         readInt() {
+          if (!this.isEnoughForRead(5)) {
+            this.warn(`Not enough space for readInt() index: ${this._readIndex}`);
+            return 0;
+          }
           let type = this._dataView.getInt8(this._readIndex);
           if (type != TYPE.int) {
             console.warn(`readInt on unexpect type: ${type}, index: ${this._readIndex}`);
@@ -2096,9 +2105,13 @@
           return result;
         }
         readDouble() {
+          if (!this.isEnoughForRead(5)) {
+            this.warn(`Not enough space for readDouble() index: ${this._readIndex}`);
+            return 0;
+          }
           let type = this._dataView.getInt8(this._readIndex);
           if (type != TYPE.double) {
-            console.warn(`readInt on unexpect type: ${type}, index: ${this._readIndex}`);
+            console.warn(`readDouble on unexpect type: ${type}, index: ${this._readIndex}`);
           }
           this._readIndex++;
           let result = this._dataView.getFloat64(this._readIndex);
@@ -2106,19 +2119,31 @@
           return result;
         }
         readString() {
+          if (!this.isEnoughForRead(5)) {
+            this.warn(`Not enough space for readString() index: ${this._readIndex}`);
+            return "";
+          }
           let type = this._dataView.getInt8(this._readIndex);
           if (type != TYPE.string) {
-            console.warn(`readInt on unexpect type: ${type}, index: ${this._readIndex}`);
+            console.warn(`readString on unexpect type: ${type}, index: ${this._readIndex}`);
           }
           this._readIndex++;
           let size = this._dataView.getInt32(this._readIndex);
           this._readIndex += 4;
+          if (!this.isEnoughForRead(size * 2)) {
+            this.warn(`Not enough space for readString() index: ${this._readIndex}`);
+            return "";
+          }
           let data = this._parcelData.slice(this._readIndex, this._readIndex + size * 2);
           let result = String.fromCharCode.apply(null, new Int16Array(data));
           this._readIndex += size * 2;
           return result;
         }
         readParcel() {
+          if (!this.isEnoughForRead(1)) {
+            this.warn(`Not enough space for readParcel() index: ${this._readIndex}`);
+            return new Parcel();
+          }
           let type = this._dataView.getInt8(this._readIndex);
           if (type != TYPE.parcel) {
             console.warn(`readParcel on unexpect type: ${type}, index: ${this._readIndex}`);
@@ -2130,6 +2155,10 @@
           return result;
         }
         readArray() {
+          if (!this.isEnoughForRead(5)) {
+            this.warn(`Not enough space for readArray() index: ${this._readIndex}`);
+            return [];
+          }
           let result = new Array();
           let type = this._dataView.getInt8(this._readIndex);
           if (type != TYPE.array) {
@@ -2144,6 +2173,10 @@
           return result;
         }
         readNumberArray() {
+          if (!this.isEnoughForRead(5)) {
+            this.warn(`Not enough space for readNumberArray() index: ${this._readIndex}`);
+            return [];
+          }
           let array = new Array();
           let type = this._dataView.getInt8(this._readIndex);
           if (type != TYPE.array) {
@@ -2153,6 +2186,10 @@
           let len = this._dataView.getInt32(this._readIndex);
           this._readIndex += 4;
           for (let i = 0; i < len; i++) {
+            if (!this.isEnoughForRead(4)) {
+              this.warn(`Not enough space for readNumberArray() index: ${this._readIndex}`);
+              return array;
+            }
             let data = this._dataView.getInt32(this._readIndex);
             this._readIndex += 4;
             array.push(data);
@@ -2160,6 +2197,10 @@
           return array;
         }
         readStringArray() {
+          if (!this.isEnoughForRead(5)) {
+            this.warn(`Not enough space for readInt() index: ${this._readIndex}`);
+            return [];
+          }
           let array = new Array();
           let type = this._dataView.getInt8(this._readIndex);
           if (type != TYPE.array) {
@@ -2169,8 +2210,15 @@
           let len = this._dataView.getInt32(this._readIndex);
           this._readIndex += 4;
           for (let i = 0; i < len; i++) {
+            if (!this.isEnoughForRead(4)) {
+              this.warn(`Not enough space for readInt() index: ${this._readIndex}`);
+              return array;
+            }
             let strlen = this._dataView.getInt32(this._readIndex);
             this._readIndex += 4;
+            if (!this.isEnoughForRead(strlen * 2)) {
+              return array;
+            }
             let data = this._parcelData.slice(this._readIndex, this._readIndex + strlen * 2);
             let str = String.fromCharCode.apply(null, new Int16Array(data));
             array.push(str);
