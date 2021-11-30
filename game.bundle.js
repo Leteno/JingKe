@@ -5277,7 +5277,7 @@
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.timestamp = void 0;
       function timestamp() {
-        return window.performance && window.performance.now ? window.performance.now() * 1e3 : new Date().getTime();
+        return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
       }
       exports.timestamp = timestamp;
     }
