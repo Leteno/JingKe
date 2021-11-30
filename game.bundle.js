@@ -1769,7 +1769,7 @@
           this.addView(panel);
           let button = new textview_1.default(new textview_1.Text("\u5F00\u59CB"));
           button.margin.top = 20;
-          button.layoutParam.xcfg = layout_1.Align.END;
+          button.layoutParam.xcfg = layout_1.Align.CENTER;
           button.textColor = colors_1.default.black;
           button.onclickInternal = (() => {
             this.visible = false;
@@ -1779,7 +1779,7 @@
           this.addView(button);
           let cancelBtn = new textview_1.default(new textview_1.Text("\u53D6\u6D88"));
           cancelBtn.margin.top = 20;
-          cancelBtn.layoutParam.xcfg = layout_1.Align.END;
+          cancelBtn.layoutParam.xcfg = layout_1.Align.CENTER;
           cancelBtn.textColor = colors_1.default.black;
           cancelBtn.onclickInternal = (() => {
             this.visible = false;

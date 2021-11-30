@@ -40,7 +40,7 @@ export class BattlePanel extends LinearLayout {
 
     let button = new TextView(new Text("开始"));
     button.margin.top = 20;
-    button.layoutParam.xcfg = Align.END;
+    button.layoutParam.xcfg = Align.CENTER;
     button.textColor = Colors.black;
     button.onclickInternal = (() => {
       this.visible = false;
@@ -51,7 +51,7 @@ export class BattlePanel extends LinearLayout {
 
     let cancelBtn = new TextView(new Text("取消"));
     cancelBtn.margin.top = 20;
-    cancelBtn.layoutParam.xcfg = Align.END;
+    cancelBtn.layoutParam.xcfg = Align.CENTER;
     cancelBtn.textColor = Colors.black;
     cancelBtn.onclickInternal = (() => {
       this.visible = false;
