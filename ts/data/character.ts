@@ -28,13 +28,9 @@ export class Character extends BindableAndSerializable {
     this.specials = new Array<SpecialAffect>();
 
     // Abilities
-    this.abilities[ABILITY.ATTACK] = 0;
-    this.abilities[ABILITY.INTELIGENCE] = 0;
-    this.abilities[ABILITY.LOYAL] = 0;
-    this.abilities[ABILITY.TRUST] = 0;
-    this.abilities[ABILITY.DEFEND] = 0;
-    this.abilities[ABILITY.AGILE] = 0;
-    this.abilities[ABILITY.STRENGTH] = 0;
+    for (let item in ABILITY) {
+      this.abilities[item] = 0;
+    }
   }
 
   toParcel(p: parcel) {
@@ -49,7 +45,10 @@ export class Character extends BindableAndSerializable {
   fromParcel(p: parcel) {
     this.name = p.readString();
     this.imageSrc = p.readString();
-    this.abilities = p.readNumberArray();
+    let abilities = p.readNumberArray();
+    for (let item in ABILITY) {
+      this.abilities[item] = abilities[item] ? abilities[item] : 0;
+    }
     let specialLen = p.readInt();
     this.specials = []
     for (let i = 0; i < specialLen; i++) {
