@@ -14,6 +14,8 @@ export enum ABILITY {
   DEFEND = 4, // 防御
   AGILE = 5, // 灵敏
   STRENGTH = 6, // 体力
+
+  POINT = 10,  // 可用点数
 }
 
 export class Character extends BindableAndSerializable {

@@ -547,6 +547,7 @@
         ABILITY2[ABILITY2["DEFEND"] = 4] = "DEFEND";
         ABILITY2[ABILITY2["AGILE"] = 5] = "AGILE";
         ABILITY2[ABILITY2["STRENGTH"] = 6] = "STRENGTH";
+        ABILITY2[ABILITY2["POINT"] = 10] = "POINT";
       })(ABILITY = exports.ABILITY || (exports.ABILITY = {}));
       var Character = class extends serializable_1.BindableAndSerializable {
         constructor() {
@@ -1414,6 +1415,49 @@
     }
   });
 
+  // js/widgets/add_remove_view.js
+  var require_add_remove_view = __commonJS({
+    "js/widgets/add_remove_view.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      var layout_1 = require_layout();
+      var imageview_1 = require_imageview();
+      var linear_layout_1 = require_linear_layout();
+      var AddRemoveView = class extends linear_layout_1.default {
+        constructor() {
+          super(linear_layout_1.Orientation.HORIZONTAL);
+          this.addButton = this.createButton("res/created/plus.png");
+          this.removeButton = this.createButton("res/created/minus.png");
+          this.addView(this.addButton);
+          this.addView(this.removeButton);
+        }
+        createButton(imageSrc) {
+          let button = new imageview_1.default(imageSrc);
+          button.layoutParam.weight = 1;
+          button.layoutParam.yLayout = layout_1.LayoutType.MATCH_PARENT;
+          return button;
+        }
+        setOnClick(onAddClicked, onRemoveClicked) {
+          this.addButton.onclickInternal = (ev) => {
+            onAddClicked();
+            return true;
+          };
+          this.removeButton.onclickInternal = (ev) => {
+            onRemoveClicked();
+            return true;
+          };
+        }
+        showAddButton(show) {
+          this.addButton.visible = show;
+        }
+        showRemoveButton(show) {
+          this.removeButton.visible = show;
+        }
+      };
+      exports.default = AddRemoveView;
+    }
+  });
+
   // js/widgets/textview_state_machine.js
   var require_textview_state_machine = __commonJS({
     "js/widgets/textview_state_machine.js"(exports) {
@@ -1740,10 +1784,12 @@
       "use strict";
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.BattlePanel = void 0;
+      var bindable_data_1 = require_bindable_data();
       var character_1 = require_character();
       var colors_1 = require_colors();
       var text_effects_1 = require_text_effects();
       var layout_1 = require_layout();
+      var add_remove_view_1 = require_add_remove_view();
       var imageview_1 = require_imageview();
       var linear_layout_1 = require_linear_layout();
       var panel_1 = require_panel();
@@ -1796,8 +1842,9 @@
           this.onWin = onWin;
           this.onFail = onFail;
           this.onCancel = onCancel;
-          this.brief1.update(ch1);
-          this.brief2.update(ch2);
+          this.brief1.bind(ch1);
+          this.brief2.bind(ch2);
+          this.brief2.showCompound(false);
           this.setIsDirty(true);
         }
         startBattle() {
@@ -1816,18 +1863,57 @@
       var BattleBriefView = class extends linear_layout_1.default {
         constructor() {
           super(linear_layout_1.Orientation.VERTICAL);
+          this.model = new BriefModel();
           this.avatar = new imageview_1.default("");
           this.avatar.forceWidth = this.avatar.forceHeight = 100;
           this.avatar.margin.bottom = 10;
-          this.attack = this.createTextView();
-          this.defend = this.createTextView();
-          this.agile = this.createTextView();
-          this.strength = this.createTextView();
+          this.attack = new CompoundView("\u52C7\u6B66", this.model);
+          this.defend = new CompoundView("\u9632\u5FA1", this.model);
+          this.agile = new CompoundView("\u7075\u654F", this.model);
+          this.strength = new CompoundView("\u4F53\u529B", this.model);
+          this.point = new textview_1.default();
           this.addView(this.avatar);
           this.addView(this.strength);
           this.addView(this.attack);
           this.addView(this.defend);
           this.addView(this.agile);
+          this.addView(this.point);
+          this.point.textSize = 24;
+          this.point.textColor = colors_1.default.black;
+          this.bindData(this.model, BattleBriefView.update);
+        }
+        bind(ch) {
+          this.avatar.img.src = ch.imageSrc;
+          this.strength.setOriginal(ch.abilities[character_1.ABILITY.STRENGTH]);
+          this.attack.setOriginal(ch.abilities[character_1.ABILITY.ATTACK]);
+          this.defend.setOriginal(ch.abilities[character_1.ABILITY.DEFEND]);
+          this.agile.setOriginal(ch.abilities[character_1.ABILITY.AGILE]);
+          this.model.leftPoints = ch.abilities[character_1.ABILITY.POINT];
+          this.model.dirty = true;
+        }
+        showCompound(show) {
+          let compounds = [this.attack, this.defend, this.agile, this.strength];
+          for (let i in compounds) {
+            compounds[i].addRemove.visible = show;
+          }
+        }
+        static update(v, d) {
+          v.point.setText(new textview_1.Text(`\u53EF\u7528\u70B9\u6570: ${d.leftPoints}`));
+        }
+      };
+      var BriefModel = class extends bindable_data_1.BindableData {
+      };
+      var CompoundView = class extends linear_layout_1.default {
+        constructor(caption, m) {
+          super(linear_layout_1.Orientation.HORIZONTAL);
+          this.caption = caption;
+          this.minNumber = 0;
+          this.addNumber = 0;
+          this.model = m;
+          this.text = this.createTextView();
+          this.addRemove = this.createAddRemoveView();
+          this.addView(this.text);
+          this.addView(this.addRemove);
         }
         createTextView() {
           let ret = new textview_1.default();
@@ -1835,12 +1921,33 @@
           ret.textColor = colors_1.default.black;
           return ret;
         }
-        update(ch) {
-          this.avatar.img.src = ch.imageSrc;
-          this.strength.setText(new textview_1.Text("\u4F53\u529B: " + ch.abilities[character_1.ABILITY.STRENGTH]));
-          this.attack.setText(new textview_1.Text("\u52C7\u6B66: " + ch.abilities[character_1.ABILITY.ATTACK]));
-          this.defend.setText(new textview_1.Text("\u9632\u5FA1: " + ch.abilities[character_1.ABILITY.DEFEND]));
-          this.agile.setText(new textview_1.Text("\u7075\u654F: " + ch.abilities[character_1.ABILITY.AGILE]));
+        createAddRemoveView() {
+          let ret = new add_remove_view_1.default();
+          ret.forceWidth = 48;
+          ret.forceHeight = 24;
+          ret.setOnClick(() => {
+            if (this.model.leftPoints > 0) {
+              this.model.leftPoints -= 1;
+              this.model.dirty = true;
+              this.addNumber += 1;
+              this.updateText();
+            }
+          }, () => {
+            if (this.addNumber > 0) {
+              this.addNumber -= 1;
+              this.model.leftPoints += 1;
+              this.model.dirty = true;
+              this.updateText();
+            }
+          });
+          return ret;
+        }
+        setOriginal(data) {
+          this.minNumber = data;
+          this.updateText();
+        }
+        updateText() {
+          this.text.setText(new textview_1.Text(`${this.caption}: ${this.minNumber + this.addNumber}`));
         }
       };
     }
