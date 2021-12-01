@@ -6,6 +6,9 @@
 - [ ] Page loading are so slow when we switch the scene.
 - [ ] UI inside About Me, and the entrance button should change.
 - [ ] Battle Panel
+- [ ] 体力格 - 像 dota 的血条一样，一格 50 血？
+- [ ] 进度条
+- [ ] 计算谁先砍完？
 - [ ] Add Calculation and usable Point in Battle Panel
 - [ ] Parcel read/write, once the IDL change, we may get troubles as the stored parcel is out-to-date.
 - [X] Animation time is pretty short, probably the time elapse function went wrong [commit](https://github.com/Leteno/JingKe/commit/a661b17c6c706c8259a72f9a313df1ce699cd96d).
