@@ -3671,7 +3671,8 @@
           this.descriptionView.margin.right = 40;
           this.descriptionView.visible = false;
           this.userPanel = new UserPanel_1.default();
-          this.userPanel.forceHeight = canvas2.height / 3;
+          this.userPanel.margin.top = 100;
+          this.userPanel.margin.bottom = 100;
           this.userPanel.visible = false;
           this.goodsPanel = new goods_panel_1.default();
           this.goodsPanel.forceHeight = canvas2.height / 3;

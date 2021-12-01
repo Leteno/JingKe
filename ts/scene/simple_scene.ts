@@ -71,7 +71,8 @@ export default abstract class SimpleScene implements Scene {
     this.descriptionView.visible = false;
 
     this.userPanel = new UserPanel();
-    this.userPanel.forceHeight = canvas.height / 3;
+    this.userPanel.margin.top = 100;
+    this.userPanel.margin.bottom = 100;
     this.userPanel.visible = false;
 
     this.goodsPanel = new GoodsPanel();
