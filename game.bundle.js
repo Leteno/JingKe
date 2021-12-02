@@ -671,6 +671,23 @@
     }
   });
 
+  // js/misc/clone.js
+  var require_clone = __commonJS({
+    "js/misc/clone.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.Clone = void 0;
+      var Clone = class {
+        static clone(obj) {
+          let target = Object.create(obj);
+          Object.assign(target, obj);
+          return target;
+        }
+      };
+      exports.Clone = Clone;
+    }
+  });
+
   // js/misc/easy-math.js
   var require_easy_math = __commonJS({
     "js/misc/easy-math.js"(exports) {
@@ -1788,6 +1805,7 @@
       var character_1 = require_character();
       var colors_1 = require_colors();
       var text_effects_1 = require_text_effects();
+      var clone_1 = require_clone();
       var layout_1 = require_layout();
       var add_remove_view_1 = require_add_remove_view();
       var imageview_1 = require_imageview();
@@ -1867,10 +1885,10 @@
           this.avatar = new imageview_1.default("");
           this.avatar.forceWidth = this.avatar.forceHeight = 100;
           this.avatar.margin.bottom = 10;
-          this.attack = new CompoundView("\u52C7\u6B66", this.model);
-          this.defend = new CompoundView("\u9632\u5FA1", this.model);
-          this.agile = new CompoundView("\u7075\u654F", this.model);
-          this.strength = new CompoundView("\u4F53\u529B", this.model);
+          this.attack = new CompoundView("\u52C7\u6B66", this.model, character_1.ABILITY.ATTACK);
+          this.defend = new CompoundView("\u9632\u5FA1", this.model, character_1.ABILITY.DEFEND);
+          this.agile = new CompoundView("\u7075\u654F", this.model, character_1.ABILITY.AGILE);
+          this.strength = new CompoundView("\u4F53\u529B", this.model, character_1.ABILITY.STRENGTH);
           this.point = new textview_1.default();
           this.addView(this.avatar);
           this.addView(this.strength);
@@ -1884,12 +1902,12 @@
         }
         bind(ch) {
           this.avatar.img.src = ch.imageSrc;
-          this.strength.setOriginal(ch.abilities[character_1.ABILITY.STRENGTH]);
-          this.attack.setOriginal(ch.abilities[character_1.ABILITY.ATTACK]);
-          this.defend.setOriginal(ch.abilities[character_1.ABILITY.DEFEND]);
-          this.agile.setOriginal(ch.abilities[character_1.ABILITY.AGILE]);
-          this.model.leftPoints = ch.abilities[character_1.ABILITY.POINT];
+          this.model.setupWithCharacter(ch);
           this.model.dirty = true;
+          this.attack.updateText();
+          this.defend.updateText();
+          this.agile.updateText();
+          this.strength.updateText();
         }
         showCompound(show) {
           let compounds = [this.attack, this.defend, this.agile, this.strength];
@@ -1903,14 +1921,25 @@
         }
       };
       var BriefModel = class extends bindable_data_1.BindableData {
+        setupWithCharacter(ch) {
+          this.leftPoints = ch.abilities[character_1.ABILITY.POINT];
+          this.abilities = clone_1.Clone.clone(ch.abilities);
+          this.delta = this.createEmptyArray();
+        }
+        createEmptyArray() {
+          let ret = new Array();
+          for (let item in character_1.ABILITY) {
+            ret[item] = 0;
+          }
+          return ret;
+        }
       };
       var CompoundView = class extends linear_layout_1.default {
-        constructor(caption, m) {
+        constructor(caption, m, type) {
           super(linear_layout_1.Orientation.HORIZONTAL);
           this.caption = caption;
-          this.minNumber = 0;
-          this.addNumber = 0;
           this.model = m;
+          this.type = type;
           this.text = this.createTextView();
           this.addRemove = this.createAddRemoveView();
           this.addView(this.text);
@@ -1930,12 +1959,12 @@
             if (this.model.leftPoints > 0) {
               this.model.leftPoints -= 1;
               this.model.dirty = true;
-              this.addNumber += 1;
+              this.model.delta[this.type] += 1;
               this.updateText();
             }
           }, () => {
-            if (this.addNumber > 0) {
-              this.addNumber -= 1;
+            if (this.model.delta[this.type] > 0) {
+              this.model.delta[this.type] -= 1;
               this.model.leftPoints += 1;
               this.model.dirty = true;
               this.updateText();
@@ -1943,12 +1972,8 @@
           });
           return ret;
         }
-        setOriginal(data) {
-          this.minNumber = data;
-          this.updateText();
-        }
         updateText() {
-          this.text.setText(new textview_1.Text(`${this.caption}: ${this.minNumber + this.addNumber}`));
+          this.text.setText(new textview_1.Text(`${this.caption}: ${this.model.abilities[this.type] + this.model.delta[this.type]}`));
         }
       };
     }
@@ -2148,23 +2173,6 @@
       exports.Player = Player;
       Player.instance = new Player();
       Player.CHOOSE_NOT_FOUND = -1;
-    }
-  });
-
-  // js/misc/clone.js
-  var require_clone = __commonJS({
-    "js/misc/clone.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.Clone = void 0;
-      var Clone = class {
-        static clone(obj) {
-          let target = Object.create(obj);
-          Object.assign(target, obj);
-          return target;
-        }
-      };
-      exports.Clone = Clone;
     }
   });
 

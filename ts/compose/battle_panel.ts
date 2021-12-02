@@ -1,7 +1,9 @@
+import { Greedy } from "../ai/batte_strategy";
 import { BindableData } from "../data/bindable_data";
 import { ABILITY, Character } from "../data/character";
 import Colors from "../game/data/styles/colors";
 import TextEffects from "../game/data/styles/text_effects";
+import { Clone } from "../misc/clone";
 import { Align, LayoutType } from "../misc/layout";
 import AddRemoveView from "../widgets/add_remove_view";
 import ImageView from "../widgets/imageview";
@@ -111,10 +113,10 @@ class BattleBriefView extends LinearLayout {
     this.avatar = new ImageView("");
     this.avatar.forceWidth = this.avatar.forceHeight = 100;
     this.avatar.margin.bottom = 10;
-    this.attack = new CompoundView("勇武", this.model)
-    this.defend = new CompoundView("防御", this.model)
-    this.agile = new CompoundView("灵敏", this.model)
-    this.strength = new CompoundView("体力", this.model)
+    this.attack = new CompoundView("勇武", this.model, ABILITY.ATTACK)
+    this.defend = new CompoundView("防御", this.model, ABILITY.DEFEND)
+    this.agile = new CompoundView("灵敏", this.model, ABILITY.AGILE)
+    this.strength = new CompoundView("体力", this.model, ABILITY.STRENGTH)
     this.point = new TextView()
     this.addView(this.avatar);
     this.addView(this.strength)
@@ -131,12 +133,12 @@ class BattleBriefView extends LinearLayout {
 
   bind(ch:Character) {
     this.avatar.img.src = ch.imageSrc;
-    this.strength.setOriginal(ch.abilities[ABILITY.STRENGTH]);
-    this.attack.setOriginal(ch.abilities[ABILITY.ATTACK]);
-    this.defend.setOriginal(ch.abilities[ABILITY.DEFEND]);
-    this.agile.setOriginal(ch.abilities[ABILITY.AGILE]);
-    this.model.leftPoints = ch.abilities[ABILITY.POINT];
+    this.model.setupWithCharacter(ch);
     this.model.dirty = true;
+    this.attack.updateText();
+    this.defend.updateText();
+    this.agile.updateText();
+    this.strength.updateText();
   }
 
   showCompound(show: boolean) {
@@ -154,23 +156,37 @@ class BattleBriefView extends LinearLayout {
 
 class BriefModel extends BindableData {
   leftPoints: number
+  abilities: Array<number>
+  delta: Array<number>
+
+  setupWithCharacter(ch: Character) {
+    this.leftPoints = ch.abilities[ABILITY.POINT];
+    this.abilities = Clone.clone(ch.abilities) as Array<number>;
+    this.delta = this.createEmptyArray();
+  }
+
+  createEmptyArray() {
+    let ret = new Array<number>();
+    for (let item in ABILITY) {
+      ret[item] = 0;
+    }
+    return ret;
+  }
 }
 
 class CompoundView extends LinearLayout {
   text: TextView
   addRemove: AddRemoveView
   caption: string
-  minNumber: number
-  addNumber: number
+  type: ABILITY
 
   model: BriefModel;
 
-  constructor(caption: string, m: BriefModel) {
+  constructor(caption: string, m: BriefModel, type: ABILITY) {
     super(Orientation.HORIZONTAL);
     this.caption = caption;
-    this.minNumber = 0;
-    this.addNumber = 0;
     this.model = m;
+    this.type = type;
 
     this.text = this.createTextView();
     this.addRemove = this.createAddRemoveView();
@@ -194,13 +210,13 @@ class CompoundView extends LinearLayout {
         if (this.model.leftPoints > 0) {
           this.model.leftPoints -= 1;
           this.model.dirty = true;
-          this.addNumber += 1;
+          this.model.delta[this.type] += 1;
           this.updateText();
         }
       },  // Add fn
       ()=>{
-        if (this.addNumber > 0) {
-          this.addNumber -= 1;
+        if (this.model.delta[this.type] > 0) {
+          this.model.delta[this.type] -= 1;
           this.model.leftPoints += 1;
           this.model.dirty = true;
           this.updateText();
@@ -210,12 +226,7 @@ class CompoundView extends LinearLayout {
     return ret;
   }
 
-  setOriginal(data: number) {
-    this.minNumber = data;
-    this.updateText();
-  }
-
   updateText() {
-    this.text.setText(new Text(`${this.caption}: ${this.minNumber + this.addNumber}`))
+    this.text.setText(new Text(`${this.caption}: ${this.model.abilities[this.type] + this.model.delta[this.type]}`))
   }
 }
