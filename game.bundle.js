@@ -1896,6 +1896,7 @@
           for (let i in compounds) {
             compounds[i].addRemove.visible = show;
           }
+          this.setIsDirty(true);
         }
         static update(v, d) {
           v.point.setText(new textview_1.Text(`\u53EF\u7528\u70B9\u6570: ${d.leftPoints}`));

@@ -144,6 +144,7 @@ class BattleBriefView extends LinearLayout {
     for (let i in compounds) {
       compounds[i].addRemove.visible = show;
     }
+    this.setIsDirty(true);
   }
 
   static update(v: BattleBriefView, d: BriefModel) {
