@@ -2080,6 +2080,11 @@
           this.version = 1;
           this.chooses = /* @__PURE__ */ new Map();
           this.money = 20;
+          this.character.abilities[character_1.ABILITY.ATTACK] = 4;
+          this.character.abilities[character_1.ABILITY.DEFEND] = 3;
+          this.character.abilities[character_1.ABILITY.AGILE] = 3;
+          this.character.abilities[character_1.ABILITY.STRENGTH] = 60;
+          this.character.abilities[character_1.ABILITY.POINT] = 4;
           this.character.specials.push(specials_1.Specials.getInstance().kouruoxuanhe);
           this.quests = [];
           this.possessions = [];
@@ -4120,6 +4125,10 @@
           fanwuji.character.name = "\u6A0A\u4E8E\u671F";
           fanwuji.character.imageSrc = "res/copyleft/people_fanwuji.png";
           fanwuji.character.abilities[character_1.ABILITY.ATTACK] = 10;
+          fanwuji.character.abilities[character_1.ABILITY.DEFEND] = 5;
+          fanwuji.character.abilities[character_1.ABILITY.AGILE] = 3;
+          fanwuji.character.abilities[character_1.ABILITY.STRENGTH] = 30;
+          fanwuji.character.abilities[character_1.ABILITY.POINT] = 2;
           fanwuji.character.specials.push(specials_1.Specials.getInstance().brave);
           this.fanwuji = fanwuji;
           let juzi = new place_and_people_view_1.People();

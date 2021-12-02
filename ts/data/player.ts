@@ -1,7 +1,7 @@
 import Parcel from "../objects/parcel";
 import { BindableAndSerializable, Serializable } from "../objects/serializable";
 import { GoodsAffect } from "../special_affect/goods_affect";
-import { Character } from "./character";
+import { ABILITY, Character } from "./character";
 import { Goods as Goods } from "./goods";
 import Quest from "./quest";
 import { Specials } from "./specials";
@@ -32,6 +32,11 @@ export class Player extends BindableAndSerializable {
     this.version = 1;
     this.chooses = new Map<number, number>();
     this.money = 20;
+    this.character.abilities[ABILITY.ATTACK] = 4;
+    this.character.abilities[ABILITY.DEFEND] = 3;
+    this.character.abilities[ABILITY.AGILE] = 3;
+    this.character.abilities[ABILITY.STRENGTH] = 60;
+    this.character.abilities[ABILITY.POINT] = 4;
     this.character.specials.push(Specials.getInstance().kouruoxuanhe);
     this.quests = [];
     this.possessions = [];

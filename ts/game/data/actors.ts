@@ -26,6 +26,10 @@ export class Actors {
     fanwuji.character.name = "樊于期";
     fanwuji.character.imageSrc = "res/copyleft/people_fanwuji.png";
     fanwuji.character.abilities[ABILITY.ATTACK] = 10;
+    fanwuji.character.abilities[ABILITY.DEFEND] = 5;
+    fanwuji.character.abilities[ABILITY.AGILE] = 3;
+    fanwuji.character.abilities[ABILITY.STRENGTH] = 30;
+    fanwuji.character.abilities[ABILITY.POINT] = 2;
     fanwuji.character.specials.push(
       Specials.getInstance().brave
     );
