@@ -1,4 +1,4 @@
-import { Greedy } from "../ai/batte_strategy";
+import { Greedy } from "../ai/battle_strategy";
 import { BindableData } from "../data/bindable_data";
 import { ABILITY, Character } from "../data/character";
 import Colors from "../game/data/styles/colors";
@@ -21,6 +21,8 @@ export class BattlePanel extends LinearLayout {
 
   brief1: BattleBriefView;
   brief2: BattleBriefView;
+
+  computerStrategy: Array<number>;
 
   constructor() {
     super(Orientation.VERTICAL);
@@ -47,7 +49,8 @@ export class BattlePanel extends LinearLayout {
     button.layoutParam.xcfg = Align.CENTER;
     button.textColor = Colors.black;
     button.onclickInternal = (() => {
-      this.visible = false;
+      // TODO
+      // this.visible = false;
       this.startBattle();
       return true;
     }).bind(this);
@@ -79,11 +82,14 @@ export class BattlePanel extends LinearLayout {
     this.brief2.bind(ch2);
     this.brief2.showCompound(false);
 
+    this.computerStrategy = new Greedy().fight(ch2, ch1);
+
     this.setIsDirty(true);
   }
 
   private startBattle() {
     // TODO
+    this.brief2.applyStrategy(this.computerStrategy);
     let win = this.getAttack(this.ch1) > this.getAttack(this.ch2);
     if (win && this.onWin) {
       this.onWin();
@@ -149,6 +155,16 @@ class BattleBriefView extends LinearLayout {
     this.setIsDirty(true);
   }
 
+  applyStrategy(strategy: Array<number>) {
+    this.model.delta = strategy;
+    this.model.leftPoints = 0;
+    this.model.dirty = true;
+    this.attack.updateText();
+    this.defend.updateText();
+    this.agile.updateText();
+    this.strength.updateText();
+  }
+
   static update(v: BattleBriefView, d: BriefModel) {
     v.point.setText(new Text(`可用点数: ${d.leftPoints}`))
   }
@@ -209,8 +225,8 @@ class CompoundView extends LinearLayout {
       ()=>{
         if (this.model.leftPoints > 0) {
           this.model.leftPoints -= 1;
-          this.model.dirty = true;
           this.model.delta[this.type] += 1;
+          this.model.dirty = true;
           this.updateText();
         }
       },  // Add fn

@@ -585,6 +585,42 @@
     }
   });
 
+  // js/ai/battle_strategy.js
+  var require_battle_strategy = __commonJS({
+    "js/ai/battle_strategy.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.Greedy = void 0;
+      var character_1 = require_character();
+      var Greedy = class {
+        fight(me, oppo) {
+          let result = this.createEmptyStrategy();
+          let leftPoint = me.abilities[character_1.ABILITY.POINT];
+          if (me.abilities[character_1.ABILITY.ATTACK] <= oppo.abilities[character_1.ABILITY.DEFEND]) {
+            let maxGap = oppo.abilities[character_1.ABILITY.DEFEND] + oppo.abilities[character_1.ABILITY.POINT] - me.abilities[character_1.ABILITY.ATTACK] + 1;
+            if (maxGap >= leftPoint) {
+              result[character_1.ABILITY.DEFEND] = leftPoint;
+              leftPoint = 0;
+            } else {
+              result[character_1.ABILITY.ATTACK] = maxGap;
+              leftPoint -= maxGap;
+            }
+          }
+          result[character_1.ABILITY.AGILE] = leftPoint;
+          return result;
+        }
+        createEmptyStrategy() {
+          let result = [];
+          for (let i in character_1.ABILITY) {
+            result[i] = 0;
+          }
+          return result;
+        }
+      };
+      exports.Greedy = Greedy;
+    }
+  });
+
   // js/game/data/styles/colors.js
   var require_colors = __commonJS({
     "js/game/data/styles/colors.js"(exports) {
@@ -1801,6 +1837,7 @@
       "use strict";
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.BattlePanel = void 0;
+      var battle_strategy_1 = require_battle_strategy();
       var bindable_data_1 = require_bindable_data();
       var character_1 = require_character();
       var colors_1 = require_colors();
@@ -1835,7 +1872,6 @@
           button.layoutParam.xcfg = layout_1.Align.CENTER;
           button.textColor = colors_1.default.black;
           button.onclickInternal = (() => {
-            this.visible = false;
             this.startBattle();
             return true;
           }).bind(this);
@@ -1863,9 +1899,11 @@
           this.brief1.bind(ch1);
           this.brief2.bind(ch2);
           this.brief2.showCompound(false);
+          this.computerStrategy = new battle_strategy_1.Greedy().fight(ch2, ch1);
           this.setIsDirty(true);
         }
         startBattle() {
+          this.brief2.applyStrategy(this.computerStrategy);
           let win = this.getAttack(this.ch1) > this.getAttack(this.ch2);
           if (win && this.onWin) {
             this.onWin();
@@ -1916,6 +1954,15 @@
           }
           this.setIsDirty(true);
         }
+        applyStrategy(strategy) {
+          this.model.delta = strategy;
+          this.model.leftPoints = 0;
+          this.model.dirty = true;
+          this.attack.updateText();
+          this.defend.updateText();
+          this.agile.updateText();
+          this.strength.updateText();
+        }
         static update(v, d) {
           v.point.setText(new textview_1.Text(`\u53EF\u7528\u70B9\u6570: ${d.leftPoints}`));
         }
@@ -1958,8 +2005,8 @@
           ret.setOnClick(() => {
             if (this.model.leftPoints > 0) {
               this.model.leftPoints -= 1;
-              this.model.dirty = true;
               this.model.delta[this.type] += 1;
+              this.model.dirty = true;
               this.updateText();
             }
           }, () => {
