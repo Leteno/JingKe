@@ -1,6 +1,6 @@
 
 import { ABILITY, Character } from "../../data/character";
-import {Greedy} from "../batte_strategy"
+import {Greedy} from "../battle_strategy"
 
 function createCharacter(
     attack: number, defend: number,
@@ -20,7 +20,7 @@ test("testGreedy", () => {
     let ch1 = createCharacter(2, 2, 2, 2);
     let ch2 = createCharacter(2, 3, 2, 2);
     let ret = strategy.fight(ch1, ch2);
-    expect(ret[ABILITY.ATTACK]).toBe(undefined);
+    expect(ret[ABILITY.ATTACK]).toBe(0);
     expect(ret[ABILITY.DEFEND]).toBe(2);
     expect(ret[ABILITY.AGILE]).toBe(0);
 
@@ -31,6 +31,6 @@ test("testGreedy", () => {
     ch2 = createCharacter(2, 2, 2, 1);
     ret = strategy.fight(ch1, ch2);
     expect(ret[ABILITY.ATTACK]).toBe(2);
-    expect(ret[ABILITY.DEFEND]).toBe(undefined);
+    expect(ret[ABILITY.DEFEND]).toBe(0);
     expect(ret[ABILITY.AGILE]).toBe(1);
 })
