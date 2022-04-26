@@ -12,6 +12,11 @@
       "es5",
       "es6"
     ],
+    "plugins": [
+      {
+        "name": "tsec"
+      }
+    ]
   },
   "include": [
     "ts/**/*"
